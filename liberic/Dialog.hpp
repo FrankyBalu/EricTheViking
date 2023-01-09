@@ -18,16 +18,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
+
+#ifndef DIALOG_H
+#define DIALOG_H
+
+#include <raylib.h>
+#include <string>
+#include <vector>
+
+namespace LibEric{
+/**
+ * @todo write docs
+ */
 
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
+class Dialog
+{
+public:
+    static Dialog* Instance();
 
-}
+    void SetMSG (std::string msg);
 
+    void Update();
 
+    bool Exist();
+
+    void DrawDialog ();
+
+private:
+
+    static Dialog *_Instance;
+    bool _MSGAvaible;
+    std::vector<std::string> _MSG;
+    Font _Font;
+    int _LinePos;
+    Dialog();
+};
+};//namespace LibEric
+#endif // DIALOG_H

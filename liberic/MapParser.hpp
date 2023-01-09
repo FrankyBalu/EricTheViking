@@ -18,16 +18,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
+#ifndef __LEVELPARSER
+#define __LEVELPARSER
+
+#include <tinyxml2.h>
+#include "Map.hpp"
+#include <string>
+
+namespace LibEric {
+
+class MapParser {
+public:
+    Map* ParseMap(std::string levelFile);
+
+private:
+
+    void ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets);
+
+    void ParseTileLayer(tinyxml2::XMLElement* tileElement, Map *rmap);
+
+    void ParseObjectLayer(tinyxml2::XMLElement* pObjectElement, Map* level);
 
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
+    int _TileSize;
+    int _Width;
+    int _Height;
+};
 
-}
-
-
+}; //namespace LibEric
+#endif // __LEVELPARSER

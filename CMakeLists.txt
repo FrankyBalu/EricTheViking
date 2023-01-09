@@ -90,5 +90,5 @@ include_directories (
                     )
 add_subdirectory(Extra)
 add_subdirectory(liberic)
-add_subdirectory(eric)
+#add_subdirectory(eric)
 

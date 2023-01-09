@@ -18,16 +18,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
 
+#ifndef __LAYER
+#define __LAYER
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
+namespace LibEric {
+class Layer {
+public:
 
-}
+    virtual void Render() = 0;
+    virtual void Update() = 0;
 
+protected:
 
+    virtual ~Layer() {}
+};
+
+}; // namespace LibEric
+#endif //__LAYER

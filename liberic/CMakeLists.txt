@@ -1,4 +1,4 @@
-project(libEric)
+project(LibEric)
 
 SET(LIBEric_HPP
     base64.h
@@ -46,9 +46,9 @@ SET(LIBEric_SRC
     TileLayer.cpp
     )
 
-add_library(${PROJECT_NAME} ${LIBEric_SRC})
+add_library(Eric ${LIBEric_SRC})
 
-target_link_libraries(libEric lua_shared
+target_link_libraries(Eric lua_shared
                              raylib
                              tinyxml2
                              z

@@ -18,16 +18,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
+#ifndef __GLOBALLUA
+#define __GLOBALLUA
+
+#define SOL_ALL_SAFETIES_ON 1
+#include "../../Extra/sol/sol.hpp"
 
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
-
-}
+namespace LibEric{
 
 
+void LuaSetup (sol::state *state);
+
+};
+
+#endif //__GLOBALLUA

@@ -204,7 +204,7 @@ private:
 
     UserSettings();
 
-    static Settings* _Instance; /*!< Zeiger auf die Instance der Klasse */
+    static UserSettings* _Instance; /*!< Zeiger auf die Instance der Klasse */
     
     bool _Fullscreen;      /*!< Vollbild Variable */
     bool _CollisionBoxes;  /*!< Kollisionsboxen Variable */

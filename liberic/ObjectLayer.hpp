@@ -18,16 +18,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
+#ifndef __OBJECTLAYER
+#define __OBJECTLAYER
 
+#include <vector>
+#include "Layer.hpp"
+#include "GameObject.hpp"
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
+namespace LibEric {
 
-}
+class ObjectLayer : public Layer {
+public:
+    ObjectLayer();
+    void Render();
+    void Update();
 
+    std::vector<GameObject*>* GetGameObjectList();
 
+private:
+    std::vector<GameObject*> _GameObjectList;
+};
+
+}; //namespace LibEric
+#endif //__OBJECTLAYER

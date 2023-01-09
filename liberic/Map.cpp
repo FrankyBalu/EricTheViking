@@ -18,16 +18,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+
+#include "Map.hpp"
+#include "TileLayer.hpp"
+#include "Layer.hpp"
 #include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
 
+void LibEric::Map::Render() {
+    _BackgroundLayer->Render();
+    _RoadLayer->Render();
+    _WaterLayer->Render();
+    _CollisionLayer->Render();
+    _ObjectLayer->Render();
+    _SkyLayer->Render();
+}
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
+void LibEric::Map::Update() {
+    _ObjectLayer->Update();
+}
 
+std::vector<LibEric::Tileset>* LibEric::Map::GetTilesets() {
+    return &_Tileset;
+}
+
+std::vector<LibEric::Layer*>* LibEric::Map::GetLayers() {
+    return &_Layers;
 }
 
 
+
+bool LibEric::Map::Collison(GameObject *object)
+{
+    return dynamic_cast<TileLayer*>(_CollisionLayer)->CheckCollision(object);
+}
+
+LibEric::Layer * LibEric::Map::GetObjectLayer(){
+    return _ObjectLayer;
+}

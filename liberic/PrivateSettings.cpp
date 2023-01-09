@@ -22,8 +22,8 @@
 #include <filesystem>
 
 #include <raylib.h>
-#include <PrivateSettings.hpp>
-#include <Log.hpp>
+#include "PrivateSettings.hpp"
+#include "Log.hpp"
 #include <Config.hpp>
 
 #define SOL_ALL_SAFETIES_ON 1
@@ -117,4 +117,5 @@ Color LibEric::PrivateSettings::GetBackgroundColor(){
 int LibEric::PrivateSettings::GetLogLevel(){
     return _LogLevel;
 }
+
 
