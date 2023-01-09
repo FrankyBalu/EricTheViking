@@ -22,7 +22,7 @@
 #define __GLOBALLUA
 
 #define SOL_ALL_SAFETIES_ON 1
-#include "../../Extra/sol/sol.hpp"
+#include "../Extra/sol/sol.hpp"
 
 
 namespace LibEric{

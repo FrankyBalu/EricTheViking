@@ -1,6 +1,6 @@
 MENUID = "GraphicMenu"
 
-settings = Settings.Instance()
+settings = UserSettings.Instance()
 stateMaschine = StateMaschine.Instance()
 game = Game.Instance()
 

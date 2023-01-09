@@ -1,5 +1,5 @@
 MENUID = "SettingsMenu"
-settings = Settings.Instance()
+settings = UserSettings.Instance()
 game = Game.Instance()
 stateMaschine = StateMaschine.Instance()
 
