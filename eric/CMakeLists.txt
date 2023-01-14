@@ -11,5 +11,5 @@ SET(Erik_SRC
 
 add_executable(${PROJECT_NAME} ${Erik_SRC})
 target_link_libraries(${PROJECT_NAME} PUBLIC Eric
-                        lua_shared)
-
+                     )
+INSTALL(TARGETS ${PROJECT_NAME}  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

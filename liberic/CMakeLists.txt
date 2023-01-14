@@ -46,11 +46,28 @@ SET(LIBEric_SRC
     TileLayer.cpp
     )
 
-add_library(Eric ${LIBEric_SRC})
+add_library(Eric SHARED  ${LIBEric_SRC})
 
-target_link_libraries(Eric lua_shared
+target_link_libraries(Eric lua_static
                              raylib
                              tinyxml2
                              z
                              )
+
+install(TARGETS Eric
+        EXPORT Eric
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+#        PUBLIC_HEADER DESTINATION include/libEric
+        )
+
+#INSTALL (
+#    FILES ${CMAKE_SOURCE_DIR}
+#    DESTINATION include/libEric
+#    REGEX "*.h*")
+
+INSTALL(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/ DESTINATION ${CMAKE_INSTALL_PREFIX}/libEric
+          FILES_MATCHING PATTERN "*.h*")
+
 #target_include_directories(${PROJECT_NAME} PUBLIC include)
