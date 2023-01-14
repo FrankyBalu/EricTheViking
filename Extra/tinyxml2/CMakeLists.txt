@@ -1,5 +1,5 @@
 include(GNUInstallDirs)
-
+add_compile_options(-fPIC)
 add_library(tinyxml2 "")
 target_sources(tinyxml2
         PRIVATE tinyxml2.cpp

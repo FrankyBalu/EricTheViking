@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.24)
 
 project(Eric VERSION 0.0.1
 	DESCRIPTION "libEric ist als eine Art Framework zum erstellen von Spielen gedacht. Eric ist ein Beispiel dafür"
@@ -65,7 +65,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     set(BUILD_SHARED_LIBS OFF)
     set(USE_EXTERNAL_GLFW ON)
     set(CMAKE_BUILD_TYPE Release)
-    set(WITH_PIC ON)
+    set(WITH_PIC TRUE)
      add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR} EXCLUDE_FROM_ALL)
   endif()
 include_directories ("${raylib_SOURCE_DIR}/src")
