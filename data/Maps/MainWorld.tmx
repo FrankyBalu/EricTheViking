@@ -18,8 +18,8 @@
    eJztzccNgDAABEH/AFMMwcWQiiEVQ2qSreIkxK007w3BOeecc859oQw5CkSUom+FGg1aJNG3Q48BIybRd8aCFRt20ffAiQs3HtHX/bsXup8Isg==
   </data>
  </layer>
- <objectgroup id="5" name="Objects" visible="0">
-  <object id="1" name="testGateway" class="Gateway" x="422" y="260" width="18.5" height="20.5">
+ <objectgroup id="5" name="Objects">
+  <object id="1" name="testDialog" class="Marker" x="433" y="256.5" width="16" height="16">
    <properties>
     <property name="script" value="test.lua"/>
    </properties>
@@ -27,10 +27,10 @@
  </objectgroup>
  <layer id="4" name="Collision" width="30" height="30">
   <data encoding="base64" compression="zlib">
-   eJztzb0JgDAAhFG1c4fsoInuoibu4t8wii7pFRZWQkAuzR18cN0zeZaZRLEnV27sbMFz3ctq5cr9yfWwwtNIdGMnV67cuJVkt0I1ssihhuR2qEcD8iiQ3AnNaEEr2kjujo7nn+giuV+Ty3VTdAPWbRjC
+   eJztzU0OQDAYhOGyc4fegeIuKHfxdwV3IFzSLCqxkjSp6eab5E1m9+hEKR0p9sQV13cm5bnly6rFFTeQa2H1roHo+k7cf7dFcp+JG34Z2c1RgQwqUUVyG9SiDlnUk9wRTWhGC1pJ7o4O9090kdyvict1Y3QDY3kZVg==
   </data>
  </layer>
- <layer id="6" name="Sky" width="30" height="30" visible="0">
+ <layer id="6" name="Sky" width="30" height="30">
   <data encoding="base64" compression="zlib">
    eJztwQEBAAAAgiD/r25IQAEAAPBoDhAAAQ==
   </data>

@@ -22,6 +22,8 @@
 #include "Dialog.hpp"
 #include <sstream>
 #include "UserSettings.hpp"
+#include "Log.hpp"
+#include <Config.hpp>
 
 LibEric::Dialog* LibEric::Dialog::_Instance = 0;
 
@@ -65,13 +67,14 @@ LibEric::Dialog * LibEric::Dialog::Instance(){
 
 LibEric::Dialog::Dialog() :
     _MSGAvaible(false), _MSG(), _Font(), _LinePos(0){
-    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Erik");
+    std::string erikDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking");
     std::string fontFile = erikDir + std::string ("/Font.ttf");
 
     _Font = LoadFontEx(fontFile.c_str(), 25, NULL, 0);
 }
 
 void LibEric::Dialog::SetMSG(std::string msg){
+    PLOGW << "setze MSG";
     _MSG = split_string_by_newline(msg);
     _LinePos = 0;
     _MSGAvaible = true;

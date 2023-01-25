@@ -22,10 +22,10 @@
 #ifndef __PLAYSTATE
 #define __PLAYSTATE
 
-#include "../liberic/GameState.hpp"
-#include "../liberic/GameStateFactory.hpp"
-#include "../liberic/GraphicGameObject.hpp"
-#include "../liberic/Map.hpp"
+#include <libEric/GameState.hpp>
+#include <libEric/GameStateFactory.hpp>
+#include <libEric/GraphicGameObject.hpp>
+#include <libEric/Map.hpp>
 // #include "../Player.hpp"
 #include <raylib.h>
 #include <vector>

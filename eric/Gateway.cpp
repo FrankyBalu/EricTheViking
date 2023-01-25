@@ -19,10 +19,11 @@
  */
 
 #include "Gateway.hpp"
-#include "../liberic/Global_LUA.hpp"
-#include "../liberic/GraphicGameObject.hpp"
+#include <libEric/Global_LUA.hpp>
+#include <libEric/GraphicGameObject.hpp>
 #include "Player.hpp"
 #include <raylib.h>
+#include <Config.hpp>
 
 Eric::Gateway::Gateway()
     : GraphicGameObject(){
@@ -40,8 +41,12 @@ void Eric::Gateway::Clean()
 
 void Eric::Gateway::Update()
 {
-    if (Player::Instance()->CollisionDetect(this)) {
-        _LUA_Enter();
+    if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
+PLOGW << "Collision";
+        if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
+            PLOGW << "Script sollte laufen";
+            _LUA_Enter();
+        }
     }
     _LUA_Update();
 }
@@ -59,7 +64,7 @@ void Eric::Gateway::Load(const std::string scriptFile){
 
     LibEric::LuaSetup(&lua);
 
-     std::string EricDir = std::string (getenv("HOME")) + std::string ("/.Eric/");
+     std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
 
     lua.set_function("ChangeToMap", &Gateway::ChangeToMap);
 

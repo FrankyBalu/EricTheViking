@@ -20,11 +20,12 @@
 
 #include "Marker.hpp"
 #include "Player.hpp"
-#include "../liberic/Game.hpp"
-#include "../liberic/Dialog.hpp"
-#include "../liberic/StoryNode.hpp"
-#include "../liberic/Global_LUA.hpp"
+#include <libEric/Game.hpp>
+#include <libEric/Dialog.hpp>
+#include <libEric/StoryNode.hpp>
+#include <libEric/Global_LUA.hpp>
 #include <raylib.h>
+#include <Config.hpp>
 
 Eric::Marker::Marker()
     : LibEric::GraphicGameObject()
@@ -68,7 +69,7 @@ void Eric::Marker::Load(const std::string script){
 
     LibEric::LuaSetup(&lua);
 
-    std::string EricDir = std::string (getenv("HOME")) + std::string ("/.Eric/assets/");
+    std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
     lua.script_file (EricDir + script);
 
 

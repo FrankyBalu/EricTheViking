@@ -21,15 +21,15 @@
 
 #include "Menu.hpp"
 // #include "PlayState.hpp"
-#include "../liberic/PrivateSettings.hpp"
-#include "../liberic/UserSettings.hpp"
-#include "../liberic/Global_LUA.hpp"
+#include <libEric/PrivateSettings.hpp>
+#include <libEric/UserSettings.hpp>
+#include <libEric/Global_LUA.hpp>
 #include <raylib.h>
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
 #include <sstream>
 #include <Config.hpp>
-#include "../liberic/Log.hpp"
+#include <libEric/Log.hpp>
 
 
 
@@ -216,7 +216,7 @@ void Eric::Menu::SetID(std::string id){
 
 bool Eric::Menu::OnEnter(std::string file)
 {
-    std::string EricDir = std::string (getenv("HOME")) + std::string ("/.Eric/");
+    std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
     std::string fontFile = EricDir + std::string ("Font.ttf");
     std::string scriptFile(EricDir);
 

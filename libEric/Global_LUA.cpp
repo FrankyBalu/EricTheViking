@@ -24,7 +24,7 @@
 #include "MapManager.hpp"
 #include "UserSettings.hpp"
 #include "StoryNode.hpp"
-
+#include "Dialog.hpp"
 
 void LibEric::LuaSetup (sol::state *state){
     state->new_usertype<UserSettings>("UserSettings",
@@ -80,5 +80,11 @@ void LibEric::LuaSetup (sol::state *state){
         "Instance", &MapManager::Instance,
         "ChanceToMap", &MapManager::ChangeCurrentMap
         );
+
+    state->new_usertype<Dialog>("Dialog",
+                                    "new", sol::no_constructor,
+                                    "Instance", &Dialog::Instance,
+                                    "Msg", &Dialog::SetMSG
+    );
 
 }

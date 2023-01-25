@@ -48,7 +48,7 @@ bool LibEric::UserSettings::Load() {
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
 //TODO System-weiter Speicherort bzw Windows Speicherort 
-    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Erik/UserSettings.lua");
+    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Eric/UserSettings.lua");
 
     if (!FileExists(confFile.c_str())){
             Save();
@@ -68,8 +68,8 @@ bool LibEric::UserSettings::Load() {
 void LibEric::UserSettings::Save(){
     std::ofstream file;
 //TODO Windows Speicherort 
-    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Erik/UserSettings.lua");
-    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Erik");
+    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Eric/UserSettings.lua");
+    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Eric");
 
     if (!FileExists(confFile.c_str())){
             if (!DirectoryExists(erikDir.c_str())){

@@ -6,5 +6,6 @@ if (NOT ERIK_SYSTEM_ZLIB)
     add_subdirectory(zlib EXCLUDE_FROM_ALL)
 endif ()
 
-
-add_subdirectory(lua EXCLUDE_FROM_ALL)
+if (NOT ERIC_SYSTEM_LUA)
+    add_subdirectory(lua EXCLUDE_FROM_ALL)
+endif()

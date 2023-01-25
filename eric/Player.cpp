@@ -19,11 +19,11 @@
  */
 
 #include "Player.hpp"
-#include "../liberic/GameStateMaschine.hpp"
-#include "../liberic/TextureManager.hpp"
-#include "../liberic/PrivateSettings.hpp"
+#include <libEric/GameStateMaschine.hpp>
+#include <libEric/TextureManager.hpp>
+#include <libEric/PrivateSettings.hpp>
 #include <raylib.h>
-#include "../liberic/Log.hpp"
+#include <libEric/Log.hpp>
 
 Eric::Player* Eric::Player::_Instance = nullptr;
 

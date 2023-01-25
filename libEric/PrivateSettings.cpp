@@ -50,7 +50,7 @@ void LibEric::PrivateSettings::Load() {
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
 
-    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Erik/PrivateSettings.lua");
+    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Eric/PrivateSettings.lua");
 
     if (!FileExists(confFile.c_str())){
             Save();
@@ -69,8 +69,8 @@ void LibEric::PrivateSettings::Load() {
 
 void LibEric::PrivateSettings::Save(){
     std::ofstream file;
-    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Erik/PrivateSettings.lua");
-    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Erik");
+    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Eric/PrivateSettings.lua");
+    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Eric");
 
     if (!FileExists(confFile.c_str())){
             if (!DirectoryExists(erikDir.c_str())){

@@ -22,8 +22,8 @@
 #ifndef __MENU
 #define __MENU
 
-#include "../liberic/GameState.hpp"
-#include "../liberic/GameStateFactory.hpp"
+#include <libEric/GameState.hpp>
+#include <libEric/GameStateFactory.hpp>
 #include <raylib.h>
 #define SOL_ALL_SAFETIES_ON 1
 #include "../Extra/sol/sol.hpp"

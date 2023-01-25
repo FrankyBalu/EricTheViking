@@ -1,7 +1,6 @@
-settings = Settings.Instance()
+settings = UserSettings.Instance()
 stateMaschine = StateMaschine.Instance()
 game = Game.Instance()
-player = Player.Instance()
 
 
 
@@ -14,7 +13,7 @@ function Draw()
 
 end
 
-function EnterGateway ()
+function GetText ()
     print "test.lua wurde betreten"
-
+    return ("Hallo ich bin ein test Dialog!\nZeile 2\nZeile 3\nZeile 4 \nUnd ende!")
 end

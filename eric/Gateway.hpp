@@ -21,9 +21,9 @@
 #ifndef __GATEWAY
 #define __GATEWAY
 
-#include "../liberic/GraphicGameObject.hpp"
-#include "../liberic/GameObjectFactory.hpp"
-#include "../liberic/Log.hpp"
+#include <libEric/GraphicGameObject.hpp>
+#include <libEric/GameObjectFactory.hpp>
+#include <libEric/Log.hpp>
 #define SOL_ALL_SAFETIES_ON 1
 #include "../Extra/sol/sol.hpp"
 

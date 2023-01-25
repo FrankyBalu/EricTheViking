@@ -20,16 +20,11 @@
 
 
 #include "PlayState.hpp"
-#include "../liberic/Game.hpp"
-#include "../liberic/TextureManager.hpp"
 #include "Player.hpp"
-#include "../liberic/Log.hpp"
-#include "../liberic/MapParser.hpp"
-#include "../liberic/UserSettings.hpp"
-#include "../liberic/MapManager.hpp"
-#include "../liberic/Dialog.hpp"
+#define ERIC_APP 1
+#define ERIC_MODULE_ALL 1
+#include <libEric/LibEric.hpp>
 // #include "../GameObjects/Enemy.hpp"
-#include "../liberic/GameStateMaschine.hpp"
 #include <raylib.h>
 #include <Config.hpp>
 
@@ -101,7 +96,7 @@ Eric::PlayState::PlayState(){
 
 bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     //FIXME Texturen aus Datei laden und nicht mehr Händisch
-    std::string EricDir = std::string (getenv("HOME")) + std::string ("/.Eric");
+    std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking");
     std::string blueKnight (EricDir + std::string("/assets/BlueKnight.png"));
     std::string npc (EricDir + std::string("/assets/NPC.png"));
     std::string hero (EricDir + std::string("/assets/Hero.png"));

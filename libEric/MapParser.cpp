@@ -100,8 +100,8 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 void LibEric::MapParser::ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets) {
     //add tileset to texturemanager
     PLOGD << "Parse Tileset: " << tilesetRoot->Attribute("name");
-    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Erik");
-    std::string assetsTag = erikDir + std::string("/assets/");
+    std::string erikDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
+    std::string assetsTag = erikDir + std::string("assets/");
     std::string tileFile (assetsTag.append(tilesetRoot->FirstChildElement()->Attribute("source")));
     TextureManager::Instance()->Load(tileFile, tilesetRoot->Attribute("name"));
 
