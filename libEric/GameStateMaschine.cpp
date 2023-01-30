@@ -31,52 +31,55 @@ LibEric::GameStateMaschine *LibEric::GameStateMaschine::Instance() {
     return _Instance;
 }
 
-void LibEric::GameStateMaschine::PushState(std::string stateID, std::string file) {
+bool LibEric::GameStateMaschine::PushState(std::string stateID, std::string file) {
     GameState *newState = nullptr;
     newState = GameStateFactory::Instance()->Create(stateID);
     if (newState == nullptr) {
-        LOGW("hier");
-        return;
+        return false;
     }
     _GameStates.push_back(newState);
     _GameStates.back()->OnEnter(file);
     LOGD ("Neuen GameState <", _GameStates.back()->GetStateID(), "> zur Statemaschine hinzugefügt");
+    return true;
 }
 
-void LibEric::GameStateMaschine::PopState() {
+bool LibEric::GameStateMaschine::PopState() {
     if (_GameStates.empty()) {
         LOGE("Kann keinen Gamestate entfernen: Keine States vorhanden");
-        return;
+        return false;
     }
     std::string currentState = _GameStates.back()->GetStateID();
     if (_GameStates.back()->OnExit()) {
         _GameStates.pop_back();
         LOGD("Gamestate <", currentState, "> beendet");
         LOGD("Zu Gamestate <", _GameStates.back()->GetStateID(), "> gewechselt");
-        return;
+        return true;
     } else {
         _GameStates.pop_back();
         LOGD("Fehler beim beenden von Gamestate <", currentState, ">");
         LOGD("Zu Gamestate <", _GameStates.back()->GetStateID(), "> gewechselt");
-        return;
+        return true;
     }
 }
 
-void LibEric::GameStateMaschine::ChangeState(std::string stateID, std::string file) {
+bool LibEric::GameStateMaschine::ChangeState(std::string stateID, std::string file) {
     std::string currentState;
     GameState *newSate = nullptr;
     newSate = GameStateFactory::Instance()->Create(stateID);
+    if (newSate == nullptr){
+        return false;
+    }
     if (_GameStates.empty()) {
         _GameStates.push_back(newSate);
         _GameStates.back()->OnEnter(file);
         LOGD("Zu Gamestate <", _GameStates.back()->GetStateID(), "> gewechselt");
-        return;
+        return true;
     } else {
         currentState = _GameStates.back()->GetStateID();
         _GameStates.push_back(newSate);
         _GameStates.back()->OnEnter(file);
         LOGD("Von Gamestate <", currentState, "> zu <", _GameStates.back()->GetStateID(), "> gewechselt");
-        return;
+        return true;
     }
 }
 

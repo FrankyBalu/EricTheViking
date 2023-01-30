@@ -74,7 +74,6 @@ bool LibEric::Game::Init(const std::string &appName) {
     }
 
     _Font =  LoadFontFromPhysFS(std::string(std::string("/system/") + LibEricSettings::Instance()->GetFont()).c_str(), _FontSize, NULL, 0);
-    LOGE ("Fontfile: ", LibEricSettings::Instance()->GetFont().c_str());
 
     _IsReady = true;
     _Running = true;
@@ -112,7 +111,6 @@ void LibEric::Game::Render() {
 }
 
 void LibEric::Game::Update() {
-  // LOGE("PAD LEFT FACE UP: ", GetGamepadButtonPressed());
     if (!Dialog::Instance()->Exist()) {
         GameStateMaschine::Instance()->Update();
     }

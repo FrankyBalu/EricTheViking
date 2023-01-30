@@ -43,7 +43,7 @@ namespace LibEric {
             \param file Das Script, das dem State übergeben wird, muss nicht angegeben werden\n
                         wenn der State kein lua-Script unterstützt.
         */
-        void PushState(std::string stateID, std::string file = "");
+        bool PushState(std::string stateID, std::string file = "");
 
         //! Fügt einen neuen Gamestate hinzu
         /*! Es wird ein neue State hinzugefügt und direkt zu diesem gewechselt.\n
@@ -55,7 +55,7 @@ namespace LibEric {
             \param file Das Script, das dem State übergeben wird, muss nicht angegeben werden\n
                         wenn der State kein lua-Script unterstützt.
         */
-        void ChangeState(std::string stateID, std::string file = "");
+        bool ChangeState(std::string stateID, std::string file = "");
 
         //!Entfernt Game den aktuellen Gamestate
         /*! Der aktuelle Gamestate wird beendet und gelöscht und zu dem Vorhergehenden\n
@@ -63,7 +63,7 @@ namespace LibEric {
          *  Ist kein State mehr vorhanden, ist das verhalten undefiniert.
             \todo Wenn alle States beendet sind, das Programm beenden.
         */
-        void PopState();
+        bool PopState();
 
         //! State Update
         /*! Ruft die Update-Funktion des States auf.

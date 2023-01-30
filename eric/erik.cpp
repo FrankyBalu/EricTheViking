@@ -18,30 +18,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #define ERIC_APP 1
+
 #include <libEric/Log.hpp>
 #include <libEric/Game.hpp>
 #include <libEric/LibEricSettings.hpp>
-#include <libEric/UserSettings.hpp>
 #include <libEric/RenderManager.hpp>
 #include <libEric/GameStateMaschine.hpp>
 #include <libEric/Menu.hpp>
-#include <libEric/Dialog.hpp>
 #include "PlayState.hpp"
 
-int main (){
-
-    LibEric::Log::Instance()->SetLogLevel(LibEric::LOG_VERBOSE);
-    LibEric::RenderManager::Instance()->LoadTextureFromFile("test3", "Test.png");
-    LibEric::GameStateFactory::Instance()->RegisterType("Menu", new LibEric::MenuCreator());
-    LibEric::GameStateFactory::Instance()->RegisterType("Play", new Eric::PlayCreator());
-
-    if (LibEric::Game::Instance()->Init("EricTheViking")) {
-        LOGI("Bis jetzt kein Fehler!");
+int main() {
+    if (!LibEric::Game::Instance()->Init("EricTheViking")) {
+        LOGE("Konnte libEric nicht Initialisieren!\nAbbruch!");
+        return 1;
     }
 
-    LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "MainMenu.lua");
+    if (!LibEric::GameStateFactory::Instance()->RegisterType("Menu", new LibEric::MenuCreator())){
+        LOGE("Konnte Type <Menu> nicht regestrieren: Breche ab!");
+        return 1;
+    }
+    if (!LibEric::GameStateFactory::Instance()->RegisterType("Play", new Eric::PlayCreator())){
+        LOGE("Konnte Type <Play> nicht regestrieren: Breche ab!");
+        return 1;
+    }
 
-   LibEric::Game::Instance()->SetGamepad(3);
+    if (!LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "MainMenu.lua")){
+        LOGE ("Konnte nicht zu MeinMenu.lua wechseln! Abbruch");
+        return 1;
+    }
+
+    LibEric::Game::Instance()->SetGamepad(3);
     LibEric::Game::Instance()->Run();
 
     LibEric::RenderManager::Instance()->ClearRenderManager();

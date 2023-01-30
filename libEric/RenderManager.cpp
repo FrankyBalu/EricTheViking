@@ -60,10 +60,10 @@ bool LibEric::RenderManager::LoadTextureFromFile(std::string id, std::string fil
     }
     if (_TextureMap.count(id) == 0) {
         LOGD("Lade Texture ", id, " aus Datei: ", fileName);
-        if (FileExistsInPhysFS(std::string("system/" + fileName).c_str()))
-            LOGI ("Datei existiert");
-        else
+        if (!FileExistsInPhysFS(std::string("system/" + fileName).c_str())) {
             LOGI ("Datei existiert nicht");
+            return false;
+        }
         Texture2D tmpTexture = LoadTextureFromPhysFS(std::string("system/" + fileName).c_str());
 
         if (tmpTexture.id <= 0) {
