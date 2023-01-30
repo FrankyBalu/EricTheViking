@@ -8,4 +8,5 @@ DialogBoxWidth = 0.8
 DialogBoxHeight = 0.2
 LogLevel = 8
 MSAA = true
-ExitKey = 193
+ExitKey = 293
+Font = 'Font.ttf'

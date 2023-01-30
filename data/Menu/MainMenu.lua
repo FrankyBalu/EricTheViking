@@ -48,7 +48,7 @@ function Update ()
     end
 
     -- Falls der Beenden Dialog mit ja beantwortet wurde, wird das Spiel beendet
-    if dialog:GetOption() == 1
+    if dialog:GetAnswer() == 1
     then
         game:Quit()
     end
@@ -121,7 +121,7 @@ end
 
 --
 function ExitDialog ()
-    dialog:OptionMSG("Wirklich Beenden", "Ja", "Nein")
+    dialog:NewSelectDialog("\n\t\tWirklich Beenden", "Ja", "Nein", 1)
 
 end
 

@@ -6,7 +6,7 @@
 #define ERIC_GAME_HPP
 
 #include <string>
-
+#include <raylib.h>
 
 namespace LibEric {
 
@@ -91,6 +91,9 @@ namespace LibEric {
         //! Gibt die Höhe des Fensters/Bildschirms zurück
         int GetWindowHeight();
 
+        //! Gibt den Defaultfont zurück
+        Font GetDefaultFont();
+
         Game(const Game &) = delete;
 
         Game(Game &&) = delete;
@@ -114,6 +117,8 @@ namespace LibEric {
         std::string _AppName;
         std::string _AppDir;
 
+        Font _Font;
+        int _FontSize;
         int UseGamepad;
     };
 

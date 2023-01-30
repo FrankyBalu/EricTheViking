@@ -4063,7 +4063,7 @@ static void GuiDrawRectangle(Rectangle rec, int borderWidth, Color borderColor, 
     if (borderWidth > 0)
     {
         // Draw rectangle border lines with color
-        DrawRectangleRoundedLines(rec, 4.0, 16, 6.0, color);
+        DrawRectangleRoundedLines(rec, 4.0, 16, 3.0, borderColor);
 /*        DrawRectangle((int)rec.x, (int)rec.y, (int)rec.width, borderWidth, borderColor);
         DrawRectangle((int)rec.x, (int)rec.y + borderWidth, borderWidth, (int)rec.height - 2*borderWidth, borderColor);
         DrawRectangle((int)rec.x + (int)rec.width - borderWidth, (int)rec.y + borderWidth, borderWidth, (int)rec.height - 2*borderWidth, borderColor);

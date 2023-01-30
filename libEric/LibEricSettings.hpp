@@ -118,6 +118,9 @@ namespace LibEric {
          */
         int GetExitKey();
 
+        //! Gibt den Dateinamen für den default Font zurück
+        std::string GetFont();
+
 
         LibEricSettings(const LibEricSettings &) = delete;
 
@@ -142,9 +145,8 @@ namespace LibEric {
         int _BackgroundColorBlue; //!< Hintergrundfarbe
         int _BackgroundColorAlpha; //!< Hintergrundfarbe
         int _LogLevel; //!< Loglevel, @LibEric::Log
-
-
-        int _ExitKey;
+        int _ExitKey; //!< Taste mit der das Programm direkt beendet wird FIXME: in UserSettings verschieben, so wie ale tasten
+        std::string _Font;
     };
 
 } // LibEric

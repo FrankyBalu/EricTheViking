@@ -43,13 +43,13 @@ public:
     //! SetMSG
     /*! Der Text wird festgelegt und die Box im anschluss angezeigt
     */
-    void SetMSG (std::string msg);
+    void NewDialog (std::string msg);
 
     //! Blendet eine Auswahlmöglichkeit ein
-    void SetOption(std::string msg, std::string option1, std::string option2);
+    void NewSelectDialog(std::string msg, std::string option1, std::string option2, int default_answer);
 
     //! Gibt die zuletzt gewählte Option zurück
-    int GetOption();
+    int GetAnswer();
 
     //! Update
     /*! Es wird auf benutzer eingaben reagiert
@@ -68,15 +68,14 @@ public:
 
 private:
 
-    static Dialog *_Instance;
-    bool _MSGAvaible;
-    bool _OptinAvaible;
-    std::string _Option1;
-    std::string _Option2;
-    int _SelectedOption;
-    int _FinalOption;
+    static Dialog *_Instance; //!< Zeiger auf die Dialog-Instance
+    bool _DialogAvaible; //!< Ist ein Dialog verfügbar
+    bool _SelectDialogAvaible;
+    std::string _Answer1;
+    std::string _Answer2;
+    int _SelectedAnswer;
+    int _FinalAnswer;
     std::vector<std::string> _MSG;
-    Font _Font;
     int _LinePos;
     int _FontSize;
     Dialog();

@@ -39,7 +39,7 @@ LibEric::LibEricSettings::LibEricSettings()
         : _FirstState("main.menu"), _DialogBoxWidth(0.8), _DialogBoxHeight(0.2),
           _ShowVersion(false), _EnableMSAA(true), _BackgroundColorRed(0), _BackgroundColorGreen(80),
           _BackgroundColorBlue(170), _BackgroundColorAlpha(255), _LogLevel(LOG_WARNING),
-          _ExitKey(293) {
+          _ExitKey(293), _Font("Font.ttf") {
 
 }
 
@@ -74,19 +74,21 @@ bool LibEric::LibEricSettings::Load() {
         _LogLevel = lua.get<int>("LogLevel");
         _EnableMSAA = lua.get<bool>("MSAA");
         _ExitKey = lua.get<int>("ExitKey");
+        _Font = lua.get<std::string>("Font");
     }
 
-    LOGD("\t_FirstState          : ", _FirstState);
-    LOGD("\t_ShowVersion         : ", _ShowVersion);
-    LOGD("\t_BackgroundColorRed  : ", _BackgroundColorRed);
-    LOGD("\t_BackgroundColorGreen: ", _BackgroundColorGreen);
-    LOGD("\t_BackgroundColorBlue : ", _BackgroundColorBlue);
-    LOGD("\t_BackgroundColorAlpha: ", _BackgroundColorAlpha);
-    LOGD("\t_DialogBoxWidth      : ", _DialogBoxWidth);
-    LOGD("\t_DialogBoxHeight     : ", _DialogBoxHeight);
-    LOGD("\t_LogLevel            : ", _LogLevel);
-    LOGD("\t_EnableMSAA          : ", _EnableMSAA);
-    LOGD("\t_ExitKey             : ", _ExitKey);
+    LOGV("\t_FirstState          : ", _FirstState);
+    LOGV("\t_ShowVersion         : ", _ShowVersion);
+    LOGV("\t_BackgroundColorRed  : ", _BackgroundColorRed);
+    LOGV("\t_BackgroundColorGreen: ", _BackgroundColorGreen);
+    LOGV("\t_BackgroundColorBlue : ", _BackgroundColorBlue);
+    LOGV("\t_BackgroundColorAlpha: ", _BackgroundColorAlpha);
+    LOGV("\t_DialogBoxWidth      : ", _DialogBoxWidth);
+    LOGV("\t_DialogBoxHeight     : ", _DialogBoxHeight);
+    LOGV("\t_LogLevel            : ", _LogLevel);
+    LOGV("\t_EnableMSAA          : ", _EnableMSAA);
+    LOGV("\t_ExitKey             : ", _ExitKey);
+    LOGV("\t_Font                : ", _Font);
     return return_value;
 }
 
@@ -132,4 +134,8 @@ bool LibEric::LibEricSettings::GetMSAA() {
 
 int LibEric::LibEricSettings::GetExitKey() {
     return _ExitKey;
+}
+
+std::string LibEric::LibEricSettings::GetFont() {
+    return _Font;
 }

@@ -24,7 +24,8 @@ LibEric::Game *LibEric::Game::Instance() {
     return _Instance;
 }
 
-LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(),UseGamepad(0) {
+//FIXME _FONTSIZE muss noch in die config datei
+LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(),_FontSize(25),UseGamepad(0) {
 }
 
 bool LibEric::Game::Init(const std::string &appName) {
@@ -45,6 +46,9 @@ bool LibEric::Game::Init(const std::string &appName) {
     Log::Instance()->SetLogLevel(LibEricSettings::Instance()->GetLogLevel());
     Log::Instance()->SetLogLevel(LibEric::LOG_DEBUG);
     SetTargetFPS(UserSettings::Instance()->GetFPS());
+
+
+
 
     //Configflags für Raylib
     if (UserSettings::Instance()->GetFullScreen() && LibEricSettings::Instance()->GetMSAA()) {
@@ -68,6 +72,9 @@ bool LibEric::Game::Init(const std::string &appName) {
     if (!IsWindowReady()) {
         return false;
     }
+
+    _Font =  LoadFontFromPhysFS(std::string(std::string("/system/") + LibEricSettings::Instance()->GetFont()).c_str(), _FontSize, NULL, 0);
+    LOGE ("Fontfile: ", LibEricSettings::Instance()->GetFont().c_str());
 
     _IsReady = true;
     _Running = true;
@@ -153,4 +160,8 @@ int LibEric::Game::GetWindowHeight() {
 
 void LibEric::Game::Resize() {
     GameStateMaschine::Instance()->Resize();
+}
+
+Font LibEric::Game::GetDefaultFont() {
+    return _Font;
 }

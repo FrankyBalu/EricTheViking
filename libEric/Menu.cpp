@@ -243,8 +243,7 @@ bool LibEric::Menu::OnEnter(std::string file)
         scriptFile += std::string ("Menu/") + file;
     }
 
-    _Font = LoadFontEx(fontFile.c_str(), 25, NULL, 0);
-    GuiSetFont(_Font);
+    GuiSetFont(Game::Instance()->GetDefaultFont());
 
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);

@@ -52,7 +52,8 @@ void LibEric::Dialog::DrawDialog(){
     TextBox.x = (UserSettings::Instance()->GetWindowWidth() - TextBox.width) / 2;
     TextBox.y = UserSettings::Instance()->GetWindowHeight() - (5 + TextBox.height); //5 ist der Rand bis zum unteren Bildschirmrand
 
-    DrawRectangleRounded(TextBox, 0.5, 4, Fade(LIGHTGRAY, 0.85f));
+    DrawRectangleRounded(TextBox, 0.5, 6, Fade(LIGHTGRAY, 0.85f));
+    DrawRectangleRoundedLines(TextBox, 0.5, 6, 3.0, RED);
 
     int line = 0;
     for (unsigned long i = _LinePos; i < _MSG.size(); i++){
@@ -60,11 +61,11 @@ void LibEric::Dialog::DrawDialog(){
             return;
         int TextSpaceToLeft = 20;
         int TextSpaceToTOP = 8;
-        DrawTextEx(_Font, _MSG[i].c_str(), Vector2{TextBox.x + TextSpaceToLeft , (TextBox.y + TextSpaceToTOP) + (_FontSize*line) }, _FontSize, 1, BLACK);
+        DrawTextEx(Game::Instance()->GetDefaultFont(), _MSG[i].c_str(), Vector2{TextBox.x + TextSpaceToLeft , (TextBox.y + TextSpaceToTOP) + (_FontSize*line) }, _FontSize, 1, BLACK);
         line++;
     }
 
-    if (_OptinAvaible){
+    if (_SelectDialogAvaible){
         Rectangle OptionBox1, OptionBox2;
         OptionBox1.width = UserSettings::Instance()->GetWindowWidth() * (LibEricSettings::Instance()->GetDialogBoxWidth()/3);
         OptionBox1.height = _FontSize + 10;//obenhalb und unterhalb der Schrift lassen wir 5 pixel platz
@@ -75,16 +76,20 @@ void LibEric::Dialog::DrawDialog(){
         OptionBox2.x = OptionBox1.x + (OptionBox1.width*2);
         OptionBox2.y =  TextBox.y - OptionBox1.height + 5; //5 Um 5 Pixel überlappt es mit der textbox
 
-        if (_SelectedOption == 0) {
+        if (_SelectedAnswer == 0) {
             DrawRectangleRounded(OptionBox1, 0.5, 4, Fade(SKYBLUE, 0.85f));
             DrawRectangleRounded(OptionBox2, 0.5, 4, Fade(LIGHTGRAY, 0.85f));
+            DrawRectangleRoundedLines(OptionBox1, 0.5, 4, 3.0, GREEN);
+            DrawRectangleRoundedLines(OptionBox2, 0.5, 4, 3.0, RED);
         }
         else{
             DrawRectangleRounded(OptionBox1, 0.5, 4, Fade(LIGHTGRAY, 0.85f));
             DrawRectangleRounded(OptionBox2, 0.5, 4, Fade(SKYBLUE, 0.85f));
+            DrawRectangleRoundedLines(OptionBox1, 0.5, 4, 3.0, RED);
+            DrawRectangleRoundedLines(OptionBox2, 0.5, 4, 3.0, GREEN);
         }
-        DrawTextEx(_Font, _Option1.c_str(), Vector2{OptionBox1.x + 20 , (OptionBox1.y + 5) }, _FontSize, 1, BLACK);
-        DrawTextEx(_Font, _Option2.c_str(), Vector2{OptionBox2.x + 20 , (OptionBox1.y + 5) }, _FontSize, 1, BLACK);
+        DrawTextEx(Game::Instance()->GetDefaultFont(), _Answer1.c_str(), Vector2{OptionBox1.x + 20 , (OptionBox1.y + 5) }, _FontSize, 1, BLACK);
+        DrawTextEx(Game::Instance()->GetDefaultFont(), _Answer2.c_str(), Vector2{OptionBox2.x + 20 , (OptionBox1.y + 5) }, _FontSize, 1, BLACK);
     }
 }
 
@@ -99,58 +104,55 @@ LibEric::Dialog * LibEric::Dialog::Instance(){
 // - Textbox größe hier Festlegen (was passiert bei auflösungs wechsel)
 // - Auswahldialog
 LibEric::Dialog::Dialog() :
-    _MSGAvaible(false), _MSG(), _Font(), _LinePos(0), _FontSize(25){
-    std::string erikDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking");
-    std::string fontFile = erikDir + std::string ("/Font.ttf");
+        _DialogAvaible(false), _MSG(), _LinePos(0), _FontSize(25){
 
-    _Font = LoadFontEx(fontFile.c_str(), _FontSize, NULL, 0);
 }
 
-void LibEric::Dialog::SetMSG(std::string msg){
+void LibEric::Dialog::NewDialog(std::string msg){
     LOGV ("Erstelle DialogBox: ");
     LOGV ("\t", msg);
     _MSG = split_string_by_newline(msg);
     _LinePos = 0;
-    _MSGAvaible = true;
+    _DialogAvaible = true;
 }
 
-void LibEric::Dialog::SetOption(std::string msg, std::string option1, std::string option2) {
-    _Option1 = option1;
-    _Option2 = option2;
+void LibEric::Dialog::NewSelectDialog(std::string msg, std::string option1, std::string option2, int default_answer) {
+    _Answer1 = option1;
+    _Answer2 = option2;
     _MSG = split_string_by_newline(msg);
     _LinePos = 0;
-    _SelectedOption = 0;
-    _FinalOption = 0;
-    _MSGAvaible = true;
-    _OptinAvaible = true;
+    _SelectedAnswer = default_answer;
+    _FinalAnswer = 0;
+    _DialogAvaible = true;
+    _SelectDialogAvaible = true;
 }
 
-int LibEric::Dialog::GetOption() {
-    int ret = _FinalOption;
-    _FinalOption = 0;
+int LibEric::Dialog::GetAnswer() {
+    int ret = _FinalAnswer;
+    _FinalAnswer = 0;
     return ret;
 }
 
 void LibEric::Dialog::Update(){
-    if (_OptinAvaible){
-        if (_SelectedOption == 0){
+    if (_SelectDialogAvaible){
+        if (_SelectedAnswer == 0){
             if (Button_Left() || Button_Right()){
-                _SelectedOption = 1;
+                _SelectedAnswer = 1;
             }
             else if (Button_A()){
-                _FinalOption = 1;
-                _OptinAvaible = false;
-                _MSGAvaible = false;
+                _FinalAnswer = 1;
+                _SelectDialogAvaible = false;
+                _DialogAvaible = false;
             }
         }
-        else if (_SelectedOption == 1){
+        else if (_SelectedAnswer == 1){
             if (Button_Left() || Button_Right()){
-                _SelectedOption = 0;
+                _SelectedAnswer = 0;
             }
             else if (Button_A()){
-                _FinalOption = 2;
-                _OptinAvaible = false;
-                _MSGAvaible = false;
+                _FinalAnswer = 2;
+                _SelectDialogAvaible = false;
+                _DialogAvaible = false;
             }
         }
         return;
@@ -164,19 +166,19 @@ void LibEric::Dialog::Update(){
         }
         else{
             if (Button_A()) {
-                _MSGAvaible = false;;
+                _DialogAvaible = false;;
             }
         }
     }
     else{
         if (Button_A()) {
-            _MSGAvaible = false;;
+            _DialogAvaible = false;;
         }
     }
 }
 
 bool LibEric::Dialog::Exist(){
-    return _MSGAvaible;
+    return _DialogAvaible;
 }
 
 

@@ -66,9 +66,9 @@ void LibEric::LuaSetup(sol::state *state) {
     state->new_usertype<Dialog>("Dialog",
                                 "new", sol::no_constructor,
                                 "Instance", &Dialog::Instance,
-                                "Msg", &Dialog::SetMSG,
-                                "OptionMSG", &Dialog::SetOption,
-                                "GetOption", &Dialog::GetOption
+                                "NewDialog", &Dialog::NewDialog,
+                                "NewSelectDialog", &Dialog::NewSelectDialog,
+                                "GetAnswer", &Dialog::GetAnswer
     );
 }
 

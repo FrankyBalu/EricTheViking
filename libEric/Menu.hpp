@@ -105,7 +105,6 @@ private:
 
     void SetID(std::string id);
 
-    Font _Font;
     std::string _ID;
     std::string _LUA_File;
 
