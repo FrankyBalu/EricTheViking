@@ -23,7 +23,7 @@
 #include <libEric/Game.hpp>
 #include <libEric/Dialog.hpp>
 #include <libEric/StoryNode.hpp>
-#include <libEric/Global_LUA.hpp>
+#include <libEric/Lua.hpp>
 #include <raylib.h>
 #include <Config.hpp>
 
@@ -46,12 +46,12 @@ void Eric::Marker::Clean()
 
 void Eric::Marker::Update()
 {
-    if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
+   /* if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
 
         if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
             LibEric::Dialog::Instance()->SetMSG(_LUA_GetText());
         }
-    }
+    }*/
     _LUA_Update();
 
 }
@@ -73,10 +73,6 @@ void Eric::Marker::Load(const std::string script){
     lua.script_file (EricDir + script);
 
 
-    _ObjectCollision.x = _Position.x;
-    _ObjectCollision.y = _Position.y;
-    _ObjectCollision.width = _Width;
-    _ObjectCollision.height =_Height;
 
     _LUA_Update = lua["Update"];
     _LUA_Draw = lua["Draw"];

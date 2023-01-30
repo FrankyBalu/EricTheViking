@@ -25,7 +25,7 @@
 #include <libEric/GameState.hpp>
 #include <libEric/GameStateFactory.hpp>
 #include <libEric/GraphicGameObject.hpp>
-#include <libEric/Map.hpp>
+//#include <libEric/Map.hpp>
 // #include "../Player.hpp"
 #include <raylib.h>
 #include <vector>
@@ -51,10 +51,11 @@ private:
 
     static const std::string _PlayID;
     Camera2D _Camera;
-    std::vector<LibEric::GameObject*> _Objects;
+    std::vector<LibEric::GameObject_Interface*> _Objects;
 
     Music _BackgroundMusic;
 
+    void Resize(){}
 
     int _CurrentMap;
 

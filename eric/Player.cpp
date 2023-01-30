@@ -20,10 +20,11 @@
 
 #include "Player.hpp"
 #include <libEric/GameStateMaschine.hpp>
-#include <libEric/TextureManager.hpp>
-#include <libEric/PrivateSettings.hpp>
+#include <libEric/RenderManager.hpp>
+#include <libEric/LibEricSettings.hpp>
 #include <raylib.h>
 #include <libEric/Log.hpp>
+#include <libEric/Input.hpp>
 
 Eric::Player* Eric::Player::_Instance = nullptr;
 
@@ -43,14 +44,13 @@ Eric::Player::Player() :
     _Position.y = 10;
     _Frame = 0;
     _Life = 3.0;
-    _IsAttack = false;
     _Visable = true;
 }
 
 
 void Eric::Player::Draw()
 {
-    int speed = GetFPS() / LibEric::PrivateSettings::Instance()->GetPlayerAnimationSpeed();
+    int speed = GetFPS() / 4;
     if ( _AnimationToPlay != PLAYER_ANIMATION_TO_PLAY::NONE ) {
         if ( _Frame < speed *1 )
             _CurrentFrame = 0;
@@ -62,7 +62,6 @@ void Eric::Player::Draw()
             _CurrentFrame = 3;
         else {
             _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::NONE;
-            _IsAttack = false;
             _Frame = 0;
         }
     } else {
@@ -103,20 +102,6 @@ void Eric::Player::Update()
 
     _Position.x += _Velocity.x;
     _Position.y += _Velocity.y;
-
-
-    _ObjectCollision.x = _Position.x + ( ( _Width - 10 ) /2 );
-    _ObjectCollision.y = _Position.y + ( _Height-10 );
-    _NorthCollision.x = _Position.x - 2;
-    _NorthCollision.y = _Position.y - 1;
-    _EastCollision.x = _Position.x + _Width - 2;
-    _EastCollision.y = _Position.y - 1;
-    _SouthCollision.x = _Position.x - 2;
-    _SouthCollision.y = _Position.y + _Height - 2;
-    _WestCollision.x = _Position.x - 2;
-    _WestCollision.y = _Position.y - 1;
-
-
 }
 
 void Eric::Player::Clean()
@@ -126,8 +111,8 @@ void Eric::Player::Clean()
 
 void Eric::Player::HandleInput()
 {
-        if ( IsGamepadButtonDown ( 0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT ) ||IsKeyDown ( KEY_D ) ) {
-            _Velocity.x = 0.9f;
+        if ( LibEric::Button_Right() ) {
+            _Velocity.x = 0.5f;
             if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
                 _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
                 _Frame = 0;
@@ -136,8 +121,8 @@ void Eric::Player::HandleInput()
             }
 
         }
-        if ( IsGamepadButtonDown ( 0, GAMEPAD_BUTTON_LEFT_FACE_LEFT ) ||IsKeyDown ( KEY_A ) ) {
-            _Velocity.x = -0.9f;
+        if ( LibEric::Button_Left() ) {
+            _Velocity.x = -0.5f;
             if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
                 _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
                 _Frame = 0;
@@ -145,8 +130,8 @@ void Eric::Player::HandleInput()
                 _CurrentRow = WALK_LEFT;
             }
         }
-        if ( IsGamepadButtonDown ( 0, GAMEPAD_BUTTON_LEFT_FACE_DOWN ) ||IsKeyDown ( KEY_S ) ) {
-            _Velocity.y = 0.9f;
+        if ( LibEric::Button_Down() ) {
+            _Velocity.y = 0.5f;
             if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
                 _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
                 _Frame = 0;
@@ -154,8 +139,8 @@ void Eric::Player::HandleInput()
                 _CurrentRow = WALK_DOWN;
             }
         }
-        if ( IsGamepadButtonDown ( 0, GAMEPAD_BUTTON_LEFT_FACE_UP ) ||IsKeyDown ( KEY_W ) ) {
-            _Velocity.y = -0.9f;
+        if ( LibEric::Button_Up() ) {
+            _Velocity.y = -0.5f;
             if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
                 _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
                 _Frame = 0;
@@ -164,21 +149,58 @@ void Eric::Player::HandleInput()
             }
         }
 
-    if ( IsGamepadButtonDown ( 0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT ) ||IsKeyDown ( KEY_RIGHT_SHIFT ) ) {
+    if ( LibEric::Button_Right_Down() ) {
+        _Velocity.x = 1.0;
+        if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
+            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
+            _Frame = 0;
+            _Direction = 2;
+            _CurrentRow = WALK_RIGHT;
+        }
+
+    }
+    if ( LibEric::Button_Left_Down() ) {
+        _Velocity.x = -0.5f;
+        if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
+            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
+            _Frame = 0;
+            _Direction = 4;
+            _CurrentRow = WALK_LEFT;
+        }
+    }
+    if ( LibEric::Button_Down_Down() ) {
+        _Velocity.y = 0.5f;
+        if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
+            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
+            _Frame = 0;
+            _Direction = 3;
+            _CurrentRow = WALK_DOWN;
+        }
+    }
+    if ( LibEric::Button_Up_Down() ) {
+        _Velocity.y = -0.5f;
+        if ( _AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE ) {
+            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
+            _Frame = 0;
+            _Direction = 1;
+            _CurrentRow = WALK_UP;
+        }
+    }
+
+    if ( LibEric::Button_X() ) {
         _Velocity.x *= 4.0f;
         _Velocity.y *= 4.0f;
     }
-    if ( !IsGamepadButtonDown ( 0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT ) ||!IsKeyDown ( KEY_RIGHT_SHIFT ) ) {
+    if ( !LibEric::Button_X() ) {
         _Acceleration.x = 0;
         _Acceleration.y = 0;
     }
 
 
-    if ( IsGamepadButtonPressed ( 0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN ) ||IsKeyPressed ( KEY_DOWN ) ) {
+    if ( LibEric::Button_A() ) {
         _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::SWORT;
         // PlaySound ( _SwordSound );
         _Frame = 0;
-        _IsAttack = true;
         if ( _CurrentRow == WALK_UP )
             _CurrentRow = SWORT_UP;
         if ( _CurrentRow == WALK_DOWN )
@@ -203,32 +225,7 @@ void Eric::Player::Load ( std::string scriptFile )
     _CurrentFrame = 0;
     _CurrentRow = 0;
 
-    _ObjectCollision.x = _Position.x + ( ( _Width - 10 ) /2 );
-    _ObjectCollision.y = _Position.y + ( _Height-10 );
-    _ObjectCollision.width = 10;
-    _ObjectCollision.height = 10;
 
-    _NorthCollision.x = _Position.x-2;
-    _NorthCollision.y = _Position.y-1;
-    _NorthCollision.width = _Width+4;
-    _NorthCollision.height = 5;
-
-    _EastCollision.x = _Position.x + _Width - 2;
-    _EastCollision.y = _Position.y - 1;
-    _EastCollision.width = 5;
-    _EastCollision.height = _Height + 4;
-
-    _SouthCollision.x = _Position.x - 2;
-    _SouthCollision.y = _Position.y + _Height - 2;
-    _SouthCollision.width = _Width + 4;
-    _SouthCollision.height = 5;
-
-    _WestCollision.x = _Position.x - 2;
-    _WestCollision.y = _Position.y - 1;
-    _WestCollision.width = 4;
-    _WestCollision.height = _Height + 2;
-
-    _IsAttack = false;
     _Visable = true;
 
 
@@ -236,61 +233,8 @@ void Eric::Player::Load ( std::string scriptFile )
     // _SwordSound =  LoadSound (std::string(std::string(DATAPATH)+std::string("Sword.wav")).c_str());
 }
 
-bool Eric::Player::CollisionDetect ( GraphicGameObject* obj )
-{
-
-    if ( CheckCollisionRecs ( _ObjectCollision, obj->GetObject() ) ) {
-        return true;
-    }
-    if ( CheckCollisionRecs ( _NorthCollision, obj->GetSouth() ) ) {
-        PLOGW << "North CollisionDetect";
-        if ( _IsAttack && _Direction == 1 ) {
-// // //             obj->MinusHP();
-            _IsAttack = false;
-            return true;
-        } //else
-//             MinusHP();
-    }
-    if ( CheckCollisionRecs ( _SouthCollision, obj->GetNorth() ) ) {
-        PLOGW << "South CollisionDetect";
-        if ( _IsAttack && _Direction == 3 ) {
-//             obj->MinusHP();
-            _IsAttack = false;
-            return true;
-        } //else
-//             MinusHP();
-    }
-    if ( CheckCollisionRecs ( _EastCollision, obj->GetWest() ) ) {
-        PLOGW << "East CollisionDetect";
-        if ( _IsAttack && _Direction == 2 ) {
-//             obj->MinusHP();
-            _IsAttack = false;
-            return true;
-        } //else
-//             MinusHP();
-    }
-    if ( CheckCollisionRecs ( _WestCollision, obj->GetEast() ) ) {
-        PLOGW << "West CollisionDetect";
-        if ( _IsAttack && _Direction == 4 ) {
-//             obj->MinusHP();
-            _IsAttack = false;
-            return true;
-        } //else
-//             MinusHP();
-    }
-
-    return false;
-}
-
 void Eric::Player::SetPosition(float x, float y) {
     _Position.x = x;
     _Position.y = y;
 }
 
-Rectangle Eric::Player::GetActionRect(){
-    return _ObjectCollision;
-}
-
-Rectangle Eric::Player::GetCollisionRect(){
-    return _ObjectCollision;
-}

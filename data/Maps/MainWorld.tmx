@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="2">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="2">
  <tileset firstgid="1" name="Oberwelt" tilewidth="16" tileheight="16" tilecount="1440" columns="40">
   <image source="overworld.png" trans="000000" width="640" height="576"/>
  </tileset>
- <layer id="1" name="Background" width="30" height="30">
+ <layer id="1" name="Background" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJxjYBg4kM3IwOBCJ5zDiLBXFsgupBOWHrV31N5Re0ftHbV31N5Rewe9vdNGmH9H7R21d7DaOw2LvdMYqZdHibV3MpD9hYE+eAqSvQMBAPfdVYE=
+   eJzt3MEJwjAYhuF0jtJt3EYvzlLJpA5gDxZUilIjmA+ew3trIDyU/KWH1KGUqqcOL316/rixRu87PfhNS2ftauTHj19s/Pj922815MePX1bOP378cuPHj19u/Pgl+dUO9txT3j9+/HLjx49fbvz48cuNHz9+ufHjxy83fvz45caPH7/c+PHjlxs/fvxy48ePX278+PXgN/Hjxy8ufr/xMz/48cuLHz9+ufHjxy8395fw45cbP378cuPX7uf7r93P/+fv/UZ+/PhFZv62+63zd166Fu3pcjerg1q6AQZsLAg=
   </data>
  </layer>
- <layer id="2" name="Road" width="30" height="30">
+ <layer id="2" name="Road" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJztzwEJADAIAEExmP1jjWEIBe8KPB8BAABsUXmn+5tTv7QH6RcBAQ==
+   eJzt2UEKgzAQBdDYgxW8/6Wkq5RSQY3tJJP3wHXMjzgzpBSAXNalPgDR/IuAb/Qq9g/w6X2WVScA4F7qayWDfCLO9Pn4/5qZyO+6V3byA4B4UXOFeeaYvZzk91vybSM/AEahZuXjTCG/Ge+JZ9svAEAGvfWtvb3PaGQHAHCO/rPN1ezkDsAo1Cxm5/tvIz8AINoGPGEL1Q==
   </data>
  </layer>
- <layer id="3" name="Water" width="30" height="30">
+ <layer id="3" name="Water" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJztzccNgDAABEH/AFMMwcWQiiEVQ2qSreIkxK007w3BOeecc859oQw5CkSUom+FGg1aJNG3Q48BIybRd8aCFRt20ffAiQs3HtHX/bsXup8Isg==
+   eJztzskNwlAUBEHfDCYYFgfDFgxbMLYhSSYEbo8vVUl9764DAAAAAADgF31apXUa0qZ2pznbtEv7dEhj7U5zjumUzumSrrU7zbmle3qkZ3qV3rRnSnNa0jt9ancAAAAAAAAAAAAAAAAAAAAAAP7OF6F/CLI=
   </data>
  </layer>
  <objectgroup id="5" name="Objects">
@@ -25,14 +25,14 @@
    </properties>
   </object>
  </objectgroup>
- <layer id="4" name="Collision" width="30" height="30">
+ <layer id="4" name="Collision" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJztzU0OQDAYhOGyc4fegeIuKHfxdwV3IFzSLCqxkjSp6eab5E1m9+hEKR0p9sQV13cm5bnly6rFFTeQa2H1roHo+k7cf7dFcp+JG34Z2c1RgQwqUUVyG9SiDlnUk9wRTWhGC1pJ7o4O9090kdyvict1Y3QDY3kZVg==
+   eJzt2stNw0AUheFJdjxKSA+QhF6AhF54tcACKgBBE2YP9EAn3EhBsLCjsY+vZyb+f+lIKBIYfQoOsTObhDBj0qhb+Gnhp4WfFn5affnNp/Vf73t9+S3+mZ3h1zr8tPDTwk8LP62Vma23u8KPIsNPCz+tof0eOn7fh+3T9tXj79JHPP+08NPCT2sIvwPfH580T78T26ltblvYlj6HSZqn37ntwnZpW9nWPofp3Pfkb13z9Lu23dhubXe2e5/DJM3T79n2sv361fbmc5ik8fqrhZ9WaX7Kud4j/LRK9MvJsDS/Tfhp4aeXiyF+WvjF9Wh7qnm8rd/hNIQj23EG9yiHNKxs7zWPt/Xb3CdfTsd1j3xXbf1WI7xHvqtSz3+5hJ8Wflr4aZXul/r/6NL9UoefFn5aOfnl+hmrXQ3hl/oc71lOz78Sw08LPy38tPDTGpNf0zV4pTH5VaH+GrzSmPw8wk8r1s/j3LEPxfpVof9zxz7E368Wflr4NRdzPQ0/rVL8cn39L8WvCnm+/pfil7qma+j4aaXwy+0z9Eo8/7Tw08JPCz8t/LTwqy/2/Q5+9VUh7v0Oflr4aeGnhZ/Wrx/rvh82TVah
   </data>
  </layer>
- <layer id="6" name="Sky" width="30" height="30">
+ <layer id="6" name="Sky" width="80" height="80">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAPBoDhAAAQ==
+   eJztwTEBAAAAwqD1T20Hb6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA1wBkAAAB
   </data>
  </layer>
 </map>

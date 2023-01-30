@@ -59,13 +59,18 @@ public:
 
 
 
+    Vector2 GetPosition (){
+        return _Position;
+    }
+    void SetPosition (float x, float y);
 
-    void SetPosition (float x, float y) override;
+    void ObjectCollision(LibEric::GameObject_Interface *object){}
+    void CollisionWithMap(){}
+    std::string GetID(){return std::string ("Player");}
 
-    bool CollisionDetect(GraphicGameObject *obj);
-
-    Rectangle GetActionRect() override;
-    Rectangle GetCollisionRect() override;
+    Rectangle GetRect()override{
+        LibEric::GraphicGameObject::GetRect();
+    }
 
 private:
 
@@ -80,6 +85,11 @@ private:
     int _Frame;
 
     float _Life;
+
+    Vector2  _Velocity;
+    Vector2  _Acceleration;
+    int _Direction;
+    int _NumFrames;
 
     Sound _SwordSound;
     static Player *_Instance;

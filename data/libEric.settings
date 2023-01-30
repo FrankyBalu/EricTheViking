@@ -1,0 +1,11 @@
+FirstState = 'MainMenu'
+ShowVersion = false
+BackgroundColorRed = 0
+BackgroundColorGreen = 80
+BackgroundColorBlue = 170
+BackgroundColorAlpha = 255
+DialogBoxWidth = 0.8
+DialogBoxHeight = 0.2
+LogLevel = 8
+MSAA = true
+ExitKey = 193

@@ -3152,9 +3152,9 @@ struct pre_main {
 #if defined(__cplusplus) && !defined(COMPAT53_LUA_CPP)
 extern "C" {
 #endif
-#include "../lua/lua-5.4.4/include/lua.h"
-	#include "../lua/lua-5.4.4/include/lualib.h"
-	#include "../lua/lua-5.4.4/include/lauxlib.h"
+#include <lua.h>
+	#include <lualib.h>
+	#include <lauxlib.h>
 #if defined(__cplusplus) && !defined(COMPAT53_LUA_CPP)
 }
 #endif
@@ -4412,9 +4412,9 @@ COMPAT53_API void luaL_requiref(lua_State* L, const char* modname, lua_CFunction
 #if defined(__cplusplus) && !defined(COMPAT53_LUA_CPP)
 extern "C" {
 #endif
-#include "../lua/lua-5.4.4/include/lua.h"
-	#include "../lua/lua-5.4.4/include/lualib.h"
-	#include "../lua/lua-5.4.4/include/lauxlib.h"
+#include <lua.h>
+	#include <lualib.h>
+	#include <lauxlib.h>
 #if defined(__cplusplus) && !defined(COMPAT53_LUA_CPP)
 }
 #endif
@@ -14538,7 +14538,7 @@ namespace sol { namespace stack {
 
 #if SOL_IS_ON(SOL_COMPILER_GCC)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
 #endif
 
 	namespace stack_detail {
@@ -17291,7 +17291,7 @@ namespace sol {
 
 #if SOL_IS_ON(SOL_COMPILER_GCC)
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
 #endif
 
 		template <typename T>

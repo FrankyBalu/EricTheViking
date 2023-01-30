@@ -1,6 +1,5 @@
 /*
  * LibEric
- * Copyright (C) 2021  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
@@ -19,77 +18,64 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
-#ifndef __GAMESTATEFACTORY
-#define __GAMESTATEFACTORY
+#ifndef ERIC_GAMESTATEFACTORY_HPP
+#define ERIC_GAMESTATEFACTORY_HPP
 
 #include <string>
 #include <map>
-#include "GameState.hpp"
+#include <libEric/GameState.hpp>
 
 namespace LibEric {
 
-//!  StateCreator
-/*!
-  Basis Klasse, mit ihr müssen alle StateCreators erstellt werden,\n
-  Damit sie zum Spielhinzugefügt werden können
-*/
-class StateBaseCreator
-{
-public:
-    //! Neuen State erstellen
-    /*! Es wird ein neue Gamestate zurückgegeben
-        \return den neuen Gamestate, wenn alles geklappt hat,\n
-                sondt nullptr.
-    */
-    virtual GameState* CreateState() const = 0;
-    virtual ~StateBaseCreator() {}
-};
+    //! StateCreator
+    /*!
+     * Basisklasse, die die Schnittstelle beschreibt, die ein StateCreator einhalten muss
+     */
+    class StateBaseCreator {
+    public:
 
-//!  Das eigentliche Spiel.
-/*!
-  Theoretisch die einzige Klasse die vom eigentlichen Spiel aufgerufen werden muss.
-*/
-class GameStateFactory
-{
-public:
+        //! Erstellt den neuen State
+        /*!
+         * Gibt einen neuen Gamestate zurück, wird nicht direkt aufgerufen, sondern sollte nur von GameStateFactory verwendet werden
+         * @return nullptr, wenn der State nicht erstellt werden konnte
+         */
+        virtual GameState *CreateState() const = 0;
 
-    //! Neuen StateType Regestrieren
-    /*! Es wird ein neues Gamestate (creator) registriert
-    */
-    bool RegisterType(std::string typeID, StateBaseCreator* creator);
+        virtual ~StateBaseCreator() {}
+    };
 
-    //! Gamestate erstellen
-    /*! Es wird ein neuer GameState von der angegebenen Id zurück gegeben
-     *
-     * \param typeID Id des Gamestates, den man erstellen möchte
-     *
-     * \return nullptr wenn Id unbekannt oder sonst etwas schief läuft,\n
-     *         sonst einen Pointer auf den neuen Gamestate.
-    */
-    GameState* Create(std::string typeID);
+    //! Die Klasse, die neue Gamestates erstellt
+    class GameStateFactory {
+    public:
+        //! Zeiger auf die Instance der Klasse
+        static GameStateFactory *Instance();
 
-    //! Neuen State erstellen
-    /*! Es wird ein neue Gamestate zurückgegeben
-        \return den neuen Gamestate, wenn alles geklappt hat,\n
-                sondt nullptr.
-    */
-    static GameStateFactory* Instance()
-    {
-        if (_Instance == nullptr)
-            _Instance = new GameStateFactory();
-        return _Instance;
-    }
+        //! Neue State wird Registriert
+        /*!
+         * Registriert einen neuen BaseCreator, damit eine instance des Gamestates erstellt werden kann.
+         *
+         * @param typeID ID unter der der neue State angesprochen wird
+         * @param creator Der StateBaseCreator des Gamestates
+         * @return false, wenn schon ein State mit der ID existiert
+         */
+        bool RegisterType(std::string typeID, StateBaseCreator *creator);
 
-private:
+        //! Erstellt einen neuen Gamestate
+        /*!
+         * Hier wird der neue Gamestate erstellt
+         * @param typeID ID des zu erstellenden States
+         * @return false, wenn die ID nicht vorhanden ist oder kein State erstellt werden konnte
+         */
+        GameState *Create(std::string typeID);
 
+    private:
+        static GameStateFactory *_Instance;
 
-    GameStateFactory():_Creators() {}
+        GameStateFactory() : _Creators() {}
 
-    std::map<std::string, StateBaseCreator*> _Creators;
+        std::map<std::string, StateBaseCreator *> _Creators;
+    };
 
-    static GameStateFactory *_Instance;
-};
+} // LibEric
 
-}; //namespace LibEric
-#endif // __GAMESTATEFACTORY
+#endif //ERIC_GAMESTATEFACTORY_HPP

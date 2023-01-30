@@ -18,113 +18,75 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <fstream>
-#include <filesystem>
 
+#include <libEric/UserSettings.hpp>
+#include <libEric/Log.hpp>
 #include <raylib.h>
-#include "UserSettings.hpp"
-#include "Log.hpp"
-#include <Config.hpp>
+#include <Extra/raylib-physfs.h>
 
 #define SOL_ALL_SAFETIES_ON 1
-#include "../../Extra/sol/sol.hpp"
 
-LibEric::UserSettings* LibEric::UserSettings::_Instance = nullptr;
+#include <sol/sol.hpp>
 
-LibEric::UserSettings* LibEric::UserSettings::Instance() {
+LibEric::UserSettings *LibEric::UserSettings::_Instance = nullptr;
+
+LibEric::UserSettings::UserSettings()
+        : _MusicVolume(0.5), _EffectVolume(0.5), _Fullscreen(false), _CollisionBoxes(true),
+          _WindowWidth(800), _WindowHeight(600), _FPS(60) {
+
+}
+
+LibEric::UserSettings *LibEric::UserSettings::Instance() {
     if (_Instance == nullptr)
         _Instance = new UserSettings();
     return _Instance;
 }
 
-LibEric::UserSettings::UserSettings()
-    : _Fullscreen(true), _CollisionBoxes(false), _WindowedWidth(800),
-      _WindowedHeight(600), _FPS(60), _MusicVolume(0.5f), _EffectVolume(0.5f)
-{
-}
-
 bool LibEric::UserSettings::Load() {
+    bool return_value = false;
+    std::string script_file;
+
     sol::state lua;
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
-//TODO System-weiter Speicherort bzw Windows Speicherort 
-    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Eric/UserSettings.lua");
 
-    if (!FileExists(confFile.c_str())){
-            Save();
+    if (FileExistsInPhysFS("user/main.settings")) {
+        return_value = true;
+        script_file = LoadFileTextFromPhysFS("user/main.settings");
+        LOGI ("Lade Settings aus Benutzerverzeichnis");
+    } else if (FileExistsInPhysFS("system/main.settings")) {
+        return_value = true;
+        script_file = LoadFileTextFromPhysFS("system/main.settings");
+        LOGI ("Lade Settings aus Systemverzeichnis");
     }
 
-    lua.script_file (confFile);
-    _Fullscreen = lua.get<bool>("FULLSCREEN");
-    _CollisionBoxes = lua.get<bool>("COLLISIONBOXES");
-    _WindowedWidth =  lua.get<int>("WINDOWWIDTH");
-    _WindowedHeight =  lua.get<int>("WINDOWHEIGHT");
-    _MusicVolume =  lua.get<float>("MUSICVOLUME");
-    _EffectVolume =  lua.get<float>("EFECTVOLUME");
-
-    return true;
-}
-
-void LibEric::UserSettings::Save(){
-    std::ofstream file;
-//TODO Windows Speicherort 
-    std::string confFile = std::string (getenv("HOME")) + std::string ("/.Eric/UserSettings.lua");
-    std::string erikDir = std::string (getenv("HOME")) + std::string ("/.Eric");
-
-    if (!FileExists(confFile.c_str())){
-            if (!DirectoryExists(erikDir.c_str())){
-                PLOGI << "Erstelle Verzeichnis: " << erikDir;
-                std::filesystem::create_directory(erikDir);
-            }
+    if (return_value == true) {
+        lua.script(script_file.c_str());
+        _MusicVolume = lua.get<float>("MusicVolume");
+        _EffectVolume = lua.get<float>("EffectVolume");
+        _Fullscreen = lua.get<bool>("Fullscreen");
+        _CollisionBoxes = lua.get<bool>("CollisionsBox");
+        _WindowWidth = lua.get<int>("Screen_Width");
+        _WindowHeight = lua.get<int>("Screen_Height");
+        _FPS = lua.get<int>("FPS");
     }
-    file.open (confFile);
-    file << "FULLSCREEN = ";
-    if (_Fullscreen)
-        file << "true\n";
-    else
-        file << "false\n";
-    file << "COLLISIONBOXES = ";
-    if (_CollisionBoxes)
-        file << "true\n";
-    else
-        file << "false\n";
-    file << "WINDOWWIDTH = " << _WindowedWidth << "\n";
-    file << "WINDOWHEIGHT = " << _WindowedHeight << "\n";
-    file << "MUSICVOLUME = " << _MusicVolume << "\n";
-    file << "EFECTVOLUME = " << _EffectVolume << "\n";
-    PLOGI << "UserSettings in " << confFile << " gespeichert!";
-    file.close();
+
+    LOGD("\t_MusicVolume : ", _MusicVolume);
+    LOGD("\t_EffectVolume: ", _EffectVolume);
+    LOGD("\t_Fullscreen  : ", _Fullscreen);
+    LOGD("\t_CollisionBox: ", _CollisionBoxes);
+    LOGD("\t_WindowWidth : ", _WindowWidth);
+    LOGD("\t_WindowHeight: ", _WindowHeight);
+    LOGD("\t_FPS         : ", _FPS);
+    return return_value;
 }
 
-
-void LibEric::UserSettings::SetFullscreen(bool fullscreen) {
-    _Fullscreen = fullscreen;
+float LibEric::UserSettings::GetMusicVolume() {
+    return _MusicVolume;
 }
 
-void LibEric::UserSettings::SetCollisionBoxes(bool boxes) {
-    _CollisionBoxes = boxes;
-}
-
-
-
-void LibEric::UserSettings::SetWindowWidth(int width) {
-    _WindowedWidth = width;
-}
-
-void LibEric::UserSettings::SetWindowHeight(int height) {
-    _WindowedHeight = height;
-}
-
-void LibEric::UserSettings::SetFPS(int fps){
-    _FPS = fps;
-}
-
-void LibEric::UserSettings::SetMusicVolume(float volume) {
-    _MusicVolume = volume;
-}
-
-void LibEric::UserSettings::SetEffectVolume(float volume) {
-    _EffectVolume = volume;
+float LibEric::UserSettings::GetEffectVolume() {
+    return _EffectVolume;
 }
 
 bool LibEric::UserSettings::GetFullScreen() {
@@ -136,28 +98,13 @@ bool LibEric::UserSettings::GetCollisionBoxes() {
 }
 
 int LibEric::UserSettings::GetWindowWidth() {
-    return _WindowedWidth;
+    return _WindowWidth;
 }
 
 int LibEric::UserSettings::GetWindowHeight() {
-    return _WindowedHeight;
+    return _WindowHeight;
 }
 
-int LibEric::UserSettings::GetFPS(){
+int LibEric::UserSettings::GetFPS() {
     return _FPS;
-}
-float LibEric::UserSettings::GetMusicVolume() {
-    return _MusicVolume;
-}
-
-float LibEric::UserSettings::GetEffectVolume() {
-    return _EffectVolume;
-}
-
-int LibEric::UserSettings::GetFSHeight(){
-    return GetMonitorHeight(GetCurrentMonitor());
-}
-
-int LibEric::UserSettings::GetFSWidth(){
-    return GetMonitorWidth(GetCurrentMonitor());
 }

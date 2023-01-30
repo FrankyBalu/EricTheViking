@@ -18,16 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
 #include "Log.hpp"
-#include <plog/Init.h>
-#include <plog/Formatters/TxtFormatter.h>
-#include <plog/Appenders/ColorConsoleAppender.h>
 
+LibEric::Log *LibEric::Log::_Instance = nullptr;
 
-void LibEric::InitLog(plog::Severity logLevel) {
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init (logLevel, &consoleAppender);
-
+LibEric::Log::Log() {
+    _LogLevel = LOG_WARNING;
 }
 
+LibEric::Log *LibEric::Log::Instance() {
+    if (_Instance == nullptr) {
+        _Instance = new Log();
+    }
+    return _Instance;
+}
 
+void LibEric::Log::SetLogLevel(int logLevel) {
+    _LogLevel = logLevel;
+}

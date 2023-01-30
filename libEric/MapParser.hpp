@@ -21,7 +21,7 @@
 #ifndef __LEVELPARSER
 #define __LEVELPARSER
 
-#include "../Extra/tinyxml2/tinyxml2.h"
+#include <tinyxml2.h>
 #include "Map.hpp"
 #include <string>
 

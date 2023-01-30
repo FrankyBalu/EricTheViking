@@ -18,29 +18,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #define ERIC_APP 1
-#include <libEric/LibEric.hpp>
-
-#include "Menu.hpp"
+#include <libEric/Log.hpp>
+#include <libEric/Game.hpp>
+#include <libEric/LibEricSettings.hpp>
+#include <libEric/UserSettings.hpp>
+#include <libEric/RenderManager.hpp>
+#include <libEric/GameStateMaschine.hpp>
+#include <libEric/Menu.hpp>
+#include <libEric/Dialog.hpp>
 #include "PlayState.hpp"
-#include "Marker.hpp"
-#include "Gateway.hpp"
-
 
 int main (){
-    LibEric::Game::Instance()->Init("Erik der Wikinger");
 
-    LibEric::GameStateFactory::Instance()->RegisterType("Menu", new Eric::MenuCreator());
+    LibEric::Log::Instance()->SetLogLevel(LibEric::LOG_VERBOSE);
+    LibEric::RenderManager::Instance()->LoadTextureFromFile("test3", "Test.png");
+    LibEric::GameStateFactory::Instance()->RegisterType("Menu", new LibEric::MenuCreator());
     LibEric::GameStateFactory::Instance()->RegisterType("Play", new Eric::PlayCreator());
 
-    LibEric::GameObjectFactory::Instance()->RegisterType("Marker", new Eric::MarkerCreator());
-    LibEric::GameObjectFactory::Instance()->RegisterType("Gateway", new Eric::GatewayCreator());
-
-    LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "Main.menu");
-    while (LibEric::Game::Instance()->Running()){
-        LibEric::Game::Instance()->HandleEvents();
-        LibEric::Game::Instance()->Update();
-        LibEric::Game::Instance()->Render();
+    if (LibEric::Game::Instance()->Init("EricTheViking")) {
+        LOGI("Bis jetzt kein Fehler!");
     }
-    LibEric::Game::Instance()->Clean();
+
+    LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "MainMenu.lua");
+
+   LibEric::Game::Instance()->SetGamepad(3);
+    LibEric::Game::Instance()->Run();
+
+    LibEric::RenderManager::Instance()->ClearRenderManager();
     return 0;
 }

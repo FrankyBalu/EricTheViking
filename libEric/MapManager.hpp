@@ -58,7 +58,7 @@ public:
 
     Layer* GetObjectLayer();
     //FIXME muss noch in eigene Kollisionslogik
-    bool Collision(GameObject *object);
+    bool Collision(GameObject_Interface *object);
 
 private:
 

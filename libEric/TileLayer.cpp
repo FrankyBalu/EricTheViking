@@ -21,11 +21,11 @@
 
 
 #include "TileLayer.hpp"
-#include "TextureManager.hpp"
+#include "RenderManager.hpp"
 #include "Game.hpp"
 #include "UserSettings.hpp"
 #include "Log.hpp"
-
+#include <raylib.h>
 
 
 LibEric::TileLayer::TileLayer(int tileSize, int mapWidth, int mapHeight, const std::vector<Tileset> &tilesets)
@@ -63,7 +63,7 @@ void LibEric::TileLayer::Render()
             id--;
 
 
-            TextureManager::Instance()->DrawTile(tileset.name,  j*_TileSize, i * _TileSize, _TileSize, _TileSize, (id - (tileset.firstGridID - 1)) / tileset.numColumns, (id - (tileset.firstGridID -1)) % tileset.numColumns);
+            RenderManager::Instance()->DrawTile(tileset.name,  j*_TileSize, i * _TileSize, _TileSize, _TileSize, (id - (tileset.firstGridID - 1)) / tileset.numColumns, (id - (tileset.firstGridID -1)) % tileset.numColumns);
 //             LibEric::TextureManager::Instance()->DrawFrame(tileset.name,  j*_TileSize, i * _TileSize, _TileSize, _TileSize, (id - (tileset.firstGridID - 1)) / tileset.numColumns, (id - (tileset.firstGridID -1)) % tileset.numColumns);
             if (_Name == std::string("Collision")&&UserSettings::Instance()->GetCollisionBoxes()) {
                 DrawRectangleLines(j*_TileSize, i * _TileSize, _TileSize, _TileSize, RED);
@@ -72,7 +72,7 @@ void LibEric::TileLayer::Render()
     }
 }
 
-bool LibEric::TileLayer::CheckCollision(GameObject *object) {
+bool LibEric::TileLayer::CheckCollision(GameObject_Interface *object) {
     Rectangle tileRect;
 
     for (int i = 0; i < _NumRows; i++)
@@ -89,7 +89,7 @@ bool LibEric::TileLayer::CheckCollision(GameObject *object) {
             tileRect.height = _TileSize;
             tileRect.width = _TileSize;
 
-            if (CheckCollisionRecs(object->GetCollisionRect(), tileRect)) {
+            if (CheckCollisionRecs(object->GetRect(), tileRect)) {
                 return true;
             }
         }
@@ -115,7 +115,7 @@ LibEric::Tileset LibEric::TileLayer::GetTilesetByID(int tileID)
         }
     }
 
-    PLOGW << "Konnte kein Tileset finden";
+    LOGE ("Konnte kein Tileset finden: ", tileID);
     Tileset t;
     return t;
 }

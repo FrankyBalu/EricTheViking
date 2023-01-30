@@ -24,7 +24,7 @@
 
 #include <string>
 #include <vector>
-#include "GameObject.hpp"
+#include "GameObject_Interface.hpp"
 #include "Layer.hpp"
 
 class TileLayer;
@@ -62,7 +62,7 @@ public:
         return _Height;
     }
 
-    bool Collison (GameObject *object);
+    bool Collison (GameObject_Interface *object);
 
 private:
     friend class MapParser;

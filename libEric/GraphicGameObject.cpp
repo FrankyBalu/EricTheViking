@@ -18,14 +18,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "GraphicGameObject.hpp"
-#include "TextureManager.hpp"
-#include "Game.hpp"
-#include "Log.hpp"
-#include "UserSettings.hpp"
+#include <libEric/GraphicGameObject.hpp>
+#include <libEric/RenderManager.hpp>
+#include <libEric/Game.hpp>
+#include <libEric/Log.hpp>
+#include <libEric/UserSettings.hpp>
+
 
 LibEric::GraphicGameObject::GraphicGameObject()
-    :GameObject(), _Position{0,0},_Velocity{0,0}, _Acceleration{0,0} {
+    : GameObject_Interface(), _Position{0, 0}, _CurrentFrame(0), _CurrentRow(0),
+    _TextureID(), _TypeID(), _Visable(false){
 }
 
 
@@ -39,20 +41,13 @@ void LibEric::GraphicGameObject::Draw()
     //Es Wird nur angezeigt, wenn die lebensenergie größer 0 ist
     if (!_Visable)
          return;
-    PLOGV << "Draw Texture : " << _TextureID;
-    PLOGV << "     Position: " << _Position.x << " x " << _Position.y;
-    PLOGV << "     Breite  : " << _Width;
-    PLOGV << "     Höhe    : " << _Height;
-    PLOGV << "     Spalte  : " << _CurrentFrame;
-    PLOGV << "     Zeile   : " << _CurrentRow;
-    TextureManager::Instance()->DrawFrame(_TextureID, (int)_Position.x, (int)_Position.y, _Width, _Height, _CurrentFrame, _CurrentRow);
-    if (UserSettings::Instance()->GetCollisionBoxes()) {
-        DrawRectangleLines(_ObjectCollision.x, _ObjectCollision.y, _ObjectCollision.width, _ObjectCollision.height, RED );
-        DrawRectangleLines(_NorthCollision.x, _NorthCollision.y, _NorthCollision.width, _NorthCollision.height, BLUE );
-        DrawRectangleLines(_EastCollision.x, _EastCollision.y, _EastCollision.width, _EastCollision.height, BLUE );
-        DrawRectangleLines(_SouthCollision.x, _SouthCollision.y, _SouthCollision.width, _SouthCollision.height, BLUE );
-        DrawRectangleLines(_WestCollision.x, _WestCollision.y, _WestCollision.width, _WestCollision.height, BLUE );
-    }
+    LOGV ("Draw Texture : ", _TextureID);
+    LOGV ("     Position: ", _Position.x, " x ", _Position.y);
+    LOGV ("     Breite  : ", _Width);
+    LOGV ("     Höhe    : ", _Height);
+    LOGV ("     Spalte  : ", _CurrentFrame);
+    LOGV ("     Zeile   : ", _CurrentRow);
+    RenderManager::Instance()->DrawFrame(_TextureID, (int)_Position.x, (int)_Position.y, _Width, _Height, _CurrentFrame, _CurrentRow);
 }
 
 void LibEric::GraphicGameObject::Clean()
@@ -61,8 +56,7 @@ void LibEric::GraphicGameObject::Clean()
 
 void LibEric::GraphicGameObject::Update()
 {
-    if (_Visable)
-        return;
+    return;
 }
 
 Vector2  LibEric::GraphicGameObject::GetPosition()
@@ -81,68 +75,6 @@ int LibEric::GraphicGameObject::GetHeight()
     return _Height;
 }
 
-void LibEric::GraphicGameObject::SetName(std::string name) {
-    _Name = name;
-}
-
-std::string LibEric::GraphicGameObject::GetName() {
-    return _Name;
-}
-
-void LibEric::GraphicGameObject::SetActivCollision(int activ) {
-    if (activ >= 0 && activ <=4) {
-        _ActivCollision = activ;
-    }
-}
-
-int LibEric::GraphicGameObject::GetActivCollision() {
-    return _ActivCollision;
-}
-
-void LibEric::GraphicGameObject::SetObject(Rectangle object) {
-    _ObjectCollision = object;
-}
-
-Rectangle LibEric::GraphicGameObject::GetObject() {
-    return _ObjectCollision;
-}
-
-void LibEric::GraphicGameObject::SetNorth(Rectangle north) {
-    _NorthCollision = north;
-}
-
-Rectangle LibEric::GraphicGameObject::GetNorth() {
-    return _NorthCollision;
-}
-
-void LibEric::GraphicGameObject::SetEast(Rectangle east) {
-    _EastCollision = east;
-}
-
-Rectangle LibEric::GraphicGameObject::GetEast() {
-    return _EastCollision;
-}
-
-void LibEric::GraphicGameObject::SetSouth(Rectangle south) {
-    _SouthCollision = south;
-}
-
-Rectangle LibEric::GraphicGameObject::GetSouth() {
-    return _SouthCollision;
-}
-
-void LibEric::GraphicGameObject::SetWest(Rectangle west) {
-    _WestCollision = west;
-}
-
-Rectangle LibEric::GraphicGameObject::GetWest() {
-    return _WestCollision;
-}
-
-bool LibEric::GraphicGameObject::CollisionDetect([[maybe_unused]] GraphicGameObject* obj) {
-    return false;
-}
-
 void LibEric::GraphicGameObject::SetPosition(float x, float y){
     _Position.x = x;
     _Position.y = y;
@@ -156,4 +88,22 @@ void LibEric::GraphicGameObject::SetWidth(float w){
     _Width = w;
 }
 
+void LibEric::GraphicGameObject::ObjectCollision(GameObject_Interface *object) {
+    return;
+}
 
+void LibEric::GraphicGameObject::CollisionWithMap() {
+    return;
+}
+
+std::string LibEric::GraphicGameObject::GetID() {
+    return std::string("UNKNOWN");
+}
+
+Rectangle LibEric::GraphicGameObject::GetRect() {
+    Rectangle  rect;
+    rect.x = _Position.x;
+    rect.y = _Position.y;
+    rect.height = _Height;
+    rect.width = _Width;
+}

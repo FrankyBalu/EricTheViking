@@ -1,200 +1,156 @@
-/*
- * libEric
- * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+//
+// Created by frank on 27.01.23.
+//
 
-
-#include "Game.hpp"
-#include "UserSettings.hpp"
-#include "PrivateSettings.hpp"
-#include "GameStateMaschine.hpp"
-#include "Dialog.hpp"
+#include <libEric/Game.hpp>
+#include <libEric/Log.hpp>
 #include <Config.hpp>
+#include <libEric/UserSettings.hpp>
+#include <libEric/LibEricSettings.hpp>
+#include <libEric/GameStateMaschine.hpp>
+#include <libEric/Dialog.hpp>
+#include <libEric/Input.hpp>
 #include <raylib.h>
-#include "Log.hpp"
 
-//FIXME Vollbild muss noch verbessert werden
-int TOFS = 0;
+#define RAYLIB_PHYSFS_IMPLEMENTATION
 
-LibEric::Game* LibEric::Game::_Instance = nullptr;
+#include "../Extra/raylib-physfs.h"
 
-LibEric::Game::Game() :
-    _Running(false){
-}
+LibEric::Game *LibEric::Game::_Instance = nullptr;
 
-
-
-bool LibEric::Game::Init(const char* title) {
-    //Als erstes Loggingsystem Initialisieren
-    InitLog(plog::debug);
-    SetTraceLogLevel(8);
-    PLOGI << "Initialisiere Erik The Game";
-
-    PLOGD << "\tLade LibEricsettings";
-    PrivateSettings::Instance()->Load();
-    PLOGD << "\t\tErfolgreich";
-    PLOGD << "\tLade UserSettings";
-    UserSettings::Instance()->Load();
-    PLOGD << "\t\tErfolgreich";
-    PLOGD << "\tSetze LogLevel auf: " << PrivateSettings::Instance()->GetLogLevel();
-    SetTraceLogLevel(PrivateSettings::Instance()->GetLogLevel());
-    PLOGD << "\t\tErfolgreich";
-
-    int display = GetCurrentMonitor();
-    //Fenster erstellen
-    PLOGD << "\tErstelle Fenster";
-    if (UserSettings::Instance()->GetFullScreen()){
-        SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_FULLSCREEN_MODE);
-        InitWindow(GetMonitorWidth(display), GetMonitorHeight(display), title);
-        if (IsWindowReady()){
-            PLOGD << "\t\tVollbild Erfolgreich";
-        }
-        else {
-            PLOGD << "\t\tVollbild Fehlgeschlagen";
-            return false;
-        }
-    }
-    else{
-        InitWindow(UserSettings::Instance()->GetWindowWidth(), UserSettings::Instance()->GetWindowHeight(), title);
-        if (IsWindowReady()){
-            PLOGD << "\t\tFenstermodus Erfolgreich";
-        }
-        else {
-            PLOGD << "\t\tFenstermodus Fehlgeschlagen";
-            return false;
-        }
-    }
-
-    //Bilder pro Sekunde setzen
-    PLOGD << "\tSetze Bildwiederholrate auf " << UserSettings::Instance()->GetFPS() << "fps";
-    SetTargetFPS(UserSettings::Instance()->GetFPS());
-    PLOGD << "\t\tErfolgreich";
-    //Audiogerät initialisieren
-    PLOGD << "\tInitialisiere Audiogerät";
-    InitAudioDevice();
-    if (IsAudioDeviceReady()){
-        PLOGD << "\t\tErfolgreich";
-    }
-    else {
-        PLOGD << "\t\tFehlgeschlagen";
-    }
-
-    // Maus sollte so aus dem sichtfeld verschwinden, keine ahnung ob es so geht
-    //TODO Prüfen ob es so geht
-    SetMousePosition(0, 0);
-
-    //Muss noch in PrivateSettings überführt werden
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
-    SetExitKey(KEY_F4);
-
-    //bis jetzt war alles gut, also läuft das spiel
-    _Running = true;
-    PLOGI << "\tErfolgreich Initialisier";
-    return _Running;
-}
-
-void LibEric::Game::Render() {
-    if (TOFS > 0){
-        TOFS--;
-        if (TOFS == 0)
-            ToggleFullscreen();
-    }
-    PLOGV << "Starte Rendering";
-    BeginDrawing();
-    PLOGV << "\tClear Hintergrund";
-    ClearBackground(PrivateSettings::Instance()->GetBackgroundColor());
-    PLOGV << "\tRender GameState";
-    GameStateMaschine::Instance()->Render();
-    if (Dialog::Instance()->Exist()){
-        PLOGV << "\tRender Dialog";
-        Dialog::Instance()->DrawDialog();
-    }
-    PLOGV << "Rendern Beenden";
-    EndDrawing();
-}
-
-void LibEric::Game::HandleEvents() {
-    if (IsKeyPressed(KEY_F))
-    {
-        ToggleFullscreen();
-    }
-}
-
-void LibEric::Game::Clean() {
-    PLOGD << "Räume Spiel auf";
-}
-
-void LibEric::Game::Quit() {
-    PLOGI << "Spiel wird beendet";
-    _Running = false;
-}
-
-
-void LibEric::Game::Update() {
-    PLOGV << "Update Mainloop";
-    if (WindowShouldClose()){
-        PLOGI << "Beende Spiel";
-        _Running = false;
-    }
-    if (Dialog::Instance()->Exist()){
-        PLOGV << "Update Dialog";
-        Dialog::Instance()->Update();
-    }
-    else{
-        PLOGV << "Update GameState";
-        GameStateMaschine::Instance()->Update();
-    }
-}
-
-LibEric::Game* LibEric::Game::Instance() {
-    if (_Instance == nullptr) {
+LibEric::Game *LibEric::Game::Instance() {
+    if (_Instance == nullptr)
         _Instance = new Game();
-    }
     return _Instance;
 }
 
-
-bool LibEric::Game::Running() {
-    return _Running;
+LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(),UseGamepad(0) {
 }
 
-void LibEric::Game::ToggleFS() {
-    PLOGD << "Wechsel Vollbild";
-    int display = GetCurrentMonitor();
-    if (!IsWindowFullscreen()){
-        PLOGD << "\tvon Fenster (" << UserSettings::Instance()->GetWindowWidth() << "x" << UserSettings::Instance()->GetWindowHeight() << ") zu Vollbild(" << GetMonitorWidth(display) << "+" <<  GetMonitorHeight(display) << ")";
-        SetWindowSize(GetMonitorWidth(display), GetMonitorHeight(display));
-        TOFS = 3;
-        UserSettings::Instance()->SetFullscreen(true);
+bool LibEric::Game::Init(const std::string &appName) {
+    _AppName = appName;
+    _AppDir = std::string(INSTALL_PREFIX) + std::string("/share/") + std::string(_AppName);
+
+    //Dies dient nur die Meldungen von Raylib zu unterdrücken, auser Fehler
+    SetTraceLogLevel(4);
+
+    InitPhysFSEx(_AppDir.c_str(), "system");
+    MountPhysFS(GetPerfDirectory(" ", _AppName.c_str()), "user");
+    if (!LibEricSettings::Instance()->Load()) {
+        return false;
+    }
+    if (!UserSettings::Instance()->Load()) {
+        return false;
+    }
+    Log::Instance()->SetLogLevel(LibEricSettings::Instance()->GetLogLevel());
+    Log::Instance()->SetLogLevel(LibEric::LOG_DEBUG);
+    SetTargetFPS(UserSettings::Instance()->GetFPS());
+
+    //Configflags für Raylib
+    if (UserSettings::Instance()->GetFullScreen() && LibEricSettings::Instance()->GetMSAA()) {
+        SetConfigFlags(FLAG_VSYNC_HINT | FLAG_FULLSCREEN_MODE |
+                       FLAG_MSAA_4X_HINT);
+    } else if (UserSettings::Instance()->GetFullScreen()) {
+        SetConfigFlags(FLAG_VSYNC_HINT | FLAG_FULLSCREEN_MODE);
+    } else if (LibEricSettings::Instance()->GetMSAA()) {
+        SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    } else {
+        SetConfigFlags(FLAG_VSYNC_HINT );
+    }
+
+    if (UserSettings::Instance()->GetFullScreen()) {
+        int display = GetCurrentMonitor();
+        InitWindow(GetMonitorWidth(display), GetMonitorHeight(display), _AppName.c_str());
+    } else {
+        InitWindow(UserSettings::Instance()->GetWindowWidth(), UserSettings::Instance()->GetWindowHeight(),
+                   appName.c_str());
+    }
+    if (!IsWindowReady()) {
+        return false;
+    }
+
+    _IsReady = true;
+    _Running = true;
+    return true;
+}
+
+std::string LibEric::Game::GetUserDir() {
+    return GetPerfDirectory(" ", _AppName.c_str());
+}
+
+void LibEric::Game::Run() {
+    while (!WindowShouldClose() && _Running) {
+        HandleEvents();
+        Update();
+        Render();
+    }
+}
+
+bool LibEric::Game::IsReady() {
+    return _IsReady;
+}
+
+void LibEric::Game::Render() {
+    BeginDrawing();
+    ClearBackground(Color{(unsigned char) LibEricSettings::Instance()->GetBGCRed(),
+                          (unsigned char) LibEricSettings::Instance()->GetBGCGreen(),
+                          (unsigned char) LibEricSettings::Instance()->GetBGCBlue(),
+                          (unsigned char) LibEricSettings::Instance()->GetBGCAlpha()});
+    GameStateMaschine::Instance()->Render();
+    if (Dialog::Instance()->Exist()) {
+        Dialog::Instance()->DrawDialog();
+    }
+
+    EndDrawing();
+}
+
+void LibEric::Game::Update() {
+  // LOGE("PAD LEFT FACE UP: ", GetGamepadButtonPressed());
+    if (!Dialog::Instance()->Exist()) {
+        GameStateMaschine::Instance()->Update();
+    }
+    else {
+        Dialog::Instance()->Update();
+    }
+
+}
+
+void LibEric::Game::HandleEvents() {
+    if (IsKeyPressed(KEY_F)) {
+        ToggleFullscreen();
+        Resize();
+    }
+    if (!Dialog::Instance()->Exist()) {
+        GameStateMaschine::Instance()->HandleEvents();
+    }
+}
+
+void LibEric::Game::Quit() {
+    _Running = false;
+}
+
+int LibEric::Game::GetWindowWidth() {
+    int width;
+    if (IsWindowFullscreen()){
+        width = GetMonitorWidth(GetCurrentMonitor());
     }
     else{
-        PLOGD << "\tvon Vollbild zu Fenster";
-        ToggleFullscreen();
-        SetWindowSize(UserSettings::Instance()->GetWindowWidth(), UserSettings::Instance()->GetWindowHeight());
-        UserSettings::Instance()->SetFullscreen(false);
+        width = GetScreenWidth();
     }
+    return width;
 }
 
-bool LibEric::Game::IsFS(){
-    if (IsWindowFullscreen())
-        return true;
-    else
-        return false;
+int LibEric::Game::GetWindowHeight() {
+    int height;
+    if (IsWindowFullscreen()){
+        height = GetMonitorHeight(GetCurrentMonitor());
+    }
+    else{
+        height = GetScreenHeight();
+    }
+    return height;
 }
 
-
+void LibEric::Game::Resize() {
+    GameStateMaschine::Instance()->Resize();
+}

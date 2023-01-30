@@ -19,7 +19,7 @@
  */
 
 #include "ObjectLayer.hpp"
-#include "GameObject.hpp"
+#include "GameObject_Interface.hpp"
 #include "Log.hpp"
 
 
@@ -37,6 +37,6 @@ void LibEric::ObjectLayer::Update() {
     }
 }
 
-std::vector<LibEric::GameObject*>* LibEric::ObjectLayer::GetGameObjectList() {
+std::vector<LibEric::GameObject_Interface*>* LibEric::ObjectLayer::GetGameObjectList() {
     return &_GameObjectList;
 }

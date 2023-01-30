@@ -58,7 +58,7 @@ private:
 
 class GatewayCreator : public LibEric::BaseCreator {
 public:
-    LibEric::GameObject* CreateObject() const {
+    LibEric::GameObject_Interface* CreateObject() const {
         return new Gateway();
     }
 };

@@ -1,0 +1,7 @@
+MusicVolume = 0.5
+EffectVolume = 0.5
+Fullscreen = false
+CollisionsBox = true
+Screen_Width = 800
+Screen_Height = 600
+FPS = 60

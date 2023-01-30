@@ -21,12 +21,13 @@
 
 #include "PlayState.hpp"
 #include "Player.hpp"
-#define ERIC_APP 1
-#define ERIC_MODULE_ALL 1
-#include <libEric/LibEric.hpp>
-// #include "../GameObjects/Enemy.hpp"
+#include <libEric/UserSettings.hpp>
+#include <libEric/GameStateMaschine.hpp>
+#include <libEric/RenderManager.hpp>
+#include <libEric/Input.hpp>
+#include <libEric/MapManager.hpp>
+#include <libEric/Log.hpp>
 #include <raylib.h>
-#include <Config.hpp>
 
 const std::string Eric::PlayState::_PlayID = "PLAY";
 
@@ -35,9 +36,9 @@ bool warenInPause;
 void Eric::PlayState::Update() {
 
     UpdateMusicStream(_BackgroundMusic);
-    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)||IsKeyDown(KEY_ESCAPE)) {
+    if (LibEric::Button_Menu()) {
         warenInPause = true;
-        LibEric::GameStateMaschine::Instance()->PushState("Menu", "Pause.menu");
+        LibEric::GameStateMaschine::Instance()->PushState("Menu", "PauseMenu.lua");
     }
 
     if (warenInPause){
@@ -48,11 +49,6 @@ void Eric::PlayState::Update() {
     Vector2 oldPlayerPosition =  Player::Instance()->GetPosition();
 
     Player::Instance()->Update();
-
-    if (LibEric::MapManager::Instance()->Collision(Player::Instance())) {
-        Player::Instance()->SetPosition(oldPlayerPosition.x, oldPlayerPosition.y);
-    }
-
     LibEric::MapManager::Instance()->Update();
     //position geht von den orginal pixeln aus, nicht von denen des bildschirms
     float x = Player::Instance()->GetPosition().x - 224;
@@ -64,10 +60,6 @@ void Eric::PlayState::Update() {
         y = 0.0f;
 
     //FIXME Mapgröße automatisch ermitteln
-    if (x >= LibEric::MapManager::Instance()->GetWidth() - GetScreenWidth()/2)
-        x = LibEric::MapManager::Instance()->GetWidth() - GetScreenWidth()/2;
-    if (y >= LibEric::MapManager::Instance()->GetHeight() - GetScreenHeight()/2)
-        y = LibEric::MapManager::Instance()->GetHeight() - GetScreenHeight()/2;
 
     _Camera.target = { x, y };
     if (IsWindowFullscreen()) {
@@ -84,8 +76,10 @@ void Eric::PlayState::Update() {
 
 void Eric::PlayState::Render() {
     BeginMode2D(_Camera);
+
     LibEric::MapManager::Instance()->Draw();
     Player::Instance()->Draw();
+
     EndMode2D();
 
 }
@@ -95,33 +89,33 @@ Eric::PlayState::PlayState(){
 
 
 bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
-    //FIXME Texturen aus Datei laden und nicht mehr Händisch
-    std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking");
-    std::string blueKnight (EricDir + std::string("/assets/BlueKnight.png"));
-    std::string npc (EricDir + std::string("/assets/NPC.png"));
-    std::string hero (EricDir + std::string("/assets/Hero.png"));
-    std::string bgMusic (EricDir + std::string("/assets/BackgroundmusicDemo.ogg"));
 
-    if(!LibEric::TextureManager::Instance()->Load(blueKnight, "BlueKnight")) {
+    std::string blueKnight (std::string("/assets/BlueKnight.png"));
+    std::string npc (std::string("/assets/NPC.png"));
+    std::string hero (std::string("/assets/Hero.png"));
+    std::string bgMusic (std::string("/assets/BackgroundmusicDemo.ogg"));
+
+    /*if(!LibEric::TextureManager::Instance()->Load(blueKnight, "BlueKnight")) {
         PLOGW << "Can't load player sprite";
     }
     if(!LibEric::TextureManager::Instance()->Load(npc, "NPC")) {
         PLOGW << "Can't load player sprite";
-    }
-    if(!LibEric::TextureManager::Instance()->Load(hero, "player")) {
+    }*/
+    LibEric::RenderManager::Instance()->LoadTextureFromFile("player", hero);/* {
         PLOGW << "Can't load player sprite";
-    }
+    }*/
     _BackgroundMusic =  LoadMusicStream(bgMusic.c_str());
     PlayMusicStream(_BackgroundMusic);
     SetMusicVolume (_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
 
     //FIXME: MapManager um zwischen verschiedenen Karten zu wechseln
-    LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/Maps/MainWorld.tmx"), "World");
+    LibEric::MapManager::Instance()->LoadMap(std::string ("/home/frank/Projekte/bin/share/EricTheViking") + std::string("/Maps/MainWorld.tmx"), "World");
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House.tmx"), "House1");
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House2.tmx"), "House2");
     LibEric::MapManager::Instance()->ChangeCurrentMap("World");
 
-    LibEric::GameObject *player = Player::Instance();
+    LOGE ("Sind raus");
+    LibEric::GameObject_Interface *player = Player::Instance();
     player->Load("n/a");
 
     // Player::Instance()->GetPosition().GetX() + GetScreenWidth()/4, Player::Instance()->GetPosition().GetY() + GetScreenHeight()/4
@@ -132,7 +126,7 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     _Camera.rotation = 0.0f;
     _Camera.zoom = 4.0f;
 
-    LibEric::Dialog::Instance()->SetMSG("Hallo und Willkommen zu dieser Demo.\nSie dient nur zum Testen.\nWirklichen Spieleinhalt, wie z.B eine\nSuper tolle geschichte wirst du hier\nvergebens suchen\ndennoch viel Spaß beim spielen");
+    //LibEric::Dialog::Instance()->SetMSG("Hallo und Willkommen zu dieser Demo.\nSie dient nur zum Testen.\nWirklichen Spieleinhalt, wie z.B eine\nSuper tolle geschichte wirst du hier\nvergebens suchen\ndennoch viel Spaß beim spielen");
     return true;
 }
 

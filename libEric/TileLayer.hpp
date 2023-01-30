@@ -24,9 +24,10 @@
 
 #include <vector>
 #include <string>
-#include "GameObject.hpp"
+#include "GameObject_Interface.hpp"
 #include "Layer.hpp"
 #include "Map.hpp"
+#include <raylib.h>
 
 namespace LibEric {
 
@@ -60,7 +61,7 @@ public:
         _Name = name;
     }
 
-    bool CheckCollision(GameObject *object);
+    bool CheckCollision(GameObject_Interface *object);
 
     int GetWidth() {
         return _NumColumns*_TileSize;

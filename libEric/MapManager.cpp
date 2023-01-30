@@ -29,7 +29,7 @@ LibEric::MapManager* LibEric::MapManager::_Instance = 0;
 bool LibEric::MapManager::LoadMap(std::string fileName, std::string id) {
     //Prüfen ob es schon eine Karte mit der id gibt
     if (Exist(id)){
-        PLOGW << "Karte mit ID "  << id << " existiert bereits";
+        LOGW  ("Karte mit ID ", id, " existiert bereits");
         return false;
     }
 
@@ -39,13 +39,13 @@ bool LibEric::MapManager::LoadMap(std::string fileName, std::string id) {
 
     //Prüfen ob Karte geladen wurde
     if (newMap == nullptr){
-        PLOGE << "Karte " << id << " konnte nicht geladen werden";
+        LOGE ("Karte ", id, " konnte nicht geladen werden");
         return false;
     }
 
     //Karte zum Stapel hinzufügen
     _Maps[id] = newMap;
-    PLOGI << "Karte erfolgreich geladen: " << id;
+    LOGI ("Karte erfolgreich geladen: ", id);
     return true;
 }
 
@@ -58,7 +58,7 @@ bool LibEric::MapManager::ChangeCurrentMap(std::string id){
         _CurrentMap = _Maps[id];
         return true;
     }
-    PLOGW << "Konnte nicht zur Karte: " << id << " wchseln: nicht vorhanden";
+    LOGW ("Konnte nicht zur Karte: ", id, " wchseln: nicht vorhanden");
     return false;
 }
 
@@ -77,7 +77,7 @@ LibEric::MapManager * LibEric::MapManager::Instance(){
     return _Instance;
 }
 
-bool LibEric::MapManager::Collision(GameObject *object){
+bool LibEric::MapManager::Collision(GameObject_Interface *object){
     return _CurrentMap->Collison(object);
 }
 

@@ -42,19 +42,18 @@ public:
 
     void Load(const std::string script) override;
 
-    void SetPosition (float x, float y) override
+    void SetPosition (float x, float y)
     {
         GraphicGameObject::SetPosition(x, y);
     }
-    void SetWidth (float w) override
+    void SetWidth (float w)
     {
         GraphicGameObject::SetWidth(w);
     }
-    void SetHeight (float h) override{
+    void SetHeight (float h){
         GraphicGameObject::SetHeight(h);
     }
-    Rectangle GetActionRect() override{return _ObjectCollision;}
-    Rectangle GetCollisionRect() override{return _ObjectCollision;}
+
 
 
 private:
@@ -71,7 +70,7 @@ private:
 
 class MarkerCreator : public LibEric::BaseCreator {
 public:
-    LibEric::GameObject* CreateObject() const {
+    LibEric::GameObject_Interface* CreateObject() const {
         return  new Marker();
     }
 };

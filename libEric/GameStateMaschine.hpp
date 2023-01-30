@@ -1,7 +1,7 @@
 /*
- * libEric
- * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * LibEric
+ * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,86 +19,89 @@
  */
 
 
-#ifndef __GAMESTATEMASCHINE
-#define __GAMESTATEMASCHINE
+#ifndef ERIC_GAMESTATEMASCHINE_HPP
+#define ERIC_GAMESTATEMASCHINE_HPP
 
-#include "GameState.hpp"
-#include <vector>
-#include <map>
 #include <string>
+#include <vector>
+#include <libEric/GameState.hpp>
 
 namespace LibEric {
 
-//!  game State Maschine.
-/*!
-  Die GameStateMaschine steuert, was das Speil gerade macht,\n
-    z.B. ob man im Menü ist oder im Spiel
-*/
-class GameStateMaschine {
-public:
+    class GameStateMaschine {
+    public:
+        //! Zeiger auf die Instace der Klasse
+        static GameStateMaschine *Instance();
 
-    static GameStateMaschine* Instance();
+        //! Fügt einen neuen Gamestate hinzu
+        /*! Es wird ein neue State hinzugefügt und direkt zu diesem gewechselt.\n
+            Der Vorhergehende State bleibt erhalten, so das man zurück wechseln kann.
+            Der neue State wird komplett neu erstellt, ist schon ein State des Types\n
+            vorhanden, wird dieser nicht überschrieben sondern ein neuer erstellt.
 
-    //! Fügt einen neuen Gamestate hinzu
-    /*! Es wird ein neue State hinzugefügt und direkt zu diesem gewechselt.\n
-        Der Vorhergehende State bleibt erhalten, so das man zurück wechseln kann.
-        Der neue State wird komplett neu erstellt, ist schon ein State des Types\n
-        vorhanden, wird dieser nicht überschrieben sondern ein neuer erstellt.
+            \param stateID ID des States, zu dem gewechselt werden soll.
+            \param file Das Script, das dem State übergeben wird, muss nicht angegeben werden\n
+                        wenn der State kein lua-Script unterstützt.
+        */
+        void PushState(std::string stateID, std::string file = "");
 
-        \param stateID ID des States, zu dem gewechselt werden soll.
-        \param file Das Script, das dem State übergeben wird, muss nicht angegeben werden\n
-                    wenn der State kein lua-Script unterstützt.
-    */
-    void PushState(std::string stateID, std::string file = "");
+        //! Fügt einen neuen Gamestate hinzu
+        /*! Es wird ein neue State hinzugefügt und direkt zu diesem gewechselt.\n
+            Der Vorhergehende State wird gelöscht.
+            Der neue State wird komplett neu erstellt, ist schon ein State des Types\n
+            vorhanden, wird dieser nicht überschrieben sondern ein neuer erstellt.
 
-    //! Fügt einen neuen Gamestate hinzu
-    /*! Es wird ein neue State hinzugefügt und direkt zu diesem gewechselt.\n
-        Der Vorhergehende State wird gelöscht.
-        Der neue State wird komplett neu erstellt, ist schon ein State des Types\n
-        vorhanden, wird dieser nicht überschrieben sondern ein neuer erstellt.
+            \param stateID ID des States, zu dem gewechselt werden soll.
+            \param file Das Script, das dem State übergeben wird, muss nicht angegeben werden\n
+                        wenn der State kein lua-Script unterstützt.
+        */
+        void ChangeState(std::string stateID, std::string file = "");
 
-        \param stateID ID des States, zu dem gewechselt werden soll.
-        \param file Das Script, das dem State übergeben wird, muss nicht angegeben werden\n
-                    wenn der State kein lua-Script unterstützt.
-    */
-    void ChangeState (std::string stateID, std::string file = "");
+        //!Entfernt Game den aktuellen Gamestate
+        /*! Der aktuelle Gamestate wird beendet und gelöscht und zu dem Vorhergehenden\n
+         *  gewechselt.
+         *  Ist kein State mehr vorhanden, ist das verhalten undefiniert.
+            \todo Wenn alle States beendet sind, das Programm beenden.
+        */
+        void PopState();
 
-    //!Entfernt Game den aktuellen Gamestate
-    /*! Der aktuelle Gamestate wird beendet und gelöscht und zu dem Vorhergehenden\n
-     *  gewechselt.
-     *  Ist kein State mehr vorhanden, ist das verhalten undefiniert.
-        \todo Wenn alle States beendet sind, das Programm beenden.
-    */
-    void PopState();
+        //! State Update
+        /*! Ruft die Update-Funktion des States auf.
+        */
+        void Update();
 
-    //! State Update
-    /*! Ruft die Update-Funktion des States auf.
-    */
-    void Update();
+        //! State Update
+        /*! Ruft die Render-Funktion des States auf.
+        */
+        void Render();
 
-    //! State Update
-    /*! Ruft die Render-Funktion des States auf.
-    */
-    void Render();
+        //! State Update
+        /*! Ruft die HandleEvents-Funktion des States auf.
+        */
+        void HandleEvents();
 
-    //! State Update
-    /*! Ruft die HandleEvents-Funktion des States auf.
-    */
-    void HandleEvents();
+        //! Auflösung wurde geändert
+        /*!
+         * Wenn die Auflösung geändert wird, wird diese Funktion aufgerufen.
+         * Im gegegensatz zu \sa Render \sa Update und \sa HandlerEvents wird diese Funktion bei allen geladenen Gamestates aufgerufen
+         */
+        void Resize();
 
-    //! State ID
-    /*! Git die Id des aktuellen States zurück
-     *
-     * \return aktuelle StateID
-    */
-    std::string GetCurrentStateID();
+        //! State ID
+        /*! Git die Id des aktuellen States zurück
+         *
+         * \return aktuelle StateID
+        */
+        std::string GetCurrentStateID();
 
-private:
-    static GameStateMaschine *_Instance;
+    private:
+        static GameStateMaschine *_Instance;
 
+        GameStateMaschine() : _GameStates() {}
 
-    std::vector <GameState*> _GameStates;
-};
+        std::vector<GameState *> _GameStates;
+    };
 
-}; //namespace LibEric
-#endif //__GAMESTATEMASCHINE
+} // LibEric
+
+#endif //ERIC_GAMESTATEMASCHINE_HPP

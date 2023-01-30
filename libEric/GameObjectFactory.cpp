@@ -1,7 +1,7 @@
 /*
- * libEric
- * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * LibEric
+ * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,47 +18,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
-
-#include "GameObjectFactory.hpp"
-#include "Log.hpp"
+#include <libEric/GameObjectFactory.hpp>
+#include <libEric/Log.hpp>
 
 LibEric::GameObjectFactory *LibEric::GameObjectFactory::_Instance = nullptr;
 
 bool LibEric::GameObjectFactory::RegisterType(std::string typeID, BaseCreator* creator)
 {
-    PLOGI << "Regestriere GameObjekt Type: " << typeID;
-
-    //Überprüfen, ob schon ein Creator mit der ID vorhanden ist
-    std::map<std::string,BaseCreator*>::iterator it = _Creators.find(typeID);
-    bool success = _Creators.end() == it;
-    if (success) {
-        PLOGI << "\tObjectcreator erfolgreich erstellt";
-        _Creators[typeID] = creator;
-    }
-    else {
-        PLOGW << "\t" << typeID << ": " << "Gameobjectcreator mit dieser ID existiert bereits";
+    if (_Creators.count(typeID) != 0){
+        LOGE("Ein Klasse mit Type <", typeID, "> wurde bereits registriert");
         delete creator;
+        return false;
     }
-    return success;
+    else{
+        _Creators[typeID] = creator;
+        LOGD("Neue Klasse mit Type <", typeID, "> registriert");
+        return true;
+    }
 }
 
-LibEric::GameObject * LibEric::GameObjectFactory::Create(std::string typeID)
+LibEric::GameObject_Interface * LibEric::GameObjectFactory::Create(std::string typeID)
 {
-    //Überprüfen, ob schon ein Creator mit der ID vorhanden ist
-    std::map<std::string, BaseCreator*>::iterator iterator = _Creators.find(typeID);
-    bool success = _Creators.end() == iterator;
-    GameObject* result;
-    if (!success) {
-        PLOGI << "Erstelle neues Object vom Typ: " << typeID;
-        BaseCreator* creator = (*iterator).second;
-        result = creator->CreateObject();
+    if (_Creators.count(typeID) != 0){
+        BaseCreator* creator = _Creators[typeID];
+        LOGD ("Erstelle ein Objekt vom Type: ", typeID);
+        return  creator->CreateObject();
     }
     else {
-        PLOGE << "\tKann Gameobject nicht erstellen: Unbekannter Typ " << typeID;
-        result = nullptr;
+        LOGE ("Kann Gameobjekt nicht erstellen: Unbekannter Typ ", typeID);
+        return nullptr;
     }
-    return result;
 }
-
-

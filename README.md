@@ -14,6 +14,8 @@ Die ErikFW soll dabei als mehr oder weniger eigentständiges Projekt entstehen u
 
 Momentan wird eine interne kopie von tinyxml2, zlib, sol2 und lua verwendet, später wird man sich entscheiden können, ob man die interne Version nutzen möchte oder die vom System installierte.
 Der Inhalt von data muss in einen Ordner names .Eric im Home Verzeichnis (~/.Eric/) gespeichert werden  gespeichert werden.
+Sobald ich halbwegs zufrieden bin, gibt es ein kleines Tuturial zu libEric.
+Es werden raylib, tinyxml2 und lua5.4 benötigt um das Projekt zu bauen.
 
 ```
 git clone https://gitlab.com/kleinod88/erik.git
@@ -22,6 +24,8 @@ mkdir build
 cd build
 cmake ..
 make
+sudo make install
+
 ```
 
 ## Windows

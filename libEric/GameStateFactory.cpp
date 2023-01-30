@@ -1,6 +1,5 @@
 /*
  * LibEric
- * Copyright (C) 2021  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
@@ -19,46 +18,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
-#include "GameStateFactory.hpp"
-#include "Log.hpp"
+#include <libEric/GameStateFactory.hpp>
+#include <libEric/Log.hpp>
 
 LibEric::GameStateFactory *LibEric::GameStateFactory::_Instance = nullptr;
 
-bool LibEric::GameStateFactory::RegisterType(std::string typeID, StateBaseCreator* creator)
-{
-    PLOGI << "Regestriere GameState: " << typeID;
+LibEric::GameStateFactory *LibEric::GameStateFactory::Instance() {
+    if (_Instance == nullptr)
+        _Instance = new GameStateFactory();
+    return _Instance;
+}
 
-    //Überprüfen, ob schon ein Creator mit der ID vorhanden ist
-    std::map<std::string,StateBaseCreator*>::iterator it = _Creators.find(typeID);
-    bool success = _Creators.end() == it;
-    if (success) {
-        PLOGI << "\tStatecreator erfolgreich erstellt";
-        _Creators[typeID] = creator;
-    }
-    else {
-        PLOGW << "\t" << typeID << ": " << "Statecreator mit dieser ID existiert bereits";
+bool LibEric::GameStateFactory::RegisterType(std::string typeID, StateBaseCreator *creator) {
+    if (_Creators.count(typeID) != 0) {
+        LOGE("Kann Gamestate mit ID <", typeID, "> nicht regestrieren: ID bereits vorhanden");
         delete creator;
+        return false;
     }
-    return success;
+    LOGI("Registriere neuen Gamestate mit ID: ", typeID);
+    _Creators[typeID] = creator;
+    return true;
 }
 
-LibEric::GameState * LibEric::GameStateFactory::Create(std::string typeID)
-{
-    //Überprüfen, ob schon ein Creator mit der ID vorhanden ist
-    std::map<std::string, StateBaseCreator*>::iterator iterator = _Creators.find(typeID);
-    bool success = _Creators.end() == iterator;
-    GameState* result;
-    if (!success) {
-        PLOGI << "Erstelle neuen State vom Typ: " << typeID;
-        StateBaseCreator* creator = (*iterator).second;
-        result = creator->CreateState();
+LibEric::GameState *LibEric::GameStateFactory::Create(std::string typeID) {
+    if (_Creators.count(typeID) == 0) {
+        LOGE("Kann GameState mit ID <", typeID, "> nicht erstellen: ID unbekannt");
+        return nullptr;
     }
-    else {
-        PLOGE << "\tKann State nicht erstellen: Unbekannter Typ " << typeID;
-        result = nullptr;
-    }
-    return result;
+    return _Creators[typeID]->CreateState();
 }
-
-

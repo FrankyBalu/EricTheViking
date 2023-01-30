@@ -18,27 +18,160 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef __LOG
-#define __LOG
 
-#include <plog/Log.h>
+#include <iostream>
+#include <mutex>
+#include <sstream>
+#include <source_location>
+#include <iomanip>
+
+
+#ifndef ERIC_LOG_H
+#define ERIC_LOG_H
+
+//regelt wieviel platz für die Funktionsnamen gelassen wird
+#define NAME_WIDTH 30
+
+#define LOG_COLOR_RESET   "\033[0m"
+#define LOG_COLOR_BLACK   "\033[30m"      /* Black */
+#define LOG_COLOR_RED     "\033[31m"      /* Red */
+#define LOG_COLOR_GREEN   "\033[32m"      /* Green */
+#define LOG_COLOR_YELLOW  "\033[33m"      /* Yellow */
+#define LOG_COLOR_BLUE    "\033[34m"      /* Blue */
+#define LOG_COLOR_MAGENTA "\033[35m"      /* Magenta */
+#define LOG_COLOR_CYAN    "\033[36m"      /* Cyan */
+#define LOG_COLOR_WHITE   "\033[37m"      /* White */
+#define LOG_COLOR_BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
+#define LOG_COLOR_BOLDRED     "\033[1m\033[31m"      /* Bold Red */
+#define LOG_COLOR_BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
+#define LOG_COLOR_BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
+#define LOG_COLOR_BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
+#define LOG_COLOR_BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
+#define LOG_COLOR_BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
+#define LOG_COLOR_BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
+
 
 namespace LibEric {
 
-/**
- * @brief Initialisiert den logger
- *
- * @param logLevel gibt an, was ausgegeben werden soll
- *                  none = Es wird garnix ausgegeben\n
- *                  fatal = Es werden nur Meldungen ausgegeben, wenn das Programm beendet werden muss\n
- *                  error = Irgendwas ist schief gelaufen, aber das Programm kann (wahrscheinlich) weiter laufen\n
- *                  warning = Hier sollte nachgebessert werden, meist Logik Fehler\n
- *                  info = Dem Nutzer wird gesagt, was wir gerade machen\n
- *                  debug = Zusätzliche ausgaben, die sich eher an Entwickler richten\n
- *                  verbos = Informationen die wahrscheinlich keiner wissen will
- * @return nix
- */
-void InitLog(plog::Severity logLevel);
+    enum LogLevel {
+        LOG_NONE = 0,
+        LOG_ERROR = 1,
+        LOG_WARNING = 2,
+        LOG_INFO = 3,
+        LOG_DEBUG = 4,
+        LOG_VERBOSE = 5
+    };
 
-}; //namespace LibEric
-#endif //__LOG
+    class Log {
+    public:
+        template<class... Args>
+        void error_log(const std::source_location loc, Args &&... args) {
+            if (_LogLevel < LOG_ERROR)
+                return;
+            static std::mutex myMutex;
+            std::ostringstream os;      // used to build the logging message
+
+            os << LOG_COLOR_BOLDRED << "ERROR  : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+               << "):" << std::boolalpha;
+
+            // fold expression:
+            ((os << ' ' << args), ...); // add all arguments to os
+            os << LOG_COLOR_RESET << std::endl;
+
+            std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
+            std::clog << os.str();                     // and stream
+        }
+
+        template<class... Args>
+        void warning_log(const std::source_location loc, Args &&... args) {
+            if (_LogLevel < LOG_WARNING)
+                return;
+            static std::mutex myMutex;
+            std::ostringstream os;      // used to build the logging message
+
+            os << LOG_COLOR_BOLDYELLOW << "WARNING: " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
+               << loc.line() << "):" << std::boolalpha;
+
+            // fold expression:
+            ((os << ' ' << args), ...); // add all arguments to os
+            os << LOG_COLOR_RESET << std::endl;
+
+            std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
+            std::clog << os.str();                     // and stream
+        }
+
+        template<class... Args>
+        void info_log(const std::source_location loc, Args &&... args) {
+            if (_LogLevel < LOG_INFO)
+                return;
+            static std::mutex myMutex;
+            std::ostringstream os;      // used to build the logging message
+
+            os << LOG_COLOR_BOLDGREEN << "INFO   : " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
+               << loc.line() << "):" << std::boolalpha;
+
+            // fold expression:
+            ((os << ' ' << args), ...); // add all arguments to os
+            os << LOG_COLOR_RESET << std::endl;
+
+            std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
+            std::clog << os.str();                     // and stream
+        }
+
+        template<class... Args>
+        void debug_log(const std::source_location loc, Args &&... args) {
+            if (_LogLevel < LOG_DEBUG)
+                return;
+            static std::mutex myMutex;
+            std::ostringstream os;      // used to build the logging message
+
+            os << LOG_COLOR_BOLDBLUE << "DEBUG  : " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
+               << loc.line() << "):" << std::boolalpha;
+
+            // fold expression:
+            ((os << ' ' << args), ...); // add all arguments to os
+            os << LOG_COLOR_RESET << std::endl;
+
+            std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
+            std::clog << os.str();                     // and stream
+        }
+
+        template<class... Args>
+        void verbose_log(const std::source_location loc, Args &&... args) {
+            if (_LogLevel < LOG_VERBOSE)
+                return;
+            static std::mutex myMutex;
+            std::ostringstream os;      // used to build the logging message
+
+            os << LOG_COLOR_BOLDWHITE << "VERBOSE: " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
+               << loc.line() << "):" << std::boolalpha;
+
+            // fold expression:
+            ((os << ' ' << args), ...); // add all arguments to os
+            os << LOG_COLOR_RESET << std::endl;
+
+            std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
+            std::clog << os.str();                     // and stream
+        }
+
+        static Log *Instance();
+
+        void SetLogLevel(int logLevel);
+
+    private:
+        Log();
+
+        int _LogLevel;
+        static Log *_Instance;
+    };
+
+
+} // LibEric
+
+#define LOGE(...) LibEric::Log::Instance()->error_log(std::source_location::current(), __VA_ARGS__)
+#define LOGW(...) LibEric::Log::Instance()->warning_log(std::source_location::current(), __VA_ARGS__)
+#define LOGI(...) LibEric::Log::Instance()->info_log(std::source_location::current(), __VA_ARGS__)
+#define LOGD(...) LibEric::Log::Instance()->debug_log(std::source_location::current(), __VA_ARGS__)
+#define LOGV(...) LibEric::Log::Instance()->verbose_log(std::source_location::current(), __VA_ARGS__)
+
+#endif //ERIC_LOG_H

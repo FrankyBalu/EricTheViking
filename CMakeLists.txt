@@ -4,22 +4,14 @@ project(Eric VERSION 0.0.1
         DESCRIPTION "libEric ist als eine Art Framework zum erstellen von Spielen gedacht. Eric ist ein Beispiel dafür"
         LANGUAGES CXX)
 
-#C++ Standart auf c++17 setzten, das ist das minimum für Sol2
-set(CMAKE_CXX_STANDARD 17)
+#C++ Standart auf c++23
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(FeatureSummary)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
-option(ERIC_SYSTEM_TINYXML2 "Use system tinyxml" OFF)
-option(ERIC_SYSTEM_ZLIB "Use system zlib" OFF)
-option(ERIC_SYSTEM_GLFW "Use system glfw" OFF)
-option(ERIC_SYSTEM_LUA "Use system lua" OFF)
 
-add_feature_info("System TinyXML2" ERIC_SYSTEM_TINYXML2 "")
-add_feature_info("System ZLIB" ERIC_SYSTEM_ZLIB "")
-add_feature_info("System GLFW" ERIC_SYSTEM_GLFW "")
-add_feature_info("System LUA" ERIC_SYSTEM_LUA "")
 
 #Abbrechen wenn Windows verwendet wird, geht eh nicht
 if (WIN32)
@@ -45,21 +37,14 @@ add_feature_info("Doxygen" Doxygen_FOUND "Generate API doc mir make doc")
 #   Testen ob Librarys im system installiert sind oder ob die interne Kopie benutzt werden muss                        #
 #                                                                                                                      #
 ########################################################################################################################
-if (ERIC_SYSTEM_LUA)
-    find_package(Lua REQUIRED)
-endif ()
 
-if (ERIC_SYSTEM_TINYXML)
-    find_package(tinyxml2 REQUIRED)
-endif ()
+find_package(Lua REQUIRED 5.4)
 
-if (ERIC_SYSTEM_GLFW)
-    find_package(glfw REQUIRED)
-endif ()
+find_package(tinyxml2 REQUIRED)
 
-if (ERIC_SYSTEM_ZLIB)
-    find_package(zlib REQUIRED)
-endif ()
+#Sollte unter Linux immer vorhanden sein, glaub ich zumindest
+find_package(ZLIB REQUIRED)
+find_package(PhysFS 3.2 REQUIRED)
 
 set(RAYLIB_VERSION 4.2.0)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
@@ -83,6 +68,10 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     include_directories(" ${raylib_SOURCE_DIR}/src")
 endif ()
 
+add_feature_info("System lua" LUA_FOUND "")
+add_feature_info("System zlib" ZLIB_FOUND "")
+add_feature_info("System tinyxml2" TINYXML2_FOUND "")
+
 ########################################################################################################################
 #                                                                                                                      #
 #   Include Verzeichnisse hinzufügen                                                                                   #
@@ -92,7 +81,6 @@ include_directories(
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/Extra/"
-        "${PROJECT_SOURCE_DIR}/Extra/plog-1.1.8/include"
 )
 
 
@@ -105,9 +93,14 @@ if (LINUX)
     set(DATA_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
     set(INSTALL_PREFIX DATA_INSTALL_PREFIX)
 elseif (WIN32)
+    #Windows wird noch nicht unterstützt, kommt aber sicher noch irgendwann
     set(DATA_INSTALL_PREFIX "data/")
     set(INSTALL_PREFIX DATA_INSTALL_PREFIX)
 endif ()
+
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    set(DEBUG 1)
+endif()
 
 configure_file(Config.hpp.in Config.hpp)
 

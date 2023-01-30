@@ -25,7 +25,7 @@
 #include <map>
 
 namespace LibEric {
-
+//FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
 class StoryNode
 {
 public:

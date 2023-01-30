@@ -1,7 +1,7 @@
 /*
- * libEric
- * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * LibEric
+ * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,95 +19,97 @@
  */
 
 
-#include "GameStateMaschine.hpp"
-#include "GameStateFactory.hpp"
-#include "Log.hpp"
+#include <libEric/GameStateMaschine.hpp>
+#include <libEric/GameStateFactory.hpp>
+#include <libEric/Log.hpp>
 
+LibEric::GameStateMaschine *LibEric::GameStateMaschine::_Instance = nullptr;
 
-LibEric::GameStateMaschine* LibEric::GameStateMaschine::_Instance = 0;
-
-LibEric::GameStateMaschine * LibEric::GameStateMaschine::Instance(){
-    if (_Instance == nullptr){
+LibEric::GameStateMaschine *LibEric::GameStateMaschine::Instance() {
+    if (_Instance == nullptr)
         _Instance = new GameStateMaschine();
-    }
     return _Instance;
 }
 
-
-
 void LibEric::GameStateMaschine::PushState(std::string stateID, std::string file) {
-    //Der neue Gamestate
-    GameState *state = nullptr;
-    //Testen welcher State Geladen werden soll
-    state = GameStateFactory::Instance()->Create(stateID);
-
-    if (state == nullptr){
-        PLOGE << "Gamestate <" << stateID << "> konnte nicht erstellt werden";
+    GameState *newState = nullptr;
+    newState = GameStateFactory::Instance()->Create(stateID);
+    if (newState == nullptr) {
+        LOGW("hier");
         return;
     }
-    _GameStates.push_back(state);
+    _GameStates.push_back(newState);
     _GameStates.back()->OnEnter(file);
-    PLOGI << "Push neuen Gamestate: " << state->GetStateID();
+    LOGD ("Neuen GameState <", _GameStates.back()->GetStateID(), "> zur Statemaschine hinzugefügt");
 }
 
 void LibEric::GameStateMaschine::PopState() {
-    if (!_GameStates.empty()) {
-        PLOGI << "Entferne _GameStates: " << _GameStates.back()->GetStateID();
-        if(_GameStates.back()->OnExit()) {
-            _GameStates.pop_back();
-            PLOGI << "\tZurück zu GameState: " << _GameStates.back()->GetStateID();
-            return;
-        }
-        else {
-            PLOGE << "\tKann GameStates nicht beenden";
-        }
+    if (_GameStates.empty()) {
+        LOGE("Kann keinen Gamestate entfernen: Keine States vorhanden");
+        return;
     }
-    else{
-        PLOGE << "\tKann GameState nicht wechseln: Keine GameState verfügbar";
+    std::string currentState = _GameStates.back()->GetStateID();
+    if (_GameStates.back()->OnExit()) {
+        _GameStates.pop_back();
+        LOGD("Gamestate <", currentState, "> beendet");
+        LOGD("Zu Gamestate <", _GameStates.back()->GetStateID(), "> gewechselt");
+        return;
+    } else {
+        _GameStates.pop_back();
+        LOGD("Fehler beim beenden von Gamestate <", currentState, ">");
+        LOGD("Zu Gamestate <", _GameStates.back()->GetStateID(), "> gewechselt");
+        return;
     }
 }
 
 void LibEric::GameStateMaschine::ChangeState(std::string stateID, std::string file) {
-    //Der neue Gamestate
-    GameState *state;
-    std::string oldID;
-
-    state = GameStateFactory::Instance()->Create(stateID);
-
-    if (state == nullptr){
-        PLOGE << "Gamestate <" << stateID << "> konnte nicht erstellt werden";
+    std::string currentState;
+    GameState *newSate = nullptr;
+    newSate = GameStateFactory::Instance()->Create(stateID);
+    if (_GameStates.empty()) {
+        _GameStates.push_back(newSate);
+        _GameStates.back()->OnEnter(file);
+        LOGD("Zu Gamestate <", _GameStates.back()->GetStateID(), "> gewechselt");
+        return;
+    } else {
+        currentState = _GameStates.back()->GetStateID();
+        _GameStates.push_back(newSate);
+        _GameStates.back()->OnEnter(file);
+        LOGD("Von Gamestate <", currentState, "> zu <", _GameStates.back()->GetStateID(), "> gewechselt");
         return;
     }
-
-   if (!_GameStates.empty()) {
-        if (_GameStates.back()->GetStateID() == state->GetStateID()) {
-            return; // da der State schon aktiv ist, müssen wir nix wechseln
-        }
-        oldID = _GameStates.back()->GetStateID();
-        if (_GameStates.back()->OnExit()) {
-            _GameStates.pop_back();
-        }
-        else {
-
-        }
-     }
-    _GameStates.push_back(state);
-    _GameStates.back()->OnEnter(file);
-    PLOGI << "Wechsel von GameState: " << oldID << " Zu GameState: "   << _GameStates.back()->GetStateID();
 }
 
-void LibEric::GameStateMaschine::Update() {
-    if (!_GameStates.empty()) {
-        _GameStates.back()->Update();
-        return;
-    }
-    PLOGE << "Kein GameState geladen";
+std::string LibEric::GameStateMaschine::GetCurrentStateID() {
+    return _GameStates.back()->GetStateID();
 }
 
 void LibEric::GameStateMaschine::Render() {
-    if (!_GameStates.empty()) {
-        _GameStates.back()->Render();
+    if (_GameStates.empty()) {
+        LOGE("Kann Gamestate nicht Rendern: Keine Gamestates vorhanden");
         return;
     }
-    PLOGE << "Kein GameState geladen";
+    _GameStates.back()->Render();
+}
+
+void LibEric::GameStateMaschine::Update() {
+    if (_GameStates.empty()) {
+        LOGE("Kann Gamestate nicht Updaten: Keine Gamestates vorhanden");
+        return;
+    }
+    _GameStates.back()->Update();
+}
+
+void LibEric::GameStateMaschine::HandleEvents() {
+    if (_GameStates.empty()) {
+        LOGE("Kann Gamestate Events nicht Updaten: Keine Gamestates vorhanden");
+        return;
+    }
+    _GameStates.back()->HandleEvents();
+}
+
+void LibEric::GameStateMaschine::Resize() {
+    for (auto itr = _GameStates.cbegin(); itr != _GameStates.cend(); itr++){
+        (*itr)->Resize();
+    }
 }

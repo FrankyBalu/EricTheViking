@@ -4056,16 +4056,18 @@ static void GuiDrawRectangle(Rectangle rec, int borderWidth, Color borderColor, 
     if (color.a > 0)
     {
         // Draw rectangle filled with color
-        DrawRectangle((int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height, color);
+        DrawRectangleRounded(rec, 4.0, 16, color);
+        //DrawRectangle((int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height, color);
     }
 
     if (borderWidth > 0)
     {
         // Draw rectangle border lines with color
-        DrawRectangle((int)rec.x, (int)rec.y, (int)rec.width, borderWidth, borderColor);
+        DrawRectangleRoundedLines(rec, 4.0, 16, 6.0, color);
+/*        DrawRectangle((int)rec.x, (int)rec.y, (int)rec.width, borderWidth, borderColor);
         DrawRectangle((int)rec.x, (int)rec.y + borderWidth, borderWidth, (int)rec.height - 2*borderWidth, borderColor);
         DrawRectangle((int)rec.x + (int)rec.width - borderWidth, (int)rec.y + borderWidth, borderWidth, (int)rec.height - 2*borderWidth, borderColor);
-        DrawRectangle((int)rec.x, (int)rec.y + (int)rec.height - borderWidth, (int)rec.width, borderWidth, borderColor);
+        DrawRectangle((int)rec.x, (int)rec.y + (int)rec.height - borderWidth, (int)rec.width, borderWidth, borderColor);*/
     }
 }
 

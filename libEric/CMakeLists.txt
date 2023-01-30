@@ -1,67 +1,55 @@
 project(LibEric)
 
-SET(LIBEric_HPP
-        base64.h
-        Dialog.hpp
-        PrivateSettings.hpp
-        Game.hpp
-        GameObjectFactory.hpp
-        GameObject.hpp
-        GameStateFactory.hpp
-        GameState.hpp
-        GameStateMaschine.hpp
-        Global_LUA.hpp
-        GraphicGameObject.hpp
-        Layer.hpp
-        LibEric.hpp
-        Log.hpp
-        Map.hpp
-        MapManager.hpp
-        MapParser.hpp
-        ObjectLayer.hpp
-        UserSettings.hpp
-        StoryNode.hpp
-        TextureManager.hpp
-        TileLayer.hpp
-        )
-
 # Local source files here
 SET(LIBEric_SRC
         base64.cpp
-        Dialog.cpp
-        PrivateSettings.cpp
-        Game.cpp
-        GameObjectFactory.cpp
-        GameStateFactory.cpp
-        GameStateMaschine.cpp
-        Global_LUA.cpp
-        GraphicGameObject.cpp
+        base64.h
         Log.cpp
-        Map.cpp
-        MapManager.cpp
-        MapParser.cpp
-        ObjectLayer.cpp
+        Log.hpp
+        LibEricSettings.cpp
+        LibEricSettings.hpp
+        Game.cpp
+        Game.hpp
         UserSettings.cpp
+        UserSettings.hpp
+        RenderManager.cpp
+        RenderManager.hpp
+        GameState.hpp
+        GameStateMaschine.cpp
+        GameStateMaschine.hpp
+        GameStateFactory.cpp
+        GameStateFactory.hpp
+        Lua.cpp
+        Lua.hpp
+        Menu.hpp
+        Menu.cpp
+        Dialog.cpp
+        Dialog.hpp
+        GameObject_Interface.hpp
+        GameObjectFactory.cpp
+        GameObjectFactory.hpp
+        Layer.hpp
         StoryNode.cpp
-        TextureManager.cpp
-        TileLayer.cpp
-        )
+        StoryNode.hpp
+        Input.cpp Input.hpp GraphicGameObject.hpp GraphicGameObject.cpp GameObjectManager.cpp GameObjectManager.hpp CollisionManager.cpp CollisionManager.hpp Map.hpp Map.cpp TileLayer.cpp ObjectLayer.hpp ObjectLayer.cpp MapManager.hpp MapManager.cpp MapParser.cpp)
 
 add_library(Eric SHARED ${LIBEric_SRC})
 
 if (NOT ERIC_SYSTEM_LUA)
-target_link_libraries(Eric lua_static
-        raylib
-        tinyxml2
-        z
-        )
-else()
+    target_link_libraries(Eric lua
+            raylib
+            tinyxml2
+            physfs
+            z
+            )
+else ()
     target_link_libraries(Eric lua
             raylib
             tinyxml2
             z
+            physfs
             )
-endif()
+endif ()
 
 install(TARGETS Eric
         EXPORT Eric

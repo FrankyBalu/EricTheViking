@@ -48,7 +48,7 @@ std::vector<LibEric::Layer*>* LibEric::Map::GetLayers() {
 
 
 
-bool LibEric::Map::Collison(GameObject *object)
+bool LibEric::Map::Collison(GameObject_Interface *object)
 {
     return dynamic_cast<TileLayer*>(_CollisionLayer)->CheckCollision(object);
 }

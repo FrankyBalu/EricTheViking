@@ -23,7 +23,7 @@
 
 #include <vector>
 #include "Layer.hpp"
-#include "GameObject.hpp"
+#include "GameObject_Interface.hpp"
 
 namespace LibEric {
 
@@ -33,10 +33,10 @@ public:
     void Render();
     void Update();
 
-    std::vector<GameObject*>* GetGameObjectList();
+    std::vector<GameObject_Interface*>* GetGameObjectList();
 
 private:
-    std::vector<GameObject*> _GameObjectList;
+    std::vector<GameObject_Interface*> _GameObjectList;
 };
 
 }; //namespace LibEric

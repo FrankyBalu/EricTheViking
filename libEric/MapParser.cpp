@@ -28,14 +28,14 @@
 #include "Log.hpp"
 #include "MapParser.hpp"
 #include "ObjectLayer.hpp"
-#include "TextureManager.hpp"
+#include "RenderManager.hpp"
 #include "TileLayer.hpp"
 //#include <asm-generic/errno.h>
 
 
 LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 
-    PLOGI << "Lade Karte: " << levelFile;
+    LOGI ("Lade Karte: ", levelFile);
 
     //tinyXML2 daten initialisieren
     tinyxml2::XMLDocument levelDocument;
@@ -43,9 +43,9 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 
 
     if (eResult != tinyxml2::XML_SUCCESS)
-        PLOGE << "\tKonnte die Datei nicht laden: " << eResult;
+        LOGE ("\tKonnte die Datei nicht laden: ", eResult);
     else
-        PLOGI << "\tErfolgreich geladen";
+        LOGI ("\tErfolgreich geladen");
 
     //Neues MapObjekt erstellen
     Map* newMap = new Map();
@@ -55,19 +55,19 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 
     //Größe in Pixel, der einzelnen Tiles
     _TileSize = root->IntAttribute("tilewidth");
-    PLOGD << "Tilebreite: " << _TileSize;
+    LOGD ("Tilebreite: ", _TileSize);
     //Breite der Karte in anzahl der Tiles
     _Width = root->IntAttribute("width");
     //Berechnen der Levelbreite in Pixel
     newMap->_Width = _TileSize*_Width;
-    PLOGD << "Breite: " << _Width << " Blöcke";
-    PLOGD << "Breite: " << newMap->_Width << " Pixel";
+    LOGD ("Breite: ", _Width, " Blöcke");
+    LOGD ("Breite: ", newMap->_Width, " Pixel");
     //Höhe der Karte in Anzahl der Tiles
     _Height = root->IntAttribute("height");
     //Berechnen der Levelhöhe in Pixel
     newMap->_Height = _TileSize*_Height;
-    PLOGD << "Höhe: " << _Height << " Blöcke";
-    PLOGD << "Höhe: " << newMap->_Height << " Pixel";
+    LOGD ("Höhe: ", _Height, " Blöcke");
+    LOGD ("Höhe: ", newMap->_Height, " Pixel");
 
 
     //Die einzelnen Elemente der XML-Datei durchgehen
@@ -86,11 +86,12 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
         }
         //die Objekte auf der Karte laden
         else if (std::string(e->Value()) == std::string("objectgroup")) {
-            PLOGD << "test rrrr";
+            LOGD ("test rrrr");
             if(e->FirstChildElement()->Value() == std::string("object")) {
-                PLOGD << "Test";
+                LOGD ("Test");
                 ParseObjectLayer(e, newMap);
             }
+            LOGI("HIER");
         }
     }
     return newMap;
@@ -99,31 +100,31 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 
 void LibEric::MapParser::ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets) {
     //add tileset to texturemanager
-    PLOGD << "Parse Tileset: " << tilesetRoot->Attribute("name");
+    LOGD ("Parse Tileset: ", tilesetRoot->Attribute("name"));
     std::string erikDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
-    std::string assetsTag = erikDir + std::string("assets/");
+    std::string assetsTag = std::string("assets/");
     std::string tileFile (assetsTag.append(tilesetRoot->FirstChildElement()->Attribute("source")));
-    TextureManager::Instance()->Load(tileFile, tilesetRoot->Attribute("name"));
+    RenderManager::Instance()->LoadTextureFromFile(tilesetRoot->Attribute("name"),tileFile);
 
     Tileset tileset;
     tileset.width = tilesetRoot->FirstChildElement()->IntAttribute("width");
-    PLOGD << "\tBreite        : " << tileset.width;
+    LOGD ("\tBreite        : ", tileset.width);
     tileset.height = tilesetRoot->FirstChildElement()->IntAttribute("height");
-    PLOGD << "\tHöhe          : " << tileset.height;
+    LOGD ("\tHöhe          : ", tileset.height);
     tileset.firstGridID = tilesetRoot->IntAttribute("firstgid");
-    PLOGD << "\tErstes Element: " << tileset.firstGridID;
+    LOGD ("\tErstes Element: ", tileset.firstGridID);
     tileset.tileWidth = tilesetRoot->IntAttribute("tilewidth");
-    PLOGD << "\tTile Breite   : " << tileset.tileWidth;
+    //PLOGD << "\tTile Breite   : " << tileset.tileWidth;
     tileset.tileHeight = tilesetRoot->IntAttribute("tileheight");
-    PLOGD << "\tTile Höhe     : " << tileset.tileHeight;
+    //PLOGD << "\tTile Höhe     : " << tileset.tileHeight;
     tileset.spacing = tilesetRoot->IntAttribute("spacing", 0);
-    PLOGD << "\tSpacing       : " << tileset.spacing;
+    //PLOGD << "\tSpacing       : " << tileset.spacing;
     tileset.margin = tilesetRoot->IntAttribute("margin", 0);
-    PLOGD << "\tMargin        : " << tileset.margin;
+    //PLOGD << "\tMargin        : " << tileset.margin;
     tileset.name = tilesetRoot->Attribute("name");
-    PLOGD << "\tName          : " << tileset.name;
+    //PLOGD << "\tName          : " << tileset.name;
     tileset.numColumns = tileset.width / (tileset.tileWidth + tileset.spacing);
-    PLOGD << "\tNumColumns    : " << tileset.numColumns;
+    //PLOGD << "\tNumColumns    : " << tileset.numColumns;
     tilesets->push_back(tileset);
 
 }
@@ -192,10 +193,10 @@ void LibEric::MapParser::ParseObjectLayer(tinyxml2::XMLElement* pObjectElement, 
     for (tinyxml2::XMLElement* e = pObjectElement->FirstChildElement(); nullptr != e; e = e->NextSiblingElement()){
         if (std::string("object") == e->Value()) {
             std::string type = e->Attribute("class");
-            GameObject* gameObject = GameObjectFactory::Instance()->Create(type);
-            PLOGD << "Parse Objektklasse: " << e->Attribute("class");
+            GameObject_Interface* gameObject = GameObjectFactory::Instance()->Create(type);
+      //      PLOGD << "Parse Objektklasse: " << e->Attribute("class");
             if (gameObject == nullptr) {
-                PLOGE << "Konnte Gameobject nicht erstellen: ";
+                ;//PLOGE << "Konnte Gameobject nicht erstellen: ";
             }
             else {
                 int x = 0;
@@ -207,10 +208,10 @@ void LibEric::MapParser::ParseObjectLayer(tinyxml2::XMLElement* pObjectElement, 
                 y = e->IntAttribute("y");
                 width = e->IntAttribute("width");
                 height = e->IntAttribute("height");
-                PLOGD << "\tPosition: " << x << "x" << y;
-                PLOGD << "\tGröße: " << width << "x" << height;
+                //PLOGD << "\tPosition: " << x << "x" << y;
+                //PLOGD << "\tGröße: " << width << "x" << height;
                 std::string name = e->Attribute("name");
-                PLOGD << "\tName: " << name;
+                //PLOGD << "\tName: " << name;
                 for (tinyxml2::XMLElement* properties = e->FirstChildElement(); nullptr != properties; properties = properties->NextSiblingElement()){
                     if (std::string("properties") == properties->Value()){
                         for (tinyxml2::XMLElement* property = properties->FirstChildElement(); nullptr != property; property = property->NextSiblingElement()){
@@ -220,14 +221,16 @@ void LibEric::MapParser::ParseObjectLayer(tinyxml2::XMLElement* pObjectElement, 
                         }
                     }
 
-                    PLOGI << "Lade GameObject: " << name << " aus lua-script: " <<  scriptFile;
-                    PLOGI << "An Position    : " << x << "x" << y;
-                    PLOGI << "Brite          : " << width;
-                    PLOGI << "Höhe           : " << height;
-                    gameObject->SetPosition(x, y);
-                    gameObject->SetWidth(width);
-                    gameObject->SetHeight(height);
-                    gameObject->Load(scriptFile);
+                    //PLOGI << "Lade GameObject_Interface: " << name << " aus lua-script: " <<  scriptFile;
+                    //PLOGI << "An Position    : " << x << "x" << y;
+                    //PLOGI << "Brite          : " << width;
+                    //PLOGI << "Höhe           : " << height;
+                    GraphicGameObject *ggo;
+                    ggo = (LibEric::GraphicGameObject*)gameObject;
+                    ggo->SetPosition(x, y);
+                    ggo->SetWidth(width);
+                    ggo->SetHeight(height);
+                    ggo->Load(scriptFile);
 
                     objectLayer->GetGameObjectList()->push_back(gameObject);
                 }
