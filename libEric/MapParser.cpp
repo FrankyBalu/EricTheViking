@@ -30,22 +30,26 @@
 #include "ObjectLayer.hpp"
 #include "RenderManager.hpp"
 #include "TileLayer.hpp"
+#include "../Extra/raylib-physfs.h"
 //#include <asm-generic/errno.h>
 
 
-LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
+LibEric::Map* LibEric::MapParser::ParseMap(std::string mapName) {
 
-    LOGI ("Lade Karte: ", levelFile);
+    LOGI ("Lade Karte: ", mapName);
+    std::string mapPath = std::string ("/system/Maps/") + mapName + std::string ("/");
+    std::string mapFile = mapPath + std::string ("map.tmx");
+    LOGI("Datei: ", mapFile);
 
     //tinyXML2 daten initialisieren
     tinyxml2::XMLDocument levelDocument;
-    tinyxml2::XMLError eResult = levelDocument.LoadFile(levelFile.c_str());
+    tinyxml2::XMLError eResult = levelDocument.Parse(LoadFileTextFromPhysFS(mapFile.c_str()));
+
+//    tinyxml2::XMLError eResult = levelDocument.LoadFile(levelFile.c_str());
 
 
     if (eResult != tinyxml2::XML_SUCCESS)
         LOGE ("\tKonnte die Datei nicht laden: ", eResult);
-    else
-        LOGI ("\tErfolgreich geladen");
 
     //Neues MapObjekt erstellen
     Map* newMap = new Map();
@@ -55,26 +59,26 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 
     //Größe in Pixel, der einzelnen Tiles
     _TileSize = root->IntAttribute("tilewidth");
-    LOGD ("Tilebreite: ", _TileSize);
+    LOGV ("Tilebreite: ", _TileSize);
     //Breite der Karte in anzahl der Tiles
     _Width = root->IntAttribute("width");
     //Berechnen der Levelbreite in Pixel
     newMap->_Width = _TileSize*_Width;
-    LOGD ("Breite: ", _Width, " Blöcke");
-    LOGD ("Breite: ", newMap->_Width, " Pixel");
+    LOGV ("Breite: ", _Width, " Blöcke");
+    LOGV ("Breite: ", newMap->_Width, " Pixel");
     //Höhe der Karte in Anzahl der Tiles
     _Height = root->IntAttribute("height");
     //Berechnen der Levelhöhe in Pixel
     newMap->_Height = _TileSize*_Height;
-    LOGD ("Höhe: ", _Height, " Blöcke");
-    LOGD ("Höhe: ", newMap->_Height, " Pixel");
+    LOGV ("Höhe: ", _Height, " Blöcke");
+    LOGV ("Höhe: ", newMap->_Height, " Pixel");
 
 
     //Die einzelnen Elemente der XML-Datei durchgehen
     for(tinyxml2::XMLElement *e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement()) {
         //tilesets Parsen
         if (std::string(e->Value()) == std::string("tileset")) {
-            ParseTilesets(e, newMap->GetTilesets());
+            ParseTilesets(e, newMap->GetTilesets(), std::string("Maps/")+mapName+std::string("/") );
         }
         //die einzelnen Ebenen der Karte laden
         else if (std::string(e->Value()) == std::string("layer")) {
@@ -98,12 +102,10 @@ LibEric::Map* LibEric::MapParser::ParseMap(std::string levelFile) {
 }
 
 
-void LibEric::MapParser::ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets) {
+void LibEric::MapParser::ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets, std::string path) {
     //add tileset to texturemanager
     LOGD ("Parse Tileset: ", tilesetRoot->Attribute("name"));
-    std::string erikDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
-    std::string assetsTag = std::string("assets/");
-    std::string tileFile (assetsTag.append(tilesetRoot->FirstChildElement()->Attribute("source")));
+    std::string tileFile = path + std::string (tilesetRoot->FirstChildElement()->Attribute("source"));
     RenderManager::Instance()->LoadTextureFromFile(tilesetRoot->Attribute("name"),tileFile);
 
     Tileset tileset;

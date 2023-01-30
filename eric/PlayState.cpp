@@ -27,6 +27,7 @@
 #include <libEric/Input.hpp>
 #include <libEric/MapManager.hpp>
 #include <libEric/Log.hpp>
+#include <libEric/Dialog.hpp>
 #include <raylib.h>
 
 const std::string Eric::PlayState::_PlayID = "PLAY";
@@ -109,7 +110,7 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     SetMusicVolume (_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
 
     //FIXME: MapManager um zwischen verschiedenen Karten zu wechseln
-    LibEric::MapManager::Instance()->LoadMap(std::string ("/home/frank/Projekte/bin/share/EricTheViking") + std::string("/Maps/MainWorld.tmx"), "World");
+    LibEric::MapManager::Instance()->LoadMap("MainWorld", "World");
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House.tmx"), "House1");
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House2.tmx"), "House2");
     LibEric::MapManager::Instance()->ChangeCurrentMap("World");
@@ -126,7 +127,7 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     _Camera.rotation = 0.0f;
     _Camera.zoom = 4.0f;
 
-    //LibEric::Dialog::Instance()->SetMSG("Hallo und Willkommen zu dieser Demo.\nSie dient nur zum Testen.\nWirklichen Spieleinhalt, wie z.B eine\nSuper tolle geschichte wirst du hier\nvergebens suchen\ndennoch viel Spaß beim spielen");
+    LibEric::Dialog::Instance()->NewDialog("Hallo und Willkommen zu dieser Demo.\nSie dient nur zum Testen.\nWirklichen Spieleinhalt, wie z.B eine\nSuper tolle geschichte wirst du hier\nvergebens suchen\ndennoch viel Spaß beim spielen");
     return true;
 }
 

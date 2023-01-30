@@ -33,7 +33,7 @@ public:
 
 private:
 
-    void ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets);
+    void ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets, std::string path);
 
     void ParseTileLayer(tinyxml2::XMLElement* tileElement, Map *rmap);
 

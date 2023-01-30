@@ -104,13 +104,11 @@ LibEric::Dialog * LibEric::Dialog::Instance(){
 // - Textbox größe hier Festlegen (was passiert bei auflösungs wechsel)
 // - Auswahldialog
 LibEric::Dialog::Dialog() :
-        _DialogAvaible(false), _MSG(), _LinePos(0), _FontSize(25){
+        _DialogAvaible(false), _MSG(), _LinePos(0), _FontSize(25),_SelectDialogAvaible(false){
 
 }
 
 void LibEric::Dialog::NewDialog(std::string msg){
-    LOGV ("Erstelle DialogBox: ");
-    LOGV ("\t", msg);
     _MSG = split_string_by_newline(msg);
     _LinePos = 0;
     _DialogAvaible = true;
