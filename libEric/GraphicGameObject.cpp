@@ -48,6 +48,9 @@ void LibEric::GraphicGameObject::Draw()
     LOGV ("     Spalte  : ", _CurrentFrame);
     LOGV ("     Zeile   : ", _CurrentRow);
     RenderManager::Instance()->DrawFrame(_TextureID, (int)_Position.x, (int)_Position.y, _Width, _Height, _CurrentFrame, _CurrentRow);
+    if (LibEric::UserSettings::Instance()->GetCollisionBoxes()){
+        DrawRectangleLines((int)_Position.x, (int)_Position.y, _Width, _Height, BLUE);
+    }
 }
 
 void LibEric::GraphicGameObject::Clean()
@@ -106,4 +109,5 @@ Rectangle LibEric::GraphicGameObject::GetRect() {
     rect.y = _Position.y;
     rect.height = _Height;
     rect.width = _Width;
+    return rect;
 }

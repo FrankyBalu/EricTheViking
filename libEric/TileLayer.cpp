@@ -64,7 +64,6 @@ void LibEric::TileLayer::Render()
 
 
             RenderManager::Instance()->DrawTile(tileset.name,  j*_TileSize, i * _TileSize, _TileSize, _TileSize, (id - (tileset.firstGridID - 1)) / tileset.numColumns, (id - (tileset.firstGridID -1)) % tileset.numColumns);
-//             LibEric::TextureManager::Instance()->DrawFrame(tileset.name,  j*_TileSize, i * _TileSize, _TileSize, _TileSize, (id - (tileset.firstGridID - 1)) / tileset.numColumns, (id - (tileset.firstGridID -1)) % tileset.numColumns);
             if (_Name == std::string("Collision")&&UserSettings::Instance()->GetCollisionBoxes()) {
                 DrawRectangleLines(j*_TileSize, i * _TileSize, _TileSize, _TileSize, RED);
             }

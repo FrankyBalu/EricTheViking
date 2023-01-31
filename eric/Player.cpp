@@ -45,6 +45,7 @@ Eric::Player::Player() :
     _Frame = 0;
     _Life = 3.0;
     _Visable = true;
+    _TypeID = "Player";
 }
 
 
@@ -188,6 +189,10 @@ void Eric::Player::HandleInput()
     }
 
     if ( LibEric::Button_X() ) {
+        _Velocity.x *= 4.0f;
+        _Velocity.y *= 4.0f;
+    }
+    if ( LibEric::Button_X_Down() ) {
         _Velocity.x *= 4.0f;
         _Velocity.y *= 4.0f;
     }

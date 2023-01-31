@@ -49,11 +49,17 @@ void Eric::PlayState::Update() {
 
     Vector2 oldPlayerPosition =  Player::Instance()->GetPosition();
 
+
     Player::Instance()->Update();
     LibEric::MapManager::Instance()->Update();
     //position geht von den orginal pixeln aus, nicht von denen des bildschirms
     float x = Player::Instance()->GetPosition().x - 224;
     float y = Player::Instance()->GetPosition().y - 128;
+
+    if (LibEric::MapManager::Instance()->Collision(Player::Instance())){
+        Player::Instance()->SetPosition(oldPlayerPosition.x, oldPlayerPosition.y);
+    }
+
 
     if (x < 0.0f )
         x = 0.0f;

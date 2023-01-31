@@ -69,7 +69,7 @@ public:
     std::string GetID(){return std::string ("Player");}
 
     Rectangle GetRect()override{
-        LibEric::GraphicGameObject::GetRect();
+        return LibEric::GraphicGameObject::GetRect();
     }
 
 private:
