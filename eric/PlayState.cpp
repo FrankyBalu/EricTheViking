@@ -121,7 +121,6 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House2.tmx"), "House2");
     LibEric::MapManager::Instance()->ChangeCurrentMap("World");
 
-    LOGE ("Sind raus");
     LibEric::GameObject_Interface *player = Player::Instance();
     player->Load("n/a");
 

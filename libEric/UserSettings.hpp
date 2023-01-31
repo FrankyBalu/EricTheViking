@@ -49,6 +49,20 @@ namespace LibEric {
 
         int GetFPS();
 
+        void SetMusicVolume(float vol);
+
+        void SetEffectVolume(float vol);
+
+        void SetFullScreen(bool val);
+
+        void SetCollisionBoxes(bool val);
+
+        void SetWindowWidth(int width);
+
+        void SetWindowHeight(int height);
+
+        void SetFPS(int fps);
+
         UserSettings(const UserSettings &) = delete;
 
         UserSettings(UserSettings &&) = delete;

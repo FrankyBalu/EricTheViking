@@ -35,14 +35,14 @@ void LibEric::LuaSetup(sol::state *state) {
                                       "GetFPS", &UserSettings::GetFPS,
                                       "GetCollisionBoxes", &UserSettings::GetCollisionBoxes,
                                       "GetMusicVolume", &UserSettings::GetMusicVolume,
-                                      "GetEffectVolume", &UserSettings::GetEffectVolume/*,
-                                      "SetFullscreen", &UserSettings::SetFullscreen,
+                                      "GetEffectVolume", &UserSettings::GetEffectVolume,
+                                      "SetFullscreen", &UserSettings::SetFullScreen,
                                       "SetWindowWidth", &UserSettings::SetWindowWidth,
                                       "SetWindowHeight", &UserSettings::SetWindowHeight,
                                       "SetFPS", &UserSettings::SetFPS,
                                       "SetCollisionBoxes", &UserSettings::SetCollisionBoxes,
                                       "SetMusicVolume", &UserSettings::SetMusicVolume,
-                                      "SetEffectVolume", &UserSettings::SetEffectVolume,
+                                      "SetEffectVolume", &UserSettings::SetEffectVolume/*,
                                       "Save", &UserSettings::Save*/
     );
 

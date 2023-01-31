@@ -108,3 +108,31 @@ int LibEric::UserSettings::GetWindowHeight() {
 int LibEric::UserSettings::GetFPS() {
     return _FPS;
 }
+
+void LibEric::UserSettings::SetMusicVolume(float vol) {
+    _MusicVolume = vol;
+}
+
+void LibEric::UserSettings::SetEffectVolume(float vol) {
+    _EffectVolume = vol;
+}
+
+void LibEric::UserSettings::SetFPS(int fps) {
+    _FPS = fps;
+}
+
+void LibEric::UserSettings::SetFullScreen(bool val) {
+    LOGW("Fixme: Change Fullscreen");
+}
+
+void LibEric::UserSettings::SetWindowWidth(int width) {
+    LOGW("Fixme: Change Window Width");
+}
+
+void LibEric::UserSettings::SetWindowHeight(int height) {
+    LOGW("Fixme: Change Window Height");
+}
+
+void LibEric::UserSettings::SetCollisionBoxes(bool val) {
+    _CollisionBoxes = val;
+}
