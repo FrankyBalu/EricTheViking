@@ -25,7 +25,6 @@
 #include <libEric/StoryNode.hpp>
 #include <libEric/Lua.hpp>
 #include <raylib.h>
-#include <Config.hpp>
 
 Eric::Marker::Marker()
         : LibEric::GraphicGameObject() {
@@ -63,8 +62,11 @@ void Eric::Marker::Load(const std::string script) {
 
 
     LibEric::LuaSetup(&lua);
-
+#ifdef __linux__
     std::string EricDir = std::string(INSTALL_PREFIX) + std::string("/share/EricTheViking/");
+#else
+    std::string EricDir = std::string("data\\scripts\\");
+#endif
     lua.script_file(EricDir + script);
 
 

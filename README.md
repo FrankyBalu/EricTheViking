@@ -30,16 +30,17 @@ sudo make install
 
 ## Windows
 
-Für später mal geplant.
-
+Kann mit Visual Studio erstellt werden, aber Menus werden nicht angezeigt bzw alles was mit schrift zu tun hat.
+Wenn man aber weiß was man drücken muss, startet das Spiel.
+Nur im Release-Build übersetzbar.
 
 ## Die Großen Ziele
 
 - [X] [Git Projekt erstellen]
-- [ ] [Einstellungen mit lua laden]
-- [ ] [Menüs mit lua erstellen]
-- [ ] [Karten laden und Kamera implämentieren]
-- [ ] [Spieler erstellen]
+- [X] [Einstellungen mit lua laden]
+- [X] [Menüs mit lua erstellen]
+- [X] [Karten laden und Kamera implämentieren]
+- [-] [Spieler erstellen]
 - [ ] [Kollisionssystem]
 - [ ] [Übergange zu den einzelnen Karten]
 - [ ] [Wegweiser und Hinweisschilder]
@@ -47,6 +48,6 @@ Für später mal geplant.
 - [ ] [Zerstörbares Gras und Gegenstände]
 - [ ] [Gegner]
 - [ ] [Inventar und Items]
-- [ ] [Storyknoten]
+- [-] [Storyknoten]
 
 

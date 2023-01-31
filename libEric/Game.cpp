@@ -30,13 +30,22 @@ LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(),
 
 bool LibEric::Game::Init(const std::string &appName) {
     _AppName = appName;
+#ifdef __linux__
     _AppDir = std::string(INSTALL_PREFIX) + std::string("/share/") + std::string(_AppName);
+#else
+    _AppDir = "data\\";
+#endif
 
     //Dies dient nur die Meldungen von Raylib zu unterdrücken, auser Fehler
     SetTraceLogLevel(4);
 
+#ifdef __linux__
     InitPhysFSEx(_AppDir.c_str(), "system");
     MountPhysFS(GetPerfDirectory(" ", _AppName.c_str()), "user");
+#else
+    InitPhysFSEx(_AppDir.c_str(), "system");
+    MountPhysFS(GetPerfDirectory(" ", _AppName.c_str()), "user");
+#endif
     if (!LibEricSettings::Instance()->Load()) {
         return false;
     }

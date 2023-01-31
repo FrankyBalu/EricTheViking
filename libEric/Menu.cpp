@@ -207,10 +207,11 @@ void LibEric::Menu::Render() {
     dest.height = Game::Instance()->GetWindowHeight();
     RenderManager::Instance()->DrawEx("BGI", src, dest, 0.0f);
     _LUA_Draw();
-
+#ifdef __linux__
     if (LibEric::LibEricSettings::Instance()->GetShowVersion())
         DrawText(std::string(std::string("Version: ") + std::string(LIBERIC_VERSION)).c_str(), 20,
                  Game::Instance()->GetWindowHeight() - 20, 20, RED);
+#endif
 }
 
 std::string LibEric::Menu::GetStateID() const {
@@ -240,10 +241,14 @@ bool ExitGameDialog() {
 }
 
 bool LibEric::Menu::OnEnter(std::string file) {
+#ifdef __linux__
     std::string scriptpath = PHYSFS_getRealDir("/system");
     std::string scriptFile = scriptpath + std::string("/Menu/") + file;
+#else
+    std::string scriptFile = std::string("data\\Menu\\") + file;
+#endif
 
-
+    LOGE("SCRIPT: ", scriptFile);
     GuiSetFont(Game::Instance()->GetDefaultFont());
 
     lua.open_libraries(sol::lib::base);
