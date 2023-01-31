@@ -26,75 +26,79 @@
 
 namespace Eric {
 
-enum  PLAYER_ANIMATIONS {
-    ANIM_NONE   = -1,
-    WALK_UP     =  1,
-    WALK_DOWN   =  0,
-    WALK_LEFT   =  2,
-    WALK_RIGHT  =  3,
-    SWORT_UP    =  5,
-    SWORT_DOWN  =  4,
-    SWORT_LEFT  =  6,
-    SWORT_RIGHT =  7
-};
+    enum PLAYER_ANIMATIONS {
+        ANIM_NONE = -1,
+        WALK_UP = 1,
+        WALK_DOWN = 0,
+        WALK_LEFT = 2,
+        WALK_RIGHT = 3,
+        SWORT_UP = 5,
+        SWORT_DOWN = 4,
+        SWORT_LEFT = 6,
+        SWORT_RIGHT = 7
+    };
 
-enum class PLAYER_ANIMATION_TO_PLAY {
-    NONE  = 0,
-    WALK  = 1,
-    SWORT = 2
-};
-
-
-class Player : public LibEric::GraphicGameObject {
-public:
-
-    static Player* Instance();
+    enum class PLAYER_ANIMATION_TO_PLAY {
+        NONE = 0,
+        WALK = 1,
+        SWORT = 2
+    };
 
 
-    virtual void Draw () override;
-    virtual void Update() override;
-    virtual void Clean() override;
+    class Player : public LibEric::GraphicGameObject {
+    public:
 
-    virtual void Load(const std::string scriptFile) override;
-
+        static Player *Instance();
 
 
-    Vector2 GetPosition (){
-        return _Position;
-    }
-    void SetPosition (float x, float y);
+        virtual void Draw() override;
 
-    void ObjectCollision(LibEric::GameObject_Interface *object){}
-    void CollisionWithMap(){}
-    std::string GetID(){return std::string ("Player");}
+        virtual void Update() override;
 
-    Rectangle GetRect()override{
-        return LibEric::GraphicGameObject::GetRect();
-    }
+        virtual void Clean() override;
 
-private:
-
-    Player();
-    void HandleInput();
+        virtual void Load(const std::string scriptFile) override;
 
 
+        Vector2 GetPosition() {
+            return _Position;
+        }
 
-    PLAYER_ANIMATIONS _Animation;
-    PLAYER_ANIMATION_TO_PLAY _AnimationToPlay;
-    bool _PlayAnimation;
-    int _Frame;
+        void SetPosition(float x, float y);
 
-    float _Life;
+        void ObjectCollision(LibEric::GameObject_Interface *object) {}
 
-    Vector2  _Velocity;
-    Vector2  _Acceleration;
-    int _Direction;
-    int _NumFrames;
+        void CollisionWithMap() {}
 
-    Sound _SwordSound;
-    static Player *_Instance;
+        std::string GetID() { return std::string("Player"); }
 
-};
+        Rectangle GetRect() override {
+            return LibEric::GraphicGameObject::GetRect();
+        }
+
+    private:
+
+        Player();
+
+        void HandleInput();
+
+
+        PLAYER_ANIMATIONS _Animation;
+        PLAYER_ANIMATION_TO_PLAY _AnimationToPlay;
+        bool _PlayAnimation;
+        int _Frame;
+
+        float _Life;
+
+        Vector2 _Velocity;
+        Vector2 _Acceleration;
+        int _Direction;
+        int _NumFrames;
+
+        Sound _SwordSound;
+        static Player *_Instance;
+
+    };
 
 
 }; //namespace Eric

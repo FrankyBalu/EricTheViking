@@ -23,16 +23,17 @@
 #define __LAYER
 
 namespace LibEric {
-class Layer {
-public:
+    class Layer {
+    public:
 
-    virtual void Render() = 0;
-    virtual void Update() = 0;
+        virtual void Render() = 0;
 
-protected:
+        virtual void Update() = 0;
 
-    virtual ~Layer() {}
-};
+    protected:
+
+        virtual ~Layer() {}
+    };
 
 }; // namespace LibEric
 #endif //__LAYER

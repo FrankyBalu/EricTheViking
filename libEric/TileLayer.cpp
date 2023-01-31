@@ -29,32 +29,27 @@
 
 
 LibEric::TileLayer::TileLayer(int tileSize, int mapWidth, int mapHeight, const std::vector<Tileset> &tilesets)
-    :_NumColumns(mapWidth), _NumRows(mapHeight), _TileSize(tileSize), _Position{0,0}, _Velocity{0,0}, _Name(), _Tilesets(tilesets), _TileIDs()
-{
+        : _NumColumns(mapWidth), _NumRows(mapHeight), _TileSize(tileSize), _Position{0, 0}, _Velocity{0, 0}, _Name(),
+          _Tilesets(tilesets), _TileIDs() {
 
 }
 
-void LibEric::TileLayer::Update()
-{
+void LibEric::TileLayer::Update() {
     _Position.x += _Velocity.x;
     _Position.y += _Velocity.y;
 }
 
-void LibEric::TileLayer::Render()
-{
+void LibEric::TileLayer::Render() {
     int x;
 
     x = _Position.x / _TileSize;
 
 
-    for (int i = 0; i < _NumRows; i++)
-    {
-        for (int j = 0; j < _NumColumns; j++)
-        {
-            int  id = _TileIDs[i][j+x];
+    for (int i = 0; i < _NumRows; i++) {
+        for (int j = 0; j < _NumColumns; j++) {
+            int id = _TileIDs[i][j + x];
 
-            if (id==0)
-            {
+            if (id == 0) {
                 continue;
             }
 
@@ -63,9 +58,11 @@ void LibEric::TileLayer::Render()
             id--;
 
 
-            RenderManager::Instance()->DrawTile(tileset.name,  j*_TileSize, i * _TileSize, _TileSize, _TileSize, (id - (tileset.firstGridID - 1)) / tileset.numColumns, (id - (tileset.firstGridID -1)) % tileset.numColumns);
-            if (_Name == std::string("Collision")&&UserSettings::Instance()->GetCollisionBoxes()) {
-                DrawRectangleLines(j*_TileSize, i * _TileSize, _TileSize, _TileSize, RED);
+            RenderManager::Instance()->DrawTile(tileset.name, j * _TileSize, i * _TileSize, _TileSize, _TileSize,
+                                                (id - (tileset.firstGridID - 1)) / tileset.numColumns,
+                                                (id - (tileset.firstGridID - 1)) % tileset.numColumns);
+            if (_Name == std::string("Collision") && UserSettings::Instance()->GetCollisionBoxes()) {
+                DrawRectangleLines(j * _TileSize, i * _TileSize, _TileSize, _TileSize, RED);
             }
         }
     }
@@ -74,13 +71,10 @@ void LibEric::TileLayer::Render()
 bool LibEric::TileLayer::CheckCollision(GameObject_Interface *object) {
     Rectangle tileRect;
 
-    for (int i = 0; i < _NumRows; i++)
-    {
-        for (int j = 0; j < _NumColumns; j++)
-        {
-            int  id = _TileIDs[i][j];
-            if (id==0)
-            {
+    for (int i = 0; i < _NumRows; i++) {
+        for (int j = 0; j < _NumColumns; j++) {
+            int id = _TileIDs[i][j];
+            if (id == 0) {
                 continue;
             }
             tileRect.x = j * _TileSize;
@@ -97,19 +91,13 @@ bool LibEric::TileLayer::CheckCollision(GameObject_Interface *object) {
 }
 
 
-LibEric::Tileset LibEric::TileLayer::GetTilesetByID(int tileID)
-{
-    for(unsigned long i = 0; i < _Tilesets.size(); i++)
-    {
-        if( i + 1 <= _Tilesets.size() - 1)
-        {
-            if(tileID >= _Tilesets[i].firstGridID && tileID < _Tilesets[i + 1].firstGridID)
-            {
+LibEric::Tileset LibEric::TileLayer::GetTilesetByID(int tileID) {
+    for (unsigned long i = 0; i < _Tilesets.size(); i++) {
+        if (i + 1 <= _Tilesets.size() - 1) {
+            if (tileID >= _Tilesets[i].firstGridID && tileID < _Tilesets[i + 1].firstGridID) {
                 return _Tilesets[i];
             }
-        }
-        else
-        {
+        } else {
             return _Tilesets[i];
         }
     }

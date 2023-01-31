@@ -26,14 +26,19 @@
 #include <libEric/LibEricSettings.hpp>
 #include <Config.hpp>
 #include <libEric/Input.hpp>
+#include <libEric/Log.hpp>
+#include <libEric/Dialog.hpp>
 #include <raylib.h>
+
 #define RAYGUI_IMPLEMENTATION
+
 #include <raygui.h>
+#include <raylib-physfs.h>
+#include <physfs.h>
 #include <sstream>
-#include <Config.hpp>
 
 
-LibEric::Button::Button(std::string text, float x, float y, float width, float height){
+LibEric::Button::Button(std::string text, float x, float y, float width, float height) {
     _Activ = false;
     _Text = text;
     _Rect.x = x;
@@ -42,7 +47,7 @@ LibEric::Button::Button(std::string text, float x, float y, float width, float h
     _Rect.height = height;
 }
 
-void LibEric::Button::Resize(float x, float y, float width, float height){
+void LibEric::Button::Resize(float x, float y, float width, float height) {
     _Rect.x = x;
     _Rect.y = y;
     _Rect.width = width;
@@ -50,11 +55,10 @@ void LibEric::Button::Resize(float x, float y, float width, float height){
 }
 
 
-void LibEric::Button::Draw(){
-    if (_Activ){
+void LibEric::Button::Draw() {
+    if (_Activ) {
         GuiSetState(STATE_FOCUSED);
-    }
-    else{
+    } else {
         GuiSetState(STATE_NORMAL);
     }
 
@@ -62,11 +66,11 @@ void LibEric::Button::Draw(){
     GuiSetState(STATE_NORMAL);
 }
 
-void LibEric::Button::SetActiv(bool activ){
+void LibEric::Button::SetActiv(bool activ) {
     _Activ = activ;
 }
 
-LibEric::CheckBox::CheckBox(std::string text, float x, float y, float width, float height, bool checked){
+LibEric::CheckBox::CheckBox(std::string text, float x, float y, float width, float height, bool checked) {
     _Activ = false;
     _Rect.x = x;
     _Rect.y = y;
@@ -76,39 +80,39 @@ LibEric::CheckBox::CheckBox(std::string text, float x, float y, float width, flo
     _Text = text;
 }
 
-void LibEric::CheckBox::Resize(float x, float y, float width, float height){
+void LibEric::CheckBox::Resize(float x, float y, float width, float height) {
     _Rect.x = x;
     _Rect.y = y;
     _Rect.width = width;
     _Rect.height = height;
 }
 
-bool LibEric::CheckBox::IsActivated(){
+bool LibEric::CheckBox::IsActivated() {
     return _Check;
 }
 
-void LibEric::CheckBox::Toggle(bool n){
+void LibEric::CheckBox::Toggle(bool n) {
     _Check = n;
 }
 
-void LibEric::CheckBox::Draw(){
-    if (_Activ){
+void LibEric::CheckBox::Draw() {
+    if (_Activ) {
         GuiSetState(STATE_FOCUSED);
-    }
-    else{
+    } else {
         GuiSetState(STATE_NORMAL);
     }
 
-    GuiCheckBox(_Rect, _Text.c_str(),_Check);
+    GuiCheckBox(_Rect, _Text.c_str(), _Check);
     GuiSetState(STATE_NORMAL);
 
 }
 
-void LibEric::CheckBox::SetActiv(bool activ){
+void LibEric::CheckBox::SetActiv(bool activ) {
     _Activ = activ;
 }
 
-LibEric::Slider::Slider(std::string text, float x, float y, float width, float height, float currentVal, float minVal, float maxVal){
+LibEric::Slider::Slider(std::string text, float x, float y, float width, float height, float currentVal, float minVal,
+                        float maxVal) {
     _Activ = false;
     _CurrentValue = currentVal;
     _MinValue = minVal;
@@ -120,7 +124,7 @@ LibEric::Slider::Slider(std::string text, float x, float y, float width, float h
     _Text = text;
 }
 
-void LibEric::Slider::Resize(float x, float y, float width, float height){
+void LibEric::Slider::Resize(float x, float y, float width, float height) {
     _Rect.x = x;
     _Rect.y = y;
     _Rect.width = width;
@@ -128,11 +132,11 @@ void LibEric::Slider::Resize(float x, float y, float width, float height){
 }
 
 
-float LibEric::Slider::GetValue(){
+float LibEric::Slider::GetValue() {
     return _CurrentValue;
 }
 
-void LibEric::Slider::SetValue(float val){
+void LibEric::Slider::SetValue(float val) {
     if (val <= 0)
         val = 0.0;
     if (val > 1)
@@ -143,36 +147,34 @@ void LibEric::Slider::SetValue(float val){
 }
 
 
-void LibEric::Slider::Draw(){
-    if (_Activ){
+void LibEric::Slider::Draw() {
+    if (_Activ) {
         GuiSetState(STATE_FOCUSED);
-    }
-    else{
+    } else {
         GuiSetState(STATE_NORMAL);
     }
 
     std::stringstream ss;
-    int i = 100*_CurrentValue;
+    int i = 100 * _CurrentValue;
     if (_CurrentValue == 0.0)
         ss << "0";
     else
         ss << i;
 
-    GuiSliderBar(_Rect, _Text.c_str(),ss.str().c_str(),_CurrentValue, _MinValue, _MaxValue);
+    GuiSliderBar(_Rect, _Text.c_str(), ss.str().c_str(), _CurrentValue, _MinValue, _MaxValue);
     GuiSetState(STATE_NORMAL);
 }
 
 
-void LibEric::Slider::SetActiv(bool activ){
+void LibEric::Slider::SetActiv(bool activ) {
     _Activ = activ;
 }
 
 
-void LibEric::Menu::Update()
-{
- //   for (int i = 0; i < 3; i++) {
- //       LOGE("Gampad ", i, ": ", IsGamepadButtonPressed(i, GAMEPAD_BUTTON_LEFT_FACE_DOWN));
- //   }
+void LibEric::Menu::Update() {
+    //   for (int i = 0; i < 3; i++) {
+    //       LOGE("Gampad ", i, ": ", IsGamepadButtonPressed(i, GAMEPAD_BUTTON_LEFT_FACE_DOWN));
+    //   }
     if (Button_Down()) {
         _LUA_Key_Down();
     }
@@ -194,54 +196,53 @@ void LibEric::Menu::Update()
     _LUA_Update();
 }
 
-void LibEric::Menu::Render()
-{
+void LibEric::Menu::Render() {
     Rectangle src;
     Rectangle dest;
     src.x = dest.x = 0;
     src.y = dest.y = 0;
     src.width = 1920;
     src.height = 1080;
-    dest.width =Game::Instance()->GetWindowWidth();
+    dest.width = Game::Instance()->GetWindowWidth();
     dest.height = Game::Instance()->GetWindowHeight();
     RenderManager::Instance()->DrawEx("BGI", src, dest, 0.0f);
     _LUA_Draw();
 
     if (LibEric::LibEricSettings::Instance()->GetShowVersion())
-        DrawText(std::string(std::string("Version: ") + std::string(LIBERIC_VERSION)).c_str(), 20, Game::Instance()->GetWindowHeight()-20, 20, RED);
+        DrawText(std::string(std::string("Version: ") + std::string(LIBERIC_VERSION)).c_str(), 20,
+                 Game::Instance()->GetWindowHeight() - 20, 20, RED);
 }
 
-std::string LibEric::Menu::GetStateID() const
-{
+std::string LibEric::Menu::GetStateID() const {
     return _ID;
 }
 
 
-
-
-void LibEric::Menu::SetID(std::string id){
-   // PLOGE << "Setzte ID zu " << id;
+void LibEric::Menu::SetID(std::string id) {
+    // PLOGE << "Setzte ID zu " << id;
     _ID = id;
 }
 
-void LibEric::Menu::Resize (){
+void LibEric::Menu::Resize() {
     _Lua_Resize();
 }
 
 
-bool LibEric::Menu::OnEnter(std::string file)
-{
-    std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
-    std::string fontFile = EricDir + std::string ("Font.ttf");
-    std::string scriptFile(EricDir);
+void CreateExitDialog() {
+    LibEric::Dialog::Instance()->NewSelectDialog("\n\t\tWirklich Beenden", "Ja", "Nein", 1);
+}
 
-    RenderManager::Instance()->LoadTextureFromFile("BGI", "assets/Background.png");
-    if (file.empty()){
-        scriptFile += std::string ("Menu/MainMenu.lua");
-    }
-    else {
-        scriptFile += std::string ("Menu/") + file;
-    }
+bool ExitGameDialog() {
+    if (LibEric::Dialog::Instance()->GetAnswer() == 0)
+        return true;
+    else
+        return false;
+}
+
+bool LibEric::Menu::OnEnter(std::string file) {
+    std::string scriptpath = PHYSFS_getRealDir("/system");
+    std::string scriptFile = scriptpath + std::string("/Menu/") + file;
+
 
     GuiSetFont(Game::Instance()->GetDefaultFont());
 
@@ -249,30 +250,32 @@ bool LibEric::Menu::OnEnter(std::string file)
     lua.open_libraries(sol::lib::string);
 
     lua.new_usertype<Button>("Button",
-                            sol::constructors<Button(std::string, float, float, float, float)>(),
+                             sol::constructors<Button(std::string, float, float, float, float)>(),
                              "Draw", &Button::Draw,
                              "Resize", &Button::Resize,
                              "SetActiv", &Button::SetActiv);
     lua.new_usertype<Slider>("Slider",
-                            sol::constructors<Slider(std::string, float, float, float, float, float, float, float)>(),
+                             sol::constructors<Slider(std::string, float, float, float, float, float, float, float)>(),
                              "Draw", &Slider::Draw,
                              "Resize", &Slider::Resize,
                              "SetActiv", &Slider::SetActiv,
                              "GetValue", &Slider::GetValue,
                              "SetValue", &Slider::SetValue);
     lua.new_usertype<CheckBox>("CheckBox",
-                            sol::constructors<CheckBox(std::string, float, float, float, float, bool)>(),
-                             "Draw", &CheckBox::Draw,
-                             "Resize", &CheckBox::Resize,
-                             "SetActiv", &CheckBox::SetActiv,
-                             "IsActivated", &CheckBox::IsActivated,
-                             "Toggle", &CheckBox::Toggle);
+                               sol::constructors<CheckBox(std::string, float, float, float, float, bool)>(),
+                               "Draw", &CheckBox::Draw,
+                               "Resize", &CheckBox::Resize,
+                               "SetActiv", &CheckBox::SetActiv,
+                               "IsActivated", &CheckBox::IsActivated,
+                               "Toggle", &CheckBox::Toggle);
 
-    
+
     LibEric::LuaSetup(&lua);
     lua.set_function("SetID", &Menu::SetID);
-    lua.script_file (scriptFile);
+    lua.set_function("CreateExitDialog", &CreateExitDialog);
+    lua.set_function("ExitGame", &ExitGameDialog);
 
+    lua.script_file(scriptFile.c_str());
 
     _ID = lua["MENUID"];
 
@@ -289,7 +292,7 @@ bool LibEric::Menu::OnEnter(std::string file)
     return true;
 }
 
-bool LibEric::Menu::OnExit(){
+bool LibEric::Menu::OnExit() {
     return true;
 }
 

@@ -27,23 +27,23 @@
 
 namespace LibEric {
 
-class MapParser {
-public:
-    Map* ParseMap(std::string levelFile);
+    class MapParser {
+    public:
+        Map *ParseMap(std::string levelFile);
 
-private:
+    private:
 
-    void ParseTilesets(tinyxml2::XMLElement* tilesetRoot, std::vector<Tileset>* tilesets, std::string path);
+        void ParseTilesets(tinyxml2::XMLElement *tilesetRoot, std::vector<Tileset> *tilesets, std::string path);
 
-    void ParseTileLayer(tinyxml2::XMLElement* tileElement, Map *rmap);
+        void ParseTileLayer(tinyxml2::XMLElement *tileElement, Map *rmap);
 
-    void ParseObjectLayer(tinyxml2::XMLElement* pObjectElement, Map* level);
+        void ParseObjectLayer(tinyxml2::XMLElement *pObjectElement, Map *level);
 
 
-    int _TileSize;
-    int _Width;
-    int _Height;
-};
+        int _TileSize;
+        int _Width;
+        int _Height;
+    };
 
 }; //namespace LibEric
 #endif // __LEVELPARSER

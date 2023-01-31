@@ -64,7 +64,7 @@ namespace LibEric {
          *  Die ID wird unter anderem dazu verwendet, wenn Objekte miteineder Kollidieren, damit sie wissen mit wem sie es zu tun haben
          * @return ID des ObjeKtes
          */
-        virtual std::string GetID () = 0;
+        virtual std::string GetID() = 0;
 
         //! muss noch ausgebaut werden, wir brauchen ja mehrere für den CollisionManager (object selbst, schild, schwert..)
         virtual Rectangle GetRect() = 0;
@@ -73,7 +73,8 @@ namespace LibEric {
         virtual void CollisionWithMap() = 0;
 
         //! Für Test FIXME Dokumentation
-        virtual void ObjectCollision(GameObject_Interface* object) = 0;
+        virtual void ObjectCollision(GameObject_Interface *object) = 0;
+
     protected:
 
         GameObject_Interface() {}

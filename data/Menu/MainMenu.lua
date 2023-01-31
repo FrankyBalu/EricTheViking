@@ -5,8 +5,6 @@ MENUID = "MainMenu"
 stateMaschine = StateMaschine.Instance()
 -- Instance von Game, um das Spiel zu beenden
 game = Game.Instance()
--- Dialog für den Wirklich beenden dialog
-dialog = Dialog.Instance()
 
 settings = UserSettings.Instance()
 
@@ -48,7 +46,7 @@ function Update ()
     end
 
     -- Falls der Beenden Dialog mit ja beantwortet wurde, wird das Spiel beendet
-    if dialog:GetAnswer() == 1
+    if ExitGame()
     then
         game:Quit()
     end
@@ -106,7 +104,7 @@ end
 function Activate ()
     if MenuPos == 2
     then
-        ExitDialog()
+        CreateExitDialog()
     end
     if MenuPos == 1
     then
@@ -119,11 +117,6 @@ function Activate ()
 
 end
 
---
-function ExitDialog ()
-    dialog:NewSelectDialog("\n\t\tWirklich Beenden", "Ja", "Nein", 1)
-
-end
 
 function Back ()
     return MenuPos

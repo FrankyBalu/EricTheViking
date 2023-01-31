@@ -24,11 +24,11 @@
 #include "MapManager.hpp"
 #include "MapParser.hpp"
 
-LibEric::MapManager* LibEric::MapManager::_Instance = 0;
+LibEric::MapManager *LibEric::MapManager::_Instance = 0;
 
 bool LibEric::MapManager::LoadMap(std::string fileName, std::string id) {
     //Prüfen ob es schon eine Karte mit der id gibt
-    if (Exist(id)){
+    if (Exist(id)) {
         LOGW  ("Karte mit ID ", id, " existiert bereits");
         return false;
     }
@@ -38,7 +38,7 @@ bool LibEric::MapManager::LoadMap(std::string fileName, std::string id) {
     Map *newMap = parser.ParseMap(fileName);
 
     //Prüfen ob Karte geladen wurde
-    if (newMap == nullptr){
+    if (newMap == nullptr) {
         LOGE ("Karte ", id, " konnte nicht geladen werden");
         return false;
     }
@@ -49,12 +49,12 @@ bool LibEric::MapManager::LoadMap(std::string fileName, std::string id) {
     return true;
 }
 
-void LibEric::MapManager::Draw () {
+void LibEric::MapManager::Draw() {
     _CurrentMap->Render();
 }
 
-bool LibEric::MapManager::ChangeCurrentMap(std::string id){
-    if (Exist(id)){
+bool LibEric::MapManager::ChangeCurrentMap(std::string id) {
+    if (Exist(id)) {
         _CurrentMap = _Maps[id];
         return true;
     }
@@ -62,30 +62,30 @@ bool LibEric::MapManager::ChangeCurrentMap(std::string id){
     return false;
 }
 
-bool LibEric::MapManager::RemoveMap(std::string id){
+bool LibEric::MapManager::RemoveMap(std::string id) {
     return false;
 }
 
-void LibEric::MapManager::Update(){
+void LibEric::MapManager::Update() {
     _CurrentMap->Update();
 }
 
-LibEric::MapManager * LibEric::MapManager::Instance(){
-    if (_Instance == nullptr){
+LibEric::MapManager *LibEric::MapManager::Instance() {
+    if (_Instance == nullptr) {
         _Instance = new MapManager();
     }
     return _Instance;
 }
 
-bool LibEric::MapManager::Collision(GameObject_Interface *object){
+bool LibEric::MapManager::Collision(GameObject_Interface *object) {
     return _CurrentMap->Collison(object);
 }
 
-int LibEric::MapManager::GetWidth(){
+int LibEric::MapManager::GetWidth() {
     return _CurrentMap->GetWidth();
 }
 
-int LibEric::MapManager::GetHeight(){
+int LibEric::MapManager::GetHeight() {
     return _CurrentMap->GetHeight();
 }
 
@@ -94,8 +94,7 @@ LibEric::MapManager::MapManager() {
 
 }
 
-LibEric::MapManager::~MapManager()
-{
+LibEric::MapManager::~MapManager() {
 }
 
 bool LibEric::MapManager::Exist(std::string id) {
@@ -105,7 +104,7 @@ bool LibEric::MapManager::Exist(std::string id) {
         return true;
 }
 
-LibEric::Layer * LibEric::MapManager::GetObjectLayer(){
+LibEric::Layer *LibEric::MapManager::GetObjectLayer() {
     return _CurrentMap->GetObjectLayer();
 }
 

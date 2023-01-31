@@ -26,24 +26,21 @@
 #include <Config.hpp>
 
 Eric::Gateway::Gateway()
-    : GraphicGameObject(){
+        : GraphicGameObject() {
 }
 
-void Eric::Gateway::Draw()
-{
+void Eric::Gateway::Draw() {
     GraphicGameObject::Draw();
 }
 
-void Eric::Gateway::Clean()
-{
+void Eric::Gateway::Clean() {
     GraphicGameObject::Clean();
 }
 
-void Eric::Gateway::Update()
-{
-    if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
-PLOGW << "Collision";
-        if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
+void Eric::Gateway::Update() {
+    if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision)) {
+        PLOGW << "Collision";
+        if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN) || IsKeyPressed(KEY_DOWN)) {
             PLOGW << "Script sollte laufen";
             _LUA_Enter();
         }
@@ -51,33 +48,31 @@ PLOGW << "Collision";
     _LUA_Update();
 }
 
-void Eric::Gateway::ChangeToMap(std::string map){
+void Eric::Gateway::ChangeToMap(std::string map) {
 
 }
 
 
-
-
-void Eric::Gateway::Load(const std::string scriptFile){
+void Eric::Gateway::Load(const std::string scriptFile) {
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
 
     LibEric::LuaSetup(&lua);
 
-     std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
+    std::string EricDir = std::string(INSTALL_PREFIX) + std::string("/share/EricTheViking/");
 
     lua.set_function("ChangeToMap", &Gateway::ChangeToMap);
 
     lua.new_usertype<Player>("Player",
-        "new", sol::no_constructor,
-        "Instance", &Player::Instance,
-        "SetPosition", &Player::SetPosition
-        );
+                             "new", sol::no_constructor,
+                             "Instance", &Player::Instance,
+                             "SetPosition", &Player::SetPosition
+    );
 
-    lua.script_file (EricDir + scriptFile);
+    lua.script_file(EricDir + scriptFile);
 
-    _ObjectCollision.x = _Position.x + ((_Width - 10)/2);
-    _ObjectCollision.y = _Position.y + (_Height-10);
+    _ObjectCollision.x = _Position.x + ((_Width - 10) / 2);
+    _ObjectCollision.y = _Position.y + (_Height - 10);
     _ObjectCollision.width = 10;
     _ObjectCollision.height = 10;
 

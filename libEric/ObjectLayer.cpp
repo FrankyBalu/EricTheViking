@@ -37,6 +37,6 @@ void LibEric::ObjectLayer::Update() {
     }
 }
 
-std::vector<LibEric::GameObject_Interface*>* LibEric::ObjectLayer::GetGameObjectList() {
+std::vector<LibEric::GameObject_Interface *> *LibEric::ObjectLayer::GetGameObjectList() {
     return &_GameObjectList;
 }

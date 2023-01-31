@@ -104,8 +104,9 @@ namespace LibEric {
 
 
         //!da meine installation probleme mit meinen Controllern hat, das als Workarout
-        int GetGamepad(){return UseGamepad;}
-        void SetGamepad(int gp){UseGamepad = gp;};
+        int GetGamepad() { return UseGamepad; }
+
+        void SetGamepad(int gp) { UseGamepad = gp; };
 
     private:
         static Game *_Instance;

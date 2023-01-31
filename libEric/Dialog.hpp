@@ -26,59 +26,59 @@
 #include <string>
 #include <vector>
 
-namespace LibEric{
+namespace LibEric {
 
 //! Zeigt ein Textbox/Dialogbox in der Text angezeigt wird
 /*! Am besten ZeilenUmbrüche("\n") direkt in den Text setzen, da noch keine automatischen Zeilenumbrüche unterstützt wereden
 
  */
-class Dialog
-{
-public:
-    //! Gibt einen Zeiger auf die DialogInstance
-    /*! Es gibt immer nur eine instance in einer Anwendung
-    */
-    static Dialog* Instance();
+    class Dialog {
+    public:
+        //! Gibt einen Zeiger auf die DialogInstance
+        /*! Es gibt immer nur eine instance in einer Anwendung
+        */
+        static Dialog *Instance();
 
-    //! SetMSG
-    /*! Der Text wird festgelegt und die Box im anschluss angezeigt
-    */
-    void NewDialog (std::string msg);
+        //! SetMSG
+        /*! Der Text wird festgelegt und die Box im anschluss angezeigt
+        */
+        void NewDialog(std::string msg);
 
-    //! Blendet eine Auswahlmöglichkeit ein
-    void NewSelectDialog(std::string msg, std::string option1, std::string option2, int default_answer);
+        //! Blendet eine Auswahlmöglichkeit ein
+        void NewSelectDialog(std::string msg, std::string option1, std::string option2, int default_answer);
 
-    //! Gibt die zuletzt gewählte Option zurück
-    int GetAnswer();
+        //! Gibt die zuletzt gewählte Option zurück
+        int GetAnswer();
 
-    //! Update
-    /*! Es wird auf benutzer eingaben reagiert
-    */
-    void Update();
+        //! Update
+        /*! Es wird auf benutzer eingaben reagiert
+        */
+        void Update();
 
-    //! Existiert eine Text zum Anzeigen?
-    /*! true wenn ein Text vorhanden ist
-    */
-    bool Exist();
+        //! Existiert eine Text zum Anzeigen?
+        /*! true wenn ein Text vorhanden ist
+        */
+        bool Exist();
 
-    //! Zeichnet den Dialog
-    /*! Der Dialog wird angezeigt
-    */
-    void DrawDialog ();
+        //! Zeichnet den Dialog
+        /*! Der Dialog wird angezeigt
+        */
+        void DrawDialog();
 
-private:
+    private:
 
-    static Dialog *_Instance; //!< Zeiger auf die Dialog-Instance
-    bool _DialogAvaible; //!< Ist ein Dialog verfügbar
-    bool _SelectDialogAvaible;
-    std::string _Answer1;
-    std::string _Answer2;
-    int _SelectedAnswer;
-    int _FinalAnswer;
-    std::vector<std::string> _MSG;
-    int _LinePos;
-    int _FontSize;
-    Dialog();
-};
+        static Dialog *_Instance; //!< Zeiger auf die Dialog-Instance
+        bool _DialogAvaible; //!< Ist ein Dialog verfügbar
+        bool _SelectDialogAvaible;
+        std::string _Answer1;
+        std::string _Answer2;
+        int _SelectedAnswer;
+        int _FinalAnswer;
+        std::vector<std::string> _MSG;
+        int _LinePos;
+        int _FontSize;
+
+        Dialog();
+    };
 };//namespace LibEric
 #endif // DIALOG_H

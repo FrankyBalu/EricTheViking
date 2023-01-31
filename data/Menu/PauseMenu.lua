@@ -43,6 +43,11 @@ function Update ()
         mainmenuButton:SetActiv(false)
         exitButton:SetActiv(true)
     end
+
+    if ExitGame()
+    then
+        game:Quit()
+    end
 end
 
 function Resize ()
@@ -91,7 +96,7 @@ end
 function Activate ()
     if MenuPos == 3
     then
-        game:Quit()
+        CreateExitDialog()
     end
     if MenuPos == 2
     then

@@ -26,23 +26,23 @@
 
 namespace LibEric {
 //FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
-class StoryNode
-{
-public:
-    static StoryNode* Instance();
+    class StoryNode {
+    public:
+        static StoryNode *Instance();
 
-    bool NodeFinished (std::string node);
+        bool NodeFinished(std::string node);
 
-    void NewNode (std::string node, bool value);
+        void NewNode(std::string node, bool value);
 
-private:
-    std::map<std::string,bool> _NodeMap;
+    private:
+        std::map<std::string, bool> _NodeMap;
 
 
-    static StoryNode *_Instance;
+        static StoryNode *_Instance;
 
-    StoryNode();
-    ~StoryNode();
-};
+        StoryNode();
+
+        ~StoryNode();
+    };
 }; //namespace LibEric
 #endif // __STORYNODE

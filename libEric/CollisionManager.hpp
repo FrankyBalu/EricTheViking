@@ -27,7 +27,7 @@ namespace LibEric {
 
     class CollisionManager {
     public:
-       // bool MapCollision(Rectangle worldTile, )
+        // bool MapCollision(Rectangle worldTile, )
 
     private:
 

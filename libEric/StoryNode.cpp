@@ -20,10 +20,10 @@
 
 #include "StoryNode.hpp"
 
-LibEric::StoryNode* LibEric::StoryNode::_Instance = nullptr;
+LibEric::StoryNode *LibEric::StoryNode::_Instance = nullptr;
 
 
-LibEric::StoryNode * LibEric::StoryNode::Instance() {
+LibEric::StoryNode *LibEric::StoryNode::Instance() {
     if (_Instance == nullptr) {
         _Instance = new StoryNode();
     }

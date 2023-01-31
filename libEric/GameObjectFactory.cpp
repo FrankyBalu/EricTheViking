@@ -23,28 +23,24 @@
 
 LibEric::GameObjectFactory *LibEric::GameObjectFactory::_Instance = nullptr;
 
-bool LibEric::GameObjectFactory::RegisterType(std::string typeID, BaseCreator* creator)
-{
-    if (_Creators.count(typeID) != 0){
+bool LibEric::GameObjectFactory::RegisterType(std::string typeID, BaseCreator *creator) {
+    if (_Creators.count(typeID) != 0) {
         LOGE("Ein Klasse mit Type <", typeID, "> wurde bereits registriert");
         delete creator;
         return false;
-    }
-    else{
+    } else {
         _Creators[typeID] = creator;
         LOGD("Neue Klasse mit Type <", typeID, "> registriert");
         return true;
     }
 }
 
-LibEric::GameObject_Interface * LibEric::GameObjectFactory::Create(std::string typeID)
-{
-    if (_Creators.count(typeID) != 0){
-        BaseCreator* creator = _Creators[typeID];
+LibEric::GameObject_Interface *LibEric::GameObjectFactory::Create(std::string typeID) {
+    if (_Creators.count(typeID) != 0) {
+        BaseCreator *creator = _Creators[typeID];
         LOGD ("Erstelle ein Objekt vom Type: ", typeID);
-        return  creator->CreateObject();
-    }
-    else {
+        return creator->CreateObject();
+    } else {
         LOGE ("Kann Gameobjekt nicht erstellen: Unbekannter Typ ", typeID);
         return nullptr;
     }

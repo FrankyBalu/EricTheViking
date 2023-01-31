@@ -27,50 +27,53 @@
 
 namespace LibEric {
 
-class MapManager {
-public:
+    class MapManager {
+    public:
 
-    static MapManager* Instance();
+        static MapManager *Instance();
 
-    //Läd eine neue Karte aus der datei fileName mid der ID id
-    bool LoadMap (std::string fileName, std::string id);
+        //Läd eine neue Karte aus der datei fileName mid der ID id
+        bool LoadMap(std::string fileName, std::string id);
 
-    //Setzt eine Karte als Activ
-    bool ChangeCurrentMap(std::string id);
+        //Setzt eine Karte als Activ
+        bool ChangeCurrentMap(std::string id);
 
-    //Zeichnet die current-Karte
-    //Die Spielfigur wird dabei nach der Kollisionsebene, vor der Himmels ebene gezeichnet
-    void Draw ();
+        //Zeichnet die current-Karte
+        //Die Spielfigur wird dabei nach der Kollisionsebene, vor der Himmels ebene gezeichnet
+        void Draw();
 
-    //Updatet alle Objecte einer MapManager
-    void Update();
+        //Updatet alle Objecte einer MapManager
+        void Update();
 
-    //Prüft ob eine Map mit der id schon existiert
-    bool Exist (std::string id);
+        //Prüft ob eine Map mit der id schon existiert
+        bool Exist(std::string id);
 
-    //Löscht eine Karte aus dem Speicher
-    bool RemoveMap (std::string id);
+        //Löscht eine Karte aus dem Speicher
+        bool RemoveMap(std::string id);
 
-    //Kartengröße
-    int GetWidth();
-    int GetHeight();
+        //Kartengröße
+        int GetWidth();
+
+        int GetHeight();
 
 
-    Layer* GetObjectLayer();
-    //FIXME muss noch in eigene Kollisionslogik
-    bool Collision(GameObject_Interface *object);
+        Layer *GetObjectLayer();
 
-private:
+        //FIXME muss noch in eigene Kollisionslogik
+        bool Collision(GameObject_Interface *object);
 
-    std::map<std::string,Map*> _Maps;
+    private:
 
-    Map *_CurrentMap;
+        std::map<std::string, Map *> _Maps;
 
-    static MapManager *_Instance;
+        Map *_CurrentMap;
 
-    MapManager();
-    ~MapManager();
-};
+        static MapManager *_Instance;
+
+        MapManager();
+
+        ~MapManager();
+    };
 
 }; //namespace LibEric
 #endif //__MAPMANAGER

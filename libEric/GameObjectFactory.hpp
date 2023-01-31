@@ -28,10 +28,11 @@
 namespace LibEric {
     //Von dieser Klasse müssen alle ObjectCreators abgeleitet werden,
     //damit die objecte dynamisch aus dateien geladen werden können
-    class BaseCreator{
+    class BaseCreator {
     public:
         //Gibt einen Zeiger auf ein erstelltes GameObject_Interface (egal welcher Type) zurück
-        virtual GameObject_Interface* CreateObject() const = 0;
+        virtual GameObject_Interface *CreateObject() const = 0;
+
         virtual ~BaseCreator() {}
     };
 
@@ -39,14 +40,13 @@ namespace LibEric {
     public:
 
         //Neuen Typen regestrieren, um dynamisch Objekte zu erstellen
-        bool RegisterType(std::string typeID, BaseCreator* creator);
+        bool RegisterType(std::string typeID, BaseCreator *creator);
 
         //Neues Objekt erstellen
-        GameObject_Interface* Create(std::string typeID);
+        GameObject_Interface *Create(std::string typeID);
 
         //Damit die Klasse ein Singleton ist, wir brauchen ja nur eine Instanze
-        static GameObjectFactory* Instance()
-        {
+        static GameObjectFactory *Instance() {
             if (_Instance == nullptr)
                 _Instance = new GameObjectFactory();
             return _Instance;
@@ -55,9 +55,9 @@ namespace LibEric {
     private:
 
 
-        GameObjectFactory():_Creators() {}
+        GameObjectFactory() : _Creators() {}
 
-        std::map<std::string, BaseCreator*> _Creators;
+        std::map<std::string, BaseCreator *> _Creators;
 
         static GameObjectFactory *_Instance;
     };

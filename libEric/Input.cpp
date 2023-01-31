@@ -42,396 +42,411 @@ int Button_Right_Trigger_1_Key = KEY_I;
 int Button_Right_Trigger_2_Key = KEY_K;
 
 
-bool LibEric::Button_Up (){
+bool LibEric::Button_Up() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_UP)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_UP)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Up_Key)){
-        ret = true;
-    }
-    return ret;
-}
-bool LibEric::Button_Right (){
-    bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_RIGHT)){
-        ret = true;
-    }
-    if (IsKeyPressed(Button_Right_Key)){
+    if (IsKeyPressed(Button_Up_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Down (){
+bool LibEric::Button_Right() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_DOWN)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_RIGHT)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Down_Key)){
+    if (IsKeyPressed(Button_Right_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left (){
+bool LibEric::Button_Down() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_LEFT)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_DOWN)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Left_Key)){
+    if (IsKeyPressed(Button_Down_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_A (){
+bool LibEric::Button_Left() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_LEFT)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_A_Key)){
+    if (IsKeyPressed(Button_Left_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_B (){
+bool LibEric::Button_A() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_B_Key)){
+    if (IsKeyPressed(Button_A_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_X (){
+bool LibEric::Button_B() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_LEFT)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_X_Key)){
+    if (IsKeyPressed(Button_B_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Y (){
+bool LibEric::Button_X() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_UP)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_LEFT)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Y_Key)){
+    if (IsKeyPressed(Button_X_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Menu (){
+bool LibEric::Button_Y() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_RIGHT)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_UP)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Menu_Key)){
+    if (IsKeyPressed(Button_Y_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Back (){
+bool LibEric::Button_Menu() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_LEFT)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_RIGHT)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Back_Key)){
+    if (IsKeyPressed(Button_Menu_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Home (){
+bool LibEric::Button_Back() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_LEFT)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Home_Key)){
+    if (IsKeyPressed(Button_Back_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Stick (){
+bool LibEric::Button_Home() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_THUMB)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Left_Stick_Key)){
+    if (IsKeyPressed(Button_Home_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Right_Stick (){
+bool LibEric::Button_Left_Stick() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_THUMB)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_THUMB)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Right_Stick_Key)){
+    if (IsKeyPressed(Button_Left_Stick_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Trigger_1(){
+bool LibEric::Button_Right_Stick() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_1)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_THUMB)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Left_Trigger_1_Key)){
+    if (IsKeyPressed(Button_Right_Stick_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Right_Trigger_1(){
+bool LibEric::Button_Left_Trigger_1() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_1)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_1)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Right_Trigger_1_Key)){
+    if (IsKeyPressed(Button_Left_Trigger_1_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Trigger_2(){
+bool LibEric::Button_Right_Trigger_1() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_2)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_1)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Left_Trigger_2_Key)){
+    if (IsKeyPressed(Button_Right_Trigger_1_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Right_Trigger_2(){
+bool LibEric::Button_Left_Trigger_2() {
     bool ret = false;
-    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_2)){
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_2)) {
         ret = true;
     }
-    if (IsKeyPressed(Button_Right_Trigger_2_Key)){
+    if (IsKeyPressed(Button_Left_Trigger_2_Key)) {
+        ret = true;
+    }
+    return ret;
+}
+
+bool LibEric::Button_Right_Trigger_2() {
+    bool ret = false;
+    if (IsGamepadButtonPressed(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_2)) {
+        ret = true;
+    }
+    if (IsKeyPressed(Button_Right_Trigger_2_Key)) {
         ret = true;
     }
     return ret;
 }
 
 
-
-
-
-bool LibEric::Button_Up_Down (){
+bool LibEric::Button_Up_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_UP)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_UP)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Up_Key)){
-        ret = true;
-    }
-    return ret;
-}
-bool LibEric::Button_Right_Down (){
-    bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_RIGHT)){
-        ret = true;
-    }
-    if (IsKeyDown(Button_Right_Key)){
+    if (IsKeyDown(Button_Up_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Down_Down (){
+bool LibEric::Button_Right_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_DOWN)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_RIGHT)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Down_Key)){
+    if (IsKeyDown(Button_Right_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Down (){
+bool LibEric::Button_Down_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_LEFT)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_DOWN)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Left_Key)){
+    if (IsKeyDown(Button_Down_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_A_Down (){
+bool LibEric::Button_Left_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_FACE_LEFT)) {
         ret = true;
     }
-    if (IsKeyDown(Button_A_Key)){
+    if (IsKeyDown(Button_Left_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_B_Down (){
+bool LibEric::Button_A_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) {
         ret = true;
     }
-    if (IsKeyDown(Button_B_Key)){
+    if (IsKeyDown(Button_A_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_X_Down (){
+bool LibEric::Button_B_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_LEFT)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)) {
         ret = true;
     }
-    if (IsKeyDown(Button_X_Key)){
+    if (IsKeyDown(Button_B_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Y_Down (){
+bool LibEric::Button_X_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_UP)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_LEFT)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Y_Key)){
+    if (IsKeyDown(Button_X_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Menu_Down (){
+bool LibEric::Button_Y_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_RIGHT)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_FACE_UP)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Menu_Key)){
+    if (IsKeyDown(Button_Y_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Back_Down (){
+bool LibEric::Button_Menu_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_LEFT)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_RIGHT)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Back_Key)){
+    if (IsKeyDown(Button_Menu_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Home_Down (){
+bool LibEric::Button_Back_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE_LEFT)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Home_Key)){
+    if (IsKeyDown(Button_Back_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Stick_Down (){
+bool LibEric::Button_Home_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_THUMB)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_MIDDLE)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Left_Stick_Key)){
+    if (IsKeyDown(Button_Home_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Right_Stick_Down (){
+bool LibEric::Button_Left_Stick_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_THUMB)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_THUMB)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Right_Stick_Key)){
+    if (IsKeyDown(Button_Left_Stick_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Trigger_1_Down(){
+bool LibEric::Button_Right_Stick_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_1)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_THUMB)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Left_Trigger_1_Key)){
+    if (IsKeyDown(Button_Right_Stick_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Right_Trigger_1_Down(){
+bool LibEric::Button_Left_Trigger_1_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_1)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_1)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Right_Trigger_1_Key)){
+    if (IsKeyDown(Button_Left_Trigger_1_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Left_Trigger_2_Down(){
+bool LibEric::Button_Right_Trigger_1_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_2)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_1)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Left_Trigger_2_Key)){
+    if (IsKeyDown(Button_Right_Trigger_1_Key)) {
         ret = true;
     }
     return ret;
 }
 
-bool LibEric::Button_Right_Trigger_2_Down(){
+bool LibEric::Button_Left_Trigger_2_Down() {
     bool ret = false;
-    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_2)){
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_LEFT_TRIGGER_2)) {
         ret = true;
     }
-    if (IsKeyDown(Button_Right_Trigger_2_Key)){
+    if (IsKeyDown(Button_Left_Trigger_2_Key)) {
+        ret = true;
+    }
+    return ret;
+}
+
+bool LibEric::Button_Right_Trigger_2_Down() {
+    bool ret = false;
+    if (IsGamepadButtonDown(Game::Instance()->GetGamepad(), GAMEPAD_BUTTON_RIGHT_TRIGGER_2)) {
+        ret = true;
+    }
+    if (IsKeyDown(Button_Right_Trigger_2_Key)) {
         ret = true;
     }
     return ret;
 }
 
 void Set_Button_Up_Key(int scancode);
+
 void Set_Button_Right_Key(int scancode);
+
 void Set_Button_Down_Key(int scancode);
+
 void Set_Button_Left_Key(int scancode);
+
 void Set_Button_A_Key(int scancode);
+
 void Set_Button_B_Key(int scancode);
+
 void Set_Button_X_Key(int scancode);
+
 void Set_Button_Y_Key(int scancode);
+
 void Set_Button_Menu_Key(int scancode);
+
 void Set_Button_Back_Key(int scancode);
+
 void Set_Button_Home_Key(int scancode);
+
 void Set_Button_Left_Stick_Key(int scancode);
+
 void Set_Button_Right_Stick_Key(int scancode);
+
 void Set_Button_Left_Trigger_1_Key(int scancode);
+
 void Set_Button_Left_Trigger_2_Key(int scancode);
+
 void Set_Button_Right_Trigger_1_Key(int scancode);
+
 void Set_Button_Right_Trigger_2_Key(int scancode);

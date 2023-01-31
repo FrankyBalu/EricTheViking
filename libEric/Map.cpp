@@ -38,21 +38,19 @@ void LibEric::Map::Update() {
     _ObjectLayer->Update();
 }
 
-std::vector<LibEric::Tileset>* LibEric::Map::GetTilesets() {
+std::vector<LibEric::Tileset> *LibEric::Map::GetTilesets() {
     return &_Tileset;
 }
 
-std::vector<LibEric::Layer*>* LibEric::Map::GetLayers() {
+std::vector<LibEric::Layer *> *LibEric::Map::GetLayers() {
     return &_Layers;
 }
 
 
-
-bool LibEric::Map::Collison(GameObject_Interface *object)
-{
-    return dynamic_cast<TileLayer*>(_CollisionLayer)->CheckCollision(object);
+bool LibEric::Map::Collison(GameObject_Interface *object) {
+    return dynamic_cast<TileLayer *>(_CollisionLayer)->CheckCollision(object);
 }
 
-LibEric::Layer * LibEric::Map::GetObjectLayer(){
+LibEric::Layer *LibEric::Map::GetObjectLayer() {
     return _ObjectLayer;
 }

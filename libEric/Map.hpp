@@ -31,56 +31,59 @@ class TileLayer;
 
 namespace LibEric {
 
-struct Tileset {
-    int firstGridID;
-    int tileWidth;
-    int tileHeight;
-    int spacing;
-    int margin;
-    int width;
-    int height;
-    int numColumns;
-    std::string name;
-};
+    struct Tileset {
+        int firstGridID;
+        int tileWidth;
+        int tileHeight;
+        int spacing;
+        int margin;
+        int width;
+        int height;
+        int numColumns;
+        std::string name;
+    };
 
-class Map {
-public:
-    ~Map () {}
+    class Map {
+    public:
+        ~Map() {}
 
-    void Update();
-    void Render();
+        void Update();
 
-    std::vector<Tileset>* GetTilesets();
+        void Render();
 
-    std::vector<Layer*>* GetLayers();
-    Layer* GetObjectLayer();
+        std::vector<Tileset> *GetTilesets();
 
-    int GetWidth() {
-        return _Width;
-    }
-    int GetHeight() {
-        return _Height;
-    }
+        std::vector<Layer *> *GetLayers();
 
-    bool Collison (GameObject_Interface *object);
+        Layer *GetObjectLayer();
 
-private:
-    friend class MapParser;
+        int GetWidth() {
+            return _Width;
+        }
 
-    Map():_Tileset(),_Layers() {}
+        int GetHeight() {
+            return _Height;
+        }
 
-    int _Width;
-    int _Height;
+        bool Collison(GameObject_Interface *object);
 
-    std::vector<Tileset> _Tileset;
-    std::vector<Layer*> _Layers;
-    Layer *_BackgroundLayer;
-    Layer *_RoadLayer;
-    Layer *_WaterLayer;
-    Layer *_CollisionLayer;
-    Layer *_SkyLayer;
-    Layer *_ObjectLayer;
-};
+    private:
+        friend class MapParser;
+
+        Map() : _Tileset(), _Layers() {}
+
+        int _Width;
+        int _Height;
+
+        std::vector<Tileset> _Tileset;
+        std::vector<Layer *> _Layers;
+        Layer *_BackgroundLayer;
+        Layer *_RoadLayer;
+        Layer *_WaterLayer;
+        Layer *_CollisionLayer;
+        Layer *_SkyLayer;
+        Layer *_ObjectLayer;
+    };
 
 }; //namespace LibEric
 #endif //__LEVEL

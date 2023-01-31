@@ -27,58 +27,64 @@
 
 namespace LibEric {
 
-class  GraphicGameObject : public GameObject_Interface
-{
-public:
+    class GraphicGameObject : public GameObject_Interface {
+    public:
 
-    GraphicGameObject();
+        GraphicGameObject();
 
-    //Objektparameter Laden
-    virtual void Load (const std::string script);
+        //Objektparameter Laden
+        virtual void Load(const std::string script);
 
-    //Objekt Darstellen
-    virtual void Draw();
+        //Objekt Darstellen
+        virtual void Draw();
 
-    //Logik des Objektes updaten
-    virtual void Update();
+        //Logik des Objektes updaten
+        virtual void Update();
 
-    //Speicher freigeben
-    virtual void Clean();
-
-
-    //! FIXME erstmal zum testen
-    virtual void ObjectCollision(GameObject_Interface *object);
-    virtual void CollisionWithMap();
-    virtual std::string GetID ();
-
-    //Position des Objektes zurückgeben
-    Vector2 GetPosition();
-    void SetPosition (float x, float y);
-
-    int GetWidth ();
-    int GetHeight();
-    void SetWidth (float w);
-    void SetHeight (float h);
+        //Speicher freigeben
+        virtual void Clean();
 
 
-    virtual Rectangle GetRect ();
-protected:
+        //! FIXME erstmal zum testen
+        virtual void ObjectCollision(GameObject_Interface *object);
 
-    int _Width;
-    int _Height;
+        virtual void CollisionWithMap();
 
-    Vector2 _Position;
+        virtual std::string GetID();
 
-    int _CurrentFrame;
-    int _CurrentRow;
+        //Position des Objektes zurückgeben
+        Vector2 GetPosition();
 
-    std::string _TextureID;
+        void SetPosition(float x, float y);
 
-    std::string _TypeID;
+        int GetWidth();
 
-    bool _Visable;
+        int GetHeight();
 
-};
+        void SetWidth(float w);
+
+        void SetHeight(float h);
+
+
+        virtual Rectangle GetRect();
+
+    protected:
+
+        int _Width;
+        int _Height;
+
+        Vector2 _Position;
+
+        int _CurrentFrame;
+        int _CurrentRow;
+
+        std::string _TextureID;
+
+        std::string _TypeID;
+
+        bool _Visable;
+
+    };
 
 }; //namespace LibEric
 #endif // __GRAPHICGAMEOBJECT

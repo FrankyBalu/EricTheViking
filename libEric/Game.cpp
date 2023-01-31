@@ -25,7 +25,7 @@ LibEric::Game *LibEric::Game::Instance() {
 }
 
 //FIXME _FONTSIZE muss noch in die config datei
-LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(),_FontSize(25),UseGamepad(0) {
+LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(), _FontSize(25), UseGamepad(0) {
 }
 
 bool LibEric::Game::Init(const std::string &appName) {
@@ -59,7 +59,7 @@ bool LibEric::Game::Init(const std::string &appName) {
     } else if (LibEricSettings::Instance()->GetMSAA()) {
         SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     } else {
-        SetConfigFlags(FLAG_VSYNC_HINT );
+        SetConfigFlags(FLAG_VSYNC_HINT);
     }
 
     if (UserSettings::Instance()->GetFullScreen()) {
@@ -73,7 +73,8 @@ bool LibEric::Game::Init(const std::string &appName) {
         return false;
     }
 
-    _Font =  LoadFontFromPhysFS(std::string(std::string("/system/") + LibEricSettings::Instance()->GetFont()).c_str(), _FontSize, NULL, 0);
+    _Font = LoadFontFromPhysFS(std::string(std::string("/system/") + LibEricSettings::Instance()->GetFont()).c_str(),
+                               _FontSize, NULL, 0);
 
     _IsReady = true;
     _Running = true;
@@ -113,8 +114,7 @@ void LibEric::Game::Render() {
 void LibEric::Game::Update() {
     if (!Dialog::Instance()->Exist()) {
         GameStateMaschine::Instance()->Update();
-    }
-    else {
+    } else {
         Dialog::Instance()->Update();
     }
 
@@ -136,10 +136,9 @@ void LibEric::Game::Quit() {
 
 int LibEric::Game::GetWindowWidth() {
     int width;
-    if (IsWindowFullscreen()){
+    if (IsWindowFullscreen()) {
         width = GetMonitorWidth(GetCurrentMonitor());
-    }
-    else{
+    } else {
         width = GetScreenWidth();
     }
     return width;
@@ -147,10 +146,9 @@ int LibEric::Game::GetWindowWidth() {
 
 int LibEric::Game::GetWindowHeight() {
     int height;
-    if (IsWindowFullscreen()){
+    if (IsWindowFullscreen()) {
         height = GetMonitorHeight(GetCurrentMonitor());
-    }
-    else{
+    } else {
         height = GetScreenHeight();
     }
     return height;

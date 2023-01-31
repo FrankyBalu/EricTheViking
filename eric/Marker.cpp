@@ -28,50 +28,44 @@
 #include <Config.hpp>
 
 Eric::Marker::Marker()
-    : LibEric::GraphicGameObject()
-{
+        : LibEric::GraphicGameObject() {
 
 }
 
-void Eric::Marker::Draw()
-{
+void Eric::Marker::Draw() {
     GraphicGameObject::Draw();
     //_LUA_Draw();
 }
 
-void Eric::Marker::Clean()
-{
+void Eric::Marker::Clean() {
     GraphicGameObject::Clean();
 }
 
-void Eric::Marker::Update()
-{
-   /* if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
+void Eric::Marker::Update() {
+    /* if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
 
-        if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
-            LibEric::Dialog::Instance()->SetMSG(_LUA_GetText());
-        }
-    }*/
+         if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
+             LibEric::Dialog::Instance()->SetMSG(_LUA_GetText());
+         }
+     }*/
     _LUA_Update();
 
 }
 
-void Eric::Marker::SetText(std::string text){
+void Eric::Marker::SetText(std::string text) {
     _Text = text;
 }
 
 
-
-void Eric::Marker::Load(const std::string script){
+void Eric::Marker::Load(const std::string script) {
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
 
 
     LibEric::LuaSetup(&lua);
 
-    std::string EricDir = std::string (INSTALL_PREFIX) + std::string ("/share/EricTheViking/");
-    lua.script_file (EricDir + script);
-
+    std::string EricDir = std::string(INSTALL_PREFIX) + std::string("/share/EricTheViking/");
+    lua.script_file(EricDir + script);
 
 
     _LUA_Update = lua["Update"];

@@ -57,7 +57,7 @@ namespace LibEric {
         /*!
          * Wird immer aufgerufen, wenn die Bildschirm auflösung sich ändert oder von Vollbild auf Fenster oder umgedreht gewechselt wird
          */
-        virtual void Resize () = 0;
+        virtual void Resize() = 0;
 
         //! Aufräumen
         /*! Wenn der State beendet werden soll, muss hier noch Speicher freigegeben werde\n

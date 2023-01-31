@@ -31,59 +31,60 @@
 
 namespace LibEric {
 
-class TileLayer : public Layer {
-public:
-    TileLayer(int tileSize, int mapWidth, int mapHeight, const std::vector<Tileset> &tilestes);
+    class TileLayer : public Layer {
+    public:
+        TileLayer(int tileSize, int mapWidth, int mapHeight, const std::vector<Tileset> &tilestes);
 
-    virtual void Update() override;
-    virtual void Render() override;
+        virtual void Update() override;
 
-    void SetTileIDs (const std::vector<std::vector<int>>& data) {
-        _TileIDs = data;
-    }
+        virtual void Render() override;
 
-    std::vector<std::vector<int>> GetTileIDs() {
-        return _TileIDs;
-    }
+        void SetTileIDs(const std::vector<std::vector<int>> &data) {
+            _TileIDs = data;
+        }
 
-    void SetTileSize( int tileSize) {
-        _TileSize = tileSize;
-    }
+        std::vector<std::vector<int>> GetTileIDs() {
+            return _TileIDs;
+        }
 
-    Tileset GetTilesetByID( int tileID);
+        void SetTileSize(int tileSize) {
+            _TileSize = tileSize;
+        }
+
+        Tileset GetTilesetByID(int tileID);
 
 
-    std::string GetName() {
-        return _Name;
-    }
+        std::string GetName() {
+            return _Name;
+        }
 
-    void SetName(std::string name) {
-        _Name = name;
-    }
+        void SetName(std::string name) {
+            _Name = name;
+        }
 
-    bool CheckCollision(GameObject_Interface *object);
+        bool CheckCollision(GameObject_Interface *object);
 
-    int GetWidth() {
-        return _NumColumns*_TileSize;
-    }
+        int GetWidth() {
+            return _NumColumns * _TileSize;
+        }
 
-    int GetHeight() {
-        return _NumRows*_TileSize;
-    }
+        int GetHeight() {
+            return _NumRows * _TileSize;
+        }
 
-private:
-    int _NumColumns;
-    int _NumRows;
-    int _TileSize;
+    private:
+        int _NumColumns;
+        int _NumRows;
+        int _TileSize;
 
-    Vector2 _Position;
-    Vector2 _Velocity;
+        Vector2 _Position;
+        Vector2 _Velocity;
 
-    std::string _Name;
+        std::string _Name;
 
-    const std::vector<Tileset> _Tilesets;
-    std::vector<std::vector<int>> _TileIDs;
-};
+        const std::vector<Tileset> _Tilesets;
+        std::vector<std::vector<int>> _TileIDs;
+    };
 
 }; //namespace LibEric
 #endif //__TILELAYER

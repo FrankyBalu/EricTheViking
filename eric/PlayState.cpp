@@ -42,12 +42,12 @@ void Eric::PlayState::Update() {
         LibEric::GameStateMaschine::Instance()->PushState("Menu", "PauseMenu.lua");
     }
 
-    if (warenInPause){
-        SetMusicVolume (_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
+    if (warenInPause) {
+        SetMusicVolume(_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
         warenInPause = false;
     }
 
-    Vector2 oldPlayerPosition =  Player::Instance()->GetPosition();
+    Vector2 oldPlayerPosition = Player::Instance()->GetPosition();
 
 
     Player::Instance()->Update();
@@ -56,23 +56,22 @@ void Eric::PlayState::Update() {
     float x = Player::Instance()->GetPosition().x - 224;
     float y = Player::Instance()->GetPosition().y - 128;
 
-    if (LibEric::MapManager::Instance()->Collision(Player::Instance())){
+    if (LibEric::MapManager::Instance()->Collision(Player::Instance())) {
         Player::Instance()->SetPosition(oldPlayerPosition.x, oldPlayerPosition.y);
     }
 
 
-    if (x < 0.0f )
+    if (x < 0.0f)
         x = 0.0f;
     if (y < 0.0f)
         y = 0.0f;
 
     //FIXME Mapgröße automatisch ermitteln
 
-    _Camera.target = { x, y };
+    _Camera.target = {x, y};
     if (IsWindowFullscreen()) {
         _Camera.zoom = 4;
-    }
-    else {
+    } else {
         _Camera.zoom = 2;
     }
 
@@ -91,16 +90,16 @@ void Eric::PlayState::Render() {
 
 }
 
-Eric::PlayState::PlayState(){
+Eric::PlayState::PlayState() {
 }
 
 
 bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
 
-    std::string blueKnight (std::string("/assets/BlueKnight.png"));
-    std::string npc (std::string("/assets/NPC.png"));
-    std::string hero (std::string("/assets/Hero.png"));
-    std::string bgMusic (std::string("/assets/BackgroundmusicDemo.ogg"));
+    std::string blueKnight(std::string("/assets/BlueKnight.png"));
+    std::string npc(std::string("/assets/NPC.png"));
+    std::string hero(std::string("/assets/Hero.png"));
+    std::string bgMusic(std::string("/assets/BackgroundmusicDemo.ogg"));
 
     /*if(!LibEric::TextureManager::Instance()->Load(blueKnight, "BlueKnight")) {
         PLOGW << "Can't load player sprite";
@@ -111,9 +110,9 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     LibEric::RenderManager::Instance()->LoadTextureFromFile("player", hero);/* {
         PLOGW << "Can't load player sprite";
     }*/
-    _BackgroundMusic =  LoadMusicStream(bgMusic.c_str());
+    _BackgroundMusic = LoadMusicStream(bgMusic.c_str());
     PlayMusicStream(_BackgroundMusic);
-    SetMusicVolume (_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
+    SetMusicVolume(_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
 
     //FIXME: MapManager um zwischen verschiedenen Karten zu wechseln
     LibEric::MapManager::Instance()->LoadMap("MainWorld", "World");
@@ -125,14 +124,16 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     player->Load("n/a");
 
     // Player::Instance()->GetPosition().GetX() + GetScreenWidth()/4, Player::Instance()->GetPosition().GetY() + GetScreenHeight()/4
-    Vector2 d = {Player::Instance()->GetPosition().x + GetScreenWidth()/4, Player::Instance()->GetPosition().y + GetScreenHeight()/4 };
-    Vector2 f = { 0.0f, 0.0f};
+    Vector2 d = {Player::Instance()->GetPosition().x + GetScreenWidth() / 4,
+                 Player::Instance()->GetPosition().y + GetScreenHeight() / 4};
+    Vector2 f = {0.0f, 0.0f};
     _Camera.target = d;
     _Camera.offset = f;
     _Camera.rotation = 0.0f;
     _Camera.zoom = 4.0f;
 
-    LibEric::Dialog::Instance()->NewDialog("Hallo und Willkommen zu dieser Demo.\nSie dient nur zum Testen.\nWirklichen Spieleinhalt, wie z.B eine\nSuper tolle geschichte wirst du hier\nvergebens suchen\ndennoch viel Spaß beim spielen");
+    LibEric::Dialog::Instance()->NewDialog(
+            "Hallo und Willkommen zu dieser Demo.\nSie dient nur zum Testen.\nWirklichen Spieleinhalt, wie z.B eine\nSuper tolle geschichte wirst du hier\nvergebens suchen\ndennoch viel Spaß beim spielen");
     return true;
 }
 

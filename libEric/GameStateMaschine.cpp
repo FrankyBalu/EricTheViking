@@ -66,7 +66,7 @@ bool LibEric::GameStateMaschine::ChangeState(std::string stateID, std::string fi
     std::string currentState;
     GameState *newSate = nullptr;
     newSate = GameStateFactory::Instance()->Create(stateID);
-    if (newSate == nullptr){
+    if (newSate == nullptr) {
         return false;
     }
     if (_GameStates.empty()) {
@@ -112,7 +112,7 @@ void LibEric::GameStateMaschine::HandleEvents() {
 }
 
 void LibEric::GameStateMaschine::Resize() {
-    for (auto itr = _GameStates.cbegin(); itr != _GameStates.cend(); itr++){
+    for (auto itr = _GameStates.cbegin(); itr != _GameStates.cend(); itr++) {
         (*itr)->Resize();
     }
 }

@@ -28,16 +28,18 @@ namespace LibEric {
 
     class GameObjectManager {
         GameObjectManager();
+
         ~GameObjectManager();
 
-        int AddObject (GameObject_Interface *obj);
+        int AddObject(GameObject_Interface *obj);
+
         //bool RemoveObject(int id);
-        GameObject_Interface* GetObject(int id);
+        GameObject_Interface *GetObject(int id);
 
         int GetNumObjects();
 
     private:
-        std::map<int,GameObject_Interface*> _Objects;
+        std::map<int, GameObject_Interface *> _Objects;
 
         int _Counter;
     };

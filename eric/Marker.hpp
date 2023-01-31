@@ -23,57 +23,59 @@
 
 #include <libEric/GraphicGameObject.hpp>
 #include <libEric/GameObjectFactory.hpp>
+
 #define SOL_ALL_SAFETIES_ON 1
+
 #include "../Extra/sol/sol.hpp"
 #include <libEric/Log.hpp>
 
 namespace Eric {
 
-class Marker : public LibEric::GraphicGameObject
-{
-public:
-    Marker();
+    class Marker : public LibEric::GraphicGameObject {
+    public:
+        Marker();
 
-    void Draw() override;
-    void Update() override;
-    void Clean () override;
+        void Draw() override;
 
-    void SetText (std::string text);
+        void Update() override;
 
-    void Load(const std::string script) override;
+        void Clean() override;
 
-    void SetPosition (float x, float y)
-    {
-        GraphicGameObject::SetPosition(x, y);
-    }
-    void SetWidth (float w)
-    {
-        GraphicGameObject::SetWidth(w);
-    }
-    void SetHeight (float h){
-        GraphicGameObject::SetHeight(h);
-    }
+        void SetText(std::string text);
+
+        void Load(const std::string script) override;
+
+        void SetPosition(float x, float y) {
+            GraphicGameObject::SetPosition(x, y);
+        }
+
+        void SetWidth(float w) {
+            GraphicGameObject::SetWidth(w);
+        }
+
+        void SetHeight(float h) {
+            GraphicGameObject::SetHeight(h);
+        }
 
 
+    private:
 
-private:
+        std::string _Text;
 
-    std::string _Text;
+        sol::state lua;
 
-    sol::state lua;
+        sol::function _LUA_Update;
+        sol::function _LUA_Draw;
+        sol::function _LUA_GetText;
 
-    sol::function _LUA_Update;
-    sol::function _LUA_Draw;
-    sol::function _LUA_GetText;
+    };
 
-};
-
-class MarkerCreator : public LibEric::BaseCreator {
-public:
-    LibEric::GameObject_Interface* CreateObject() const {
-        return  new Marker();
-    }
-};
+    class MarkerCreator : public LibEric::BaseCreator {
+    public:
+        LibEric::GameObject_Interface *CreateObject() const {
+            return new Marker();
+        }
+    };
 
 }; //namespace Eric
 #endif // ENEMY_H

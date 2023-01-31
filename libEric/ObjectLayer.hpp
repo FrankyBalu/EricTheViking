@@ -27,17 +27,19 @@
 
 namespace LibEric {
 
-class ObjectLayer : public Layer {
-public:
-    ObjectLayer();
-    void Render();
-    void Update();
+    class ObjectLayer : public Layer {
+    public:
+        ObjectLayer();
 
-    std::vector<GameObject_Interface*>* GetGameObjectList();
+        void Render();
 
-private:
-    std::vector<GameObject_Interface*> _GameObjectList;
-};
+        void Update();
+
+        std::vector<GameObject_Interface *> *GetGameObjectList();
+
+    private:
+        std::vector<GameObject_Interface *> _GameObjectList;
+    };
 
 }; //namespace LibEric
 #endif //__OBJECTLAYER

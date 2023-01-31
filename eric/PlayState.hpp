@@ -32,41 +32,44 @@
 
 namespace Eric {
 
-class PlayState : public LibEric::GameState
-{
-public:
-    PlayState ();
+    class PlayState : public LibEric::GameState {
+    public:
+        PlayState();
 
-    void HandleEvents() override{};
-    virtual void Update() override;
-    virtual void Render() override;
+        void HandleEvents() override {};
 
-    virtual bool OnEnter(std::string file = "") override;
-    virtual bool OnExit() override;
+        virtual void Update() override;
 
-    virtual std::string GetStateID() const override;
-    bool CheckCollision (LibEric::GraphicGameObject *obj1, LibEric::GraphicGameObject *obj2);
+        virtual void Render() override;
 
-private:
+        virtual bool OnEnter(std::string file = "") override;
 
-    static const std::string _PlayID;
-    Camera2D _Camera;
-    std::vector<LibEric::GameObject_Interface*> _Objects;
+        virtual bool OnExit() override;
 
-    Music _BackgroundMusic;
+        virtual std::string GetStateID() const override;
 
-    void Resize(){}
+        bool CheckCollision(LibEric::GraphicGameObject *obj1, LibEric::GraphicGameObject *obj2);
 
-    int _CurrentMap;
+    private:
 
-};
+        static const std::string _PlayID;
+        Camera2D _Camera;
+        std::vector<LibEric::GameObject_Interface *> _Objects;
 
-class PlayCreator : public LibEric::StateBaseCreator {
-public:
-    LibEric::GameState* CreateState() const {
-        return new PlayState();
-    }
-};
+        Music _BackgroundMusic;
+
+        void Resize() {}
+
+        int _CurrentMap;
+
+    };
+
+    class PlayCreator : public LibEric::StateBaseCreator {
+    public:
+        LibEric::GameState *CreateState() const {
+            return new PlayState();
+        }
+    };
 
 }; //namespace Eric
 #endif // PLAYSTATE

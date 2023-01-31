@@ -33,16 +33,18 @@ int main() {
         return 1;
     }
 
-    if (!LibEric::GameStateFactory::Instance()->RegisterType("Menu", new LibEric::MenuCreator())){
+    LibEric::RenderManager::Instance()->LoadTextureFromFile("BGI", "assets/Background.png");
+
+    if (!LibEric::GameStateFactory::Instance()->RegisterType("Menu", new LibEric::MenuCreator())) {
         LOGE("Konnte Type <Menu> nicht regestrieren: Breche ab!");
         return 1;
     }
-    if (!LibEric::GameStateFactory::Instance()->RegisterType("Play", new Eric::PlayCreator())){
+    if (!LibEric::GameStateFactory::Instance()->RegisterType("Play", new Eric::PlayCreator())) {
         LOGE("Konnte Type <Play> nicht regestrieren: Breche ab!");
         return 1;
     }
 
-    if (!LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "MainMenu.lua")){
+    if (!LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "MainMenu.lua")) {
         LOGE ("Konnte nicht zu MeinMenu.lua wechseln! Abbruch");
         return 1;
     }

@@ -20,10 +20,10 @@
 
 #include "GameObjectManager.hpp"
 
-LibEric::GameObjectManager::GameObjectManager(): _Objects(), _Counter(0){
+LibEric::GameObjectManager::GameObjectManager() : _Objects(), _Counter(0) {
 }
 
-LibEric::GameObjectManager::~GameObjectManager(){
+LibEric::GameObjectManager::~GameObjectManager() {
 }
 
 int LibEric::GameObjectManager::AddObject(LibEric::GameObject_Interface *obj) {
@@ -31,10 +31,10 @@ int LibEric::GameObjectManager::AddObject(LibEric::GameObject_Interface *obj) {
     _Counter++;
 }
 
-int LibEric::GameObjectManager::GetNumObjects(){
+int LibEric::GameObjectManager::GetNumObjects() {
     return _Counter;
 }
 
-LibEric::GameObject_Interface* LibEric::GameObjectManager::GetObject(int id) {
+LibEric::GameObject_Interface *LibEric::GameObjectManager::GetObject(int id) {
     return _Objects[id];
 }

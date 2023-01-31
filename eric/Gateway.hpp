@@ -24,44 +24,49 @@
 #include <libEric/GraphicGameObject.hpp>
 #include <libEric/GameObjectFactory.hpp>
 #include <libEric/Log.hpp>
+
 #define SOL_ALL_SAFETIES_ON 1
+
 #include "../Extra/sol/sol.hpp"
 
 
 namespace Eric {
 
-class Gateway : public LibEric::GraphicGameObject
-{
-public:
-    Gateway();
+    class Gateway : public LibEric::GraphicGameObject {
+    public:
+        Gateway();
 
-    void Draw() override;
-    void Update() override;
-    void Clean () override;
+        void Draw() override;
 
-    void ChangeToMap (std::string map);
+        void Update() override;
 
-    void Load(const std::string scriptFile) override;
+        void Clean() override;
 
-    Rectangle GetActionRect() override{return _ObjectCollision;}
-    Rectangle GetCollisionRect() override{return _ObjectCollision;}
-private:
+        void ChangeToMap(std::string map);
 
-    std::string _Changeto;
+        void Load(const std::string scriptFile) override;
 
-    sol::state lua;
+        Rectangle GetActionRect() override { return _ObjectCollision; }
 
-    sol::function _LUA_Update;
-    sol::function _LUA_Draw;
-    sol::function _LUA_Enter;
-};
+        Rectangle GetCollisionRect() override { return _ObjectCollision; }
 
-class GatewayCreator : public LibEric::BaseCreator {
-public:
-    LibEric::GameObject_Interface* CreateObject() const {
-        return new Gateway();
-    }
-};
+    private:
+
+        std::string _Changeto;
+
+        sol::state lua;
+
+        sol::function _LUA_Update;
+        sol::function _LUA_Draw;
+        sol::function _LUA_Enter;
+    };
+
+    class GatewayCreator : public LibEric::BaseCreator {
+    public:
+        LibEric::GameObject_Interface *CreateObject() const {
+            return new Gateway();
+        }
+    };
 
 }; //namespace Eric
 #endif // ENEMY_H
