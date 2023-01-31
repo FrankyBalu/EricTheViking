@@ -25,6 +25,10 @@
 #include <libEric/StoryNode.hpp>
 #include <libEric/Lua.hpp>
 #include <raylib.h>
+#include <physfs.h>
+#ifdef __linux__
+#include <Config.hpp>
+#endif
 
 Eric::Marker::Marker()
         : LibEric::GraphicGameObject() {
@@ -41,12 +45,11 @@ void Eric::Marker::Clean() {
 }
 
 void Eric::Marker::Update() {
-    /* if (CheckCollisionRecs(Player::Instance()->GetObject(), _ObjectCollision ) ){
-
+     if (CheckCollisionRecs(Player::Instance()->GetRect(), this->GetRect() ) ){
          if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
-             LibEric::Dialog::Instance()->SetMSG(_LUA_GetText());
+             LibEric::Dialog::Instance()->NewDialog(_LUA_GetText());
          }
-     }*/
+     }
     _LUA_Update();
 
 }
@@ -63,7 +66,8 @@ void Eric::Marker::Load(const std::string script) {
 
     LibEric::LuaSetup(&lua);
 #ifdef __linux__
-    std::string EricDir = std::string(INSTALL_PREFIX) + std::string("/share/EricTheViking/");
+    std::string EricDir = PHYSFS_getRealDir("/system/");
+    EricDir += "/";
 #else
     std::string EricDir = std::string("data\\scripts\\");
 #endif

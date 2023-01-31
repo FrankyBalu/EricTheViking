@@ -85,6 +85,8 @@ bool LibEric::Game::Init(const std::string &appName) {
     _Font = LoadFontFromPhysFS(std::string(std::string("/system/") + LibEricSettings::Instance()->GetFont()).c_str(),
                                _FontSize, NULL, 0);
 
+    InitAudioDevice();
+
     _IsReady = true;
     _Running = true;
     return true;

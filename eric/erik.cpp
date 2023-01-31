@@ -25,6 +25,7 @@
 #include <libEric/RenderManager.hpp>
 #include <libEric/GameStateMaschine.hpp>
 #include <libEric/Menu.hpp>
+#include "Marker.hpp"
 #include "PlayState.hpp"
 
 int main() {
@@ -49,7 +50,10 @@ int main() {
         return 1;
     }
 
+    LibEric::GameObjectFactory::Instance()->RegisterType("Marker", new Eric::MarkerCreator());
+    //scheinbar ein Fehler in meiner Arch Linux installation, aber bei mir funktioniert 0 nicht
     LibEric::Game::Instance()->SetGamepad(3);
+
     LibEric::Game::Instance()->Run();
 
     LibEric::RenderManager::Instance()->ClearRenderManager();

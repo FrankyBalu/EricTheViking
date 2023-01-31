@@ -24,9 +24,7 @@
 #include <libEric/GraphicGameObject.hpp>
 #include <libEric/GameObjectFactory.hpp>
 #include <libEric/Log.hpp>
-
 #define SOL_ALL_SAFETIES_ON 1
-
 #include "../Extra/sol/sol.hpp"
 
 

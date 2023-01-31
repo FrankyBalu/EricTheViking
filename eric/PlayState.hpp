@@ -25,8 +25,6 @@
 #include <libEric/GameState.hpp>
 #include <libEric/GameStateFactory.hpp>
 #include <libEric/GraphicGameObject.hpp>
-//#include <libEric/Map.hpp>
-// #include "../Player.hpp"
 #include <raylib.h>
 #include <vector>
 
@@ -59,9 +57,6 @@ namespace Eric {
         Music _BackgroundMusic;
 
         void Resize() {}
-
-        int _CurrentMap;
-
     };
 
     class PlayCreator : public LibEric::StateBaseCreator {

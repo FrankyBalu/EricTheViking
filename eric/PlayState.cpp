@@ -29,6 +29,7 @@
 #include <libEric/Log.hpp>
 #include <libEric/Dialog.hpp>
 #include <raylib.h>
+#include <raylib-physfs.h>
 
 const std::string Eric::PlayState::_PlayID = "PLAY";
 
@@ -99,7 +100,8 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     std::string blueKnight(std::string("/assets/BlueKnight.png"));
     std::string npc(std::string("/assets/NPC.png"));
     std::string hero(std::string("/assets/Hero.png"));
-    std::string bgMusic(std::string("/assets/BackgroundmusicDemo.ogg"));
+    std::string bgMusic(std::string("/system") + std::string("/assets/Inspiring-Dreams.mp3"));
+
 
     /*if(!LibEric::TextureManager::Instance()->Load(blueKnight, "BlueKnight")) {
         PLOGW << "Can't load player sprite";
@@ -110,7 +112,8 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     LibEric::RenderManager::Instance()->LoadTextureFromFile("player", hero);/* {
         PLOGW << "Can't load player sprite";
     }*/
-    _BackgroundMusic = LoadMusicStream(bgMusic.c_str());
+
+    _BackgroundMusic = LoadMusicStreamFromPhysFS(bgMusic.c_str());
     PlayMusicStream(_BackgroundMusic);
     SetMusicVolume(_BackgroundMusic, LibEric::UserSettings::Instance()->GetMusicVolume());
 
