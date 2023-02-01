@@ -23,6 +23,7 @@
 
 #include <libEric/GameObject_Interface.hpp>
 #include <raylib.h>
+#include <vector>
 
 
 namespace LibEric {
@@ -44,11 +45,11 @@ namespace LibEric {
         //Speicher freigeben
         virtual void Clean();
 
+        //! Ist das Objekt beweglich
+        virtual bool Moveable();
 
-        //! FIXME erstmal zum testen
-        virtual void ObjectCollision(GameObject_Interface *object);
-
-        virtual void CollisionWithMap();
+        //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
+        virtual void ObjectCollision(std::string ownType, void *data);
 
         virtual std::string GetID();
 
@@ -66,7 +67,7 @@ namespace LibEric {
         void SetHeight(float h);
 
 
-        virtual Rectangle GetRect();
+        virtual std::vector<EricRect> GetRects();
 
     protected:
 

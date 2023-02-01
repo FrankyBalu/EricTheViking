@@ -68,9 +68,9 @@ void LibEric::TileLayer::Render() {
     }
 }
 
-bool LibEric::TileLayer::CheckCollision(GameObject_Interface *object) {
+std::vector<Rectangle> LibEric::TileLayer::GetCollisionRects() {
+    std::vector<Rectangle> _rects;
     Rectangle tileRect;
-
     for (int i = 0; i < _NumRows; i++) {
         for (int j = 0; j < _NumColumns; j++) {
             int id = _TileIDs[i][j];
@@ -82,12 +82,10 @@ bool LibEric::TileLayer::CheckCollision(GameObject_Interface *object) {
             tileRect.height = _TileSize;
             tileRect.width = _TileSize;
 
-            if (CheckCollisionRecs(object->GetRect(), tileRect)) {
-                return true;
-            }
+            _rects.push_back(tileRect);
         }
     }
-    return false;
+    return _rects;
 }
 
 

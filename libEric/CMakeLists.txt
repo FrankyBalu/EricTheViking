@@ -31,7 +31,22 @@ SET(LIBEric_SRC
         Layer.hpp
         StoryNode.cpp
         StoryNode.hpp
-        Input.cpp Input.hpp GraphicGameObject.hpp GraphicGameObject.cpp GameObjectManager.cpp GameObjectManager.hpp CollisionManager.cpp CollisionManager.hpp Map.hpp Map.cpp TileLayer.cpp ObjectLayer.hpp ObjectLayer.cpp MapManager.hpp MapManager.cpp MapParser.cpp)
+        Input.cpp Input.hpp
+        GraphicGameObject.hpp
+        GraphicGameObject.cpp
+        GameObjectManager.cpp
+        GameObjectManager.hpp
+        CollisionManager.cpp
+        CollisionManager.hpp
+        Map.hpp
+        Map.cpp
+        TileLayer.cpp
+        ObjectLayer.hpp
+        ObjectLayer.cpp
+        MapManager.hpp
+        MapManager.cpp
+        MapParser.cpp
+        Rectangle.hpp)
 
 add_library(Eric SHARED ${LIBEric_SRC})
 

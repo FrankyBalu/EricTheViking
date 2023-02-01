@@ -25,6 +25,7 @@
 #include <libEric/GameState.hpp>
 #include <libEric/GameStateFactory.hpp>
 #include <libEric/GraphicGameObject.hpp>
+#include <libEric/CollisionManager.hpp>
 #include <raylib.h>
 #include <vector>
 
@@ -55,7 +56,7 @@ namespace Eric {
         std::vector<LibEric::GameObject_Interface *> _Objects;
 
         Music _BackgroundMusic;
-
+        LibEric::CollisionManager _CollisionManager;
         void Resize() {}
     };
 

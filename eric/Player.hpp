@@ -66,14 +66,24 @@ namespace Eric {
 
         void SetPosition(float x, float y);
 
-        void ObjectCollision(LibEric::GameObject_Interface *object) {}
+        //! Ist das Objekt beweglich
+        bool Moveable() override;
 
-        void CollisionWithMap() {}
+        //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
+        void ObjectCollision(std::string ownType, void *data) override;
 
         std::string GetID() { return std::string("Player"); }
 
-        Rectangle GetRect() override {
-            return LibEric::GraphicGameObject::GetRect();
+        std::vector<LibEric::EricRect> GetRects() override {
+            LibEric::EricRect rect;
+            rect.x = _Position.x;
+            rect.y = _Position.y;
+            rect.height = _Height;
+            rect.width = _Width;
+            rect.type = "WORLDCOLISION";
+            std::vector<LibEric::EricRect> r;
+            r.push_back(rect);
+            return r;
         }
 
     private:
@@ -82,6 +92,7 @@ namespace Eric {
 
         void HandleInput();
 
+        void PositionReset();
 
         PLAYER_ANIMATIONS _Animation;
         PLAYER_ANIMATION_TO_PLAY _AnimationToPlay;
@@ -94,6 +105,8 @@ namespace Eric {
         Vector2 _Acceleration;
         int _Direction;
         int _NumFrames;
+
+        Vector2 oldPosition;
 
         Sound _SwordSound;
         static Player *_Instance;

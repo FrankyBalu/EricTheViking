@@ -77,8 +77,8 @@ LibEric::MapManager *LibEric::MapManager::Instance() {
     return _Instance;
 }
 
-bool LibEric::MapManager::Collision(GameObject_Interface *object) {
-    return _CurrentMap->Collison(object);
+std::vector<Rectangle> LibEric::MapManager::GetCollisionRects() {
+    return _CurrentMap->GetCollisonRects();
 }
 
 int LibEric::MapManager::GetWidth() {

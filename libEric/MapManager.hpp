@@ -60,7 +60,7 @@ namespace LibEric {
         Layer *GetObjectLayer();
 
         //FIXME muss noch in eigene Kollisionslogik
-        bool Collision(GameObject_Interface *object);
+        std::vector<Rectangle> GetCollisionRects();
 
     private:
 

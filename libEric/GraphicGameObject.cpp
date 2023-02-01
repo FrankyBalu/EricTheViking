@@ -85,23 +85,29 @@ void LibEric::GraphicGameObject::SetWidth(float w) {
     _Width = w;
 }
 
-void LibEric::GraphicGameObject::ObjectCollision(GameObject_Interface *object) {
-    return;
-}
-
-void LibEric::GraphicGameObject::CollisionWithMap() {
-    return;
-}
 
 std::string LibEric::GraphicGameObject::GetID() {
     return std::string("UNKNOWN");
 }
 
-Rectangle LibEric::GraphicGameObject::GetRect() {
-    Rectangle rect;
+std::vector<LibEric::EricRect> LibEric::GraphicGameObject::GetRects() {
+    EricRect rect;
     rect.x = _Position.x;
     rect.y = _Position.y;
     rect.height = _Height;
     rect.width = _Width;
-    return rect;
+    rect.type = "unknown";
+    std::vector<EricRect> r;
+    r.push_back(rect);
+    return r;
+}
+
+//! Ist das Objekt beweglich
+bool LibEric::GraphicGameObject::Moveable(){
+    return false;
+}
+
+//! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
+void LibEric::GraphicGameObject::ObjectCollision(std::string ownType, void *data){
+    return;
 }

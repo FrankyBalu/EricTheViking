@@ -62,7 +62,7 @@ namespace LibEric {
             _Name = name;
         }
 
-        bool CheckCollision(GameObject_Interface *object);
+        std::vector<Rectangle> GetCollisionRects();
 
         int GetWidth() {
             return _NumColumns * _TileSize;

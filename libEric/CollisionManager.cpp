@@ -19,6 +19,40 @@
  */
 
 #include "CollisionManager.hpp"
+#include <libEric/MapManager.hpp>
+#include <libEric/Log.hpp>
 
-namespace LibEric {
-} // LibEric
+void LibEric::CollisionManager::AddObject(GameObject_Interface *object) {
+    ObjectType *obj = new ObjectType ;
+    obj->obj = object;
+    obj->rects = object->GetRects();
+    if (object->Moveable()){
+        _MoveableObjects.push_back(obj);
+    }
+    else{
+        _StaticObjects.push_back(obj);
+    }
+}
+
+void LibEric::CollisionManager::Update() {
+    // Check Map Collision
+    for (long int i = 0; i < _MoveableObjects.size(); i++){
+        std::vector<EricRect> objRects = _MoveableObjects[i]->obj->GetRects();
+        for (long int j = 0; j < objRects.size(); j++){
+            if (objRects[j].type == std::string ("WORLDCOLISION")){
+                Rectangle rectangle;
+                rectangle.x = objRects[j].x;
+                rectangle.y = objRects[j].y;
+                rectangle.width = objRects[j].width;
+                rectangle.height = objRects[j].height;
+
+                std::vector<Rectangle> mapRects = MapManager::Instance()->GetCollisionRects();
+                for (long int e = 0; e < mapRects.size(); e++){
+                    if (CheckCollisionRecs(mapRects[e], rectangle)){
+                        _MoveableObjects[i]->obj->ObjectCollision("MapCollision", nullptr);
+                    }
+                }
+            }
+        }
+    }
+}

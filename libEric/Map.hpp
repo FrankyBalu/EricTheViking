@@ -65,7 +65,7 @@ namespace LibEric {
             return _Height;
         }
 
-        bool Collison(GameObject_Interface *object);
+        std::vector<Rectangle> GetCollisonRects();
 
     private:
         friend class MapParser;

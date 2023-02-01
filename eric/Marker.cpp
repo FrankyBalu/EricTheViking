@@ -37,7 +37,7 @@ Eric::Marker::Marker()
 
 void Eric::Marker::Draw() {
     GraphicGameObject::Draw();
-    //_LUA_Draw();
+    _LUA_Draw();
 }
 
 void Eric::Marker::Clean() {
@@ -45,11 +45,11 @@ void Eric::Marker::Clean() {
 }
 
 void Eric::Marker::Update() {
-     if (CheckCollisionRecs(Player::Instance()->GetRect(), this->GetRect() ) ){
+     /*if (CheckCollisionRecs(Player::Instance()->GetRect(), this->GetRect() ) ){
          if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)||IsKeyPressed(KEY_DOWN)) {
              LibEric::Dialog::Instance()->NewDialog(_LUA_GetText());
          }
-     }
+     }*/
     _LUA_Update();
 
 }

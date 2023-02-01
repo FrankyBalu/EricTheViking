@@ -28,6 +28,7 @@
 #include <libEric/MapManager.hpp>
 #include <libEric/Log.hpp>
 #include <libEric/Dialog.hpp>
+#include <libEric/CollisionManager.hpp>
 #include <raylib.h>
 #include <raylib-physfs.h>
 
@@ -48,19 +49,17 @@ void Eric::PlayState::Update() {
         warenInPause = false;
     }
 
-    Vector2 oldPlayerPosition = Player::Instance()->GetPosition();
-
 
     Player::Instance()->Update();
+    _CollisionManager.Update();
     LibEric::MapManager::Instance()->Update();
     //position geht von den orginal pixeln aus, nicht von denen des bildschirms
+
     float x = Player::Instance()->GetPosition().x - 224;
     float y = Player::Instance()->GetPosition().y - 128;
 
-    if (LibEric::MapManager::Instance()->Collision(Player::Instance())) {
-        Player::Instance()->SetPosition(oldPlayerPosition.x, oldPlayerPosition.y);
-    }
-
+    LOGW("Player.x: ", Player::Instance()->GetPosition().x);
+    LOGW("Player.y: ", Player::Instance()->GetPosition().y);
 
     if (x < 0.0f)
         x = 0.0f;
@@ -125,7 +124,7 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
 
     LibEric::GameObject_Interface *player = Player::Instance();
     player->Load("n/a");
-
+    _CollisionManager.AddObject(player);
     // Player::Instance()->GetPosition().GetX() + GetScreenWidth()/4, Player::Instance()->GetPosition().GetY() + GetScreenHeight()/4
     Vector2 d = {Player::Instance()->GetPosition().x + GetScreenWidth() / 4,
                  Player::Instance()->GetPosition().y + GetScreenHeight() / 4};

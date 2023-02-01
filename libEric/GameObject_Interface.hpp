@@ -22,8 +22,11 @@
 #ifndef ERIC_GAMEOBJECT_INTERFACE_HPP
 #define ERIC_GAMEOBJECT_INTERFACE_HPP
 
+#include <libEric/Rectangle.hpp>
 #include <string>
+#include <vector>
 #include <raylib.h>
+#include <ostream>
 
 namespace LibEric {
 
@@ -66,20 +69,26 @@ namespace LibEric {
          */
         virtual std::string GetID() = 0;
 
-        //! muss noch ausgebaut werden, wir brauchen ja mehrere für den CollisionManager (object selbst, schild, schwert..)
-        virtual Rectangle GetRect() = 0;
+        //! Gibt alle zu dem Objekt gehörenden Kollisionsrects zurück
+        /*!
+         * FIXME Doku
+         * @return
+         */
+        virtual std::vector<EricRect> GetRects() = 0;
 
-        //! Testhalber hier, bin mir noch nicht sicher ob ich das über den CollisionManager mache
-        virtual void CollisionWithMap() = 0;
+        //! Ist das Objekt beweglich
+        virtual bool Moveable() = 0;
 
-        //! Für Test FIXME Dokumentation
-        virtual void ObjectCollision(GameObject_Interface *object) = 0;
+        //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
+        virtual void ObjectCollision(std::string ownType, void *data) = 0;
 
     protected:
 
         GameObject_Interface() {}
 
         virtual ~GameObject_Interface() {}
+
+        std::vector<EricRect> _Rects;
     };
 
 } // LibEric

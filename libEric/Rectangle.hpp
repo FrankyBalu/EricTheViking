@@ -1,7 +1,7 @@
 /*
- * libEric
- * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * LibEric
+ * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,31 +18,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef ERIC_COLLISIONMANAGER_HPP
-#define ERIC_COLLISIONMANAGER_HPP
+#ifndef ERIC_RECTANGLE_HPP
+#define ERIC_RECTANGLE_HPP
 
-#include <raylib.h>
-#include <vector>
-#include <libEric/GameObject_Interface.hpp>
-#include <libEric/Rectangle.hpp>
+#include <string>
 
 namespace LibEric {
 
-    typedef struct {
-        std::vector<EricRect> rects;
-        GameObject_Interface* obj;
-    }ObjectType;
-
-    class CollisionManager {
+    class EricRect {
     public:
-        //nicht final, nur zum testen
-        void AddObject(GameObject_Interface *object);
-        void Update();
-    private:
-        std::vector<ObjectType*> _MoveableObjects;
-        std::vector<ObjectType *> _StaticObjects;
+        float x;
+        float y;
+        float width;
+        float height;
+        std::string name;
+        std::string type;
     };
 
 } // LibEric
 
-#endif //ERIC_COLLISIONMANAGER_HPP
+#endif //ERIC_RECTANGLE_HPP

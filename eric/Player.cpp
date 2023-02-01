@@ -97,6 +97,8 @@ void Eric::Player::Update() {
     else
         _Frame = 0;
 
+    oldPosition.x = _Position.x;
+    oldPosition.y = _Position.y;
     _Position.x += _Velocity.x;
     _Position.y += _Velocity.y;
 }
@@ -236,3 +238,19 @@ void Eric::Player::SetPosition(float x, float y) {
     _Position.y = y;
 }
 
+//! Ist das Objekt beweglich
+bool Eric::Player::Moveable(){
+    return true;
+}
+
+void Eric::Player::PositionReset() {
+    _Position.x = oldPosition.x;
+    _Position.y = oldPosition.y;
+}
+
+//! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
+void Eric::Player::ObjectCollision(std::string Type, void *data){
+    if (Type == "MapCollision"){
+        PositionReset();
+    }
+}
