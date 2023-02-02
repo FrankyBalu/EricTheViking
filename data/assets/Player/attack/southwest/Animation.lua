@@ -1,0 +1,17 @@
+AddTextureID ("assets/", "Player/attack/southwest/00.png")
+AddTextureID ("assets/", "Player/attack/southwest/01.png")
+AddTextureID ("assets/", "Player/attack/southwest/02.png")
+AddTextureID ("assets/", "Player/attack/southwest/03.png")
+AddTextureID ("assets/", "Player/attack/southwest/04.png")
+AddTextureID ("assets/", "Player/attack/southwest/05.png")
+AddTextureID ("assets/", "Player/attack/southwest/06.png")
+AddTextureID ("assets/", "Player/attack/southwest/07.png")
+AddTextureID ("assets/", "Player/attack/southwest/08.png")
+AddTextureID ("assets/", "Player/attack/southwest/09.png")
+AddTextureID ("assets/", "Player/attack/southwest/10.png")
+AddTextureID ("assets/", "Player/attack/southwest/11.png")
+AddTextureID ("assets/", "Player/attack/southwest/12.png")
+
+SetTextureRect (0,0,96,96)
+
+SetDrawRect (0, 0, 64, 64)

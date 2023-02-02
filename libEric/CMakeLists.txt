@@ -46,7 +46,7 @@ SET(LIBEric_SRC
         MapManager.hpp
         MapManager.cpp
         MapParser.cpp
-        Rectangle.hpp)
+        Rectangle.hpp Animation.cpp Animation.hpp Sprite.cpp Sprite.hpp)
 
 add_library(Eric SHARED ${LIBEric_SRC})
 

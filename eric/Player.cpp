@@ -25,6 +25,7 @@
 #include <raylib.h>
 #include <libEric/Log.hpp>
 #include <libEric/Input.hpp>
+#include <libEric/UserSettings.hpp>
 
 Eric::Player *Eric::Player::_Instance = nullptr;
 
@@ -40,192 +41,279 @@ Eric::Player::Player() :
         GraphicGameObject() {
     _Position.x = 10;
     _Position.y = 10;
-    _Frame = 0;
-    _Life = 3.0;
     _Visable = true;
     _TypeID = "Player";
 }
 
 
 void Eric::Player::Draw() {
-    int speed = GetFPS() / 4;
-    if (_AnimationToPlay != PLAYER_ANIMATION_TO_PLAY::NONE) {
-        if (_Frame < speed * 1)
-            _CurrentFrame = 0;
-        else if (_Frame < speed * 2)
-            _CurrentFrame = 1;
-        else if (_Frame < speed * 3)
-            _CurrentFrame = 2;
-        else if (_Frame < speed * 4)
-            _CurrentFrame = 3;
-        else {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::NONE;
-            _Frame = 0;
-        }
-    } else {
-        if (_CurrentRow == 4) {
-            _CurrentRow = 0;
-            _Frame = 0;
-        } else if (_CurrentRow == 5) {
-            _CurrentRow = 1;
-            _Frame = 0;
-        } else if (_CurrentRow == 6) {
-            _CurrentRow = 2;
-            _Frame = 0;
-        } else if (_CurrentRow == 7) {
-            _CurrentRow = 3;
-            _Frame = 0;
-        }
-    }
 
-
+    _CurrentAnimation->Draw();
     GraphicGameObject::Draw();
 }
 
 void Eric::Player::Update() {
-    if (_Life <= 0.0) {
-        LibEric::GameStateMaschine::Instance()->ChangeState("Menu", "GameOver.menu");
-    }
-    _Velocity.x = 0;
-    _Velocity.y = 0;
-
-
     HandleInput();
+    float oldx = _Position.x;
+    float oldy = _Position.y;
 
-    if (_Frame < GetFPS())
-        _Frame++;
-    else
-        _Frame = 0;
-
-    oldPosition.x = _Position.x;
-    oldPosition.y = _Position.y;
+    oldPosition = _Position;
     _Position.x += _Velocity.x;
     _Position.y += _Velocity.y;
+    _CurrentAnimation->SetPosition(_Position.x, _Position.y);
+    _CurrentAnimation->Update();
+
+    float offsetx = oldx - _Position.x;
+    float offsety = oldy - _Position.y;
+    _CollisionRect.x += offsetx;
+    _CollisionRect.y += offsety;
 }
 
 void Eric::Player::Clean() {
-    //  DLOG << "clean player\n";
 }
 
 void Eric::Player::HandleInput() {
-    if (LibEric::Button_Right()) {
-        _Velocity.x = 0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 2;
-            _CurrentRow = WALK_RIGHT;
+    LibEric::Animation *tmpAnimatin = _CurrentAnimation;
+    //und runter und x (rennen)
+    if ( LibEric::Button_Right_Down() && LibEric::Button_Down_Down()){
+        if (LibEric::Button_X_Down()) {
+            _CurrentAnimation = &_Animation[SOUTHEAST][RUNNING];
+            _Velocity.x = 2.0f;
+            _Velocity.y = 2.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
-
-    }
-    if (LibEric::Button_Left()) {
-        _Velocity.x = -0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 4;
-            _CurrentRow = WALK_LEFT;
+        else {
+            _CurrentAnimation = &_Animation[SOUTHEAST][WALK];
+            _Velocity.x = 0.5f;
+            _Velocity.y = 0.5f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
-    }
-    if (LibEric::Button_Down()) {
-        _Velocity.y = 0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 3;
-            _CurrentRow = WALK_DOWN;
+        return;
+    }//nur runter
+    else if (LibEric::Button_Right_Down() && LibEric::Button_Up_Down()){
+        if (LibEric::Button_X_Down()) {
+            _CurrentAnimation = &_Animation[NORTHEAST][RUNNING];
+            _Velocity.x = 2.0f;
+            _Velocity.y = -2.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
-    }
-    if (LibEric::Button_Up()) {
-        _Velocity.y = -0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 1;
-            _CurrentRow = WALK_UP;
+        else{
+            _CurrentAnimation = &_Animation[NORTHEAST][WALK];
+            _Velocity.x = 0.5f;
+            _Velocity.y = -0.5f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
+        return;
     }
-
+    //Nach rechst
     if (LibEric::Button_Right_Down()) {
-        _Velocity.x = 1.0;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 2;
-            _CurrentRow = WALK_RIGHT;
+        if (LibEric::Button_X_Down()){
+            _CurrentAnimation = &_Animation[EAST][RUNNING];
+            _Velocity.x = 2.0f;
+            _Velocity.y = 0.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
-
+        else {
+            _CurrentAnimation = &_Animation[EAST][WALK];
+            _Velocity.x = 0.5f;
+            _Velocity.y = 0.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        return;
     }
+    else if ( LibEric::Button_Left_Down() && LibEric::Button_Down_Down()){
+        if (LibEric::Button_X_Down()) {
+            _CurrentAnimation = &_Animation[SOUTHWEST][RUNNING];
+            _Velocity.x = -2.0f;
+            _Velocity.y = 2.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        else {
+            _CurrentAnimation = &_Animation[SOUTHWEST][WALK];
+            _Velocity.x = -0.5f;
+            _Velocity.y = 0.5f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        return;
+    }//nur runter
+    else if (LibEric::Button_Left_Down() && LibEric::Button_Up_Down()){
+        if (LibEric::Button_X_Down()) {
+            _CurrentAnimation = &_Animation[NORTHWEST][RUNNING];
+            _Velocity.x = -2.0f;
+            _Velocity.y = -2.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        else{
+            _CurrentAnimation = &_Animation[NORTHWEST][WALK];
+            _Velocity.x = -0.5f;
+            _Velocity.y = -0.5f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        return;
+    }
+    //Nach rechst
     if (LibEric::Button_Left_Down()) {
-        _Velocity.x = -0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 4;
-            _CurrentRow = WALK_LEFT;
+        if (LibEric::Button_X_Down()){
+            _CurrentAnimation = &_Animation[WEST][RUNNING];
+            _Velocity.x = -2.0f;
+            _Velocity.y = 0.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
-    }
-    if (LibEric::Button_Down_Down()) {
-        _Velocity.y = 0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 3;
-            _CurrentRow = WALK_DOWN;
+        else {
+            _CurrentAnimation = &_Animation[WEST][WALK];
+            _Velocity.x = -0.5f;
+            _Velocity.y = 0.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
+        return;
     }
-    if (LibEric::Button_Up_Down()) {
-        _Velocity.y = -0.5f;
-        if (_AnimationToPlay == PLAYER_ANIMATION_TO_PLAY::NONE) {
-            _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::WALK;
-            _Frame = 0;
-            _Direction = 1;
-            _CurrentRow = WALK_UP;
+    else if (LibEric::Button_Up_Down()){
+        if (LibEric::Button_X_Down()){
+            _CurrentAnimation = &_Animation[NORTH][RUNNING];
+            _Velocity.x = 0.0f;
+            _Velocity.y = -2.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
         }
+        else {
+            _CurrentAnimation = &_Animation[NORTH][WALK];
+            _Velocity.x = 0.0f;
+            _Velocity.y = -0.5f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        return;
     }
-
-    if (LibEric::Button_X()) {
-        _Velocity.x *= 4.0f;
-        _Velocity.y *= 4.0f;
+    else if (LibEric::Button_Down_Down()){
+        if (LibEric::Button_X_Down()){
+            _CurrentAnimation = &_Animation[SOUTH][RUNNING];
+            _Velocity.x = 0.0f;
+            _Velocity.y = 2.0f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        else {
+            _CurrentAnimation = &_Animation[SOUTH][WALK];
+            _Velocity.x = 0.0f;
+            _Velocity.y = 0.5f;
+            if (tmpAnimatin == _CurrentAnimation) {
+                _CurrentAnimation->Play();
+            }else{
+                tmpAnimatin->Stop();
+                _CurrentAnimation->Play();
+            }
+        }
+        return;
     }
-    if (LibEric::Button_X_Down()) {
-        _Velocity.x *= 4.0f;
-        _Velocity.y *= 4.0f;
+    else{
+        _CurrentAnimation->Stop();
+        _Velocity = {0.0f,0.0f};
     }
-    if (!LibEric::Button_X()) {
-        _Acceleration.x = 0;
-        _Acceleration.y = 0;
-    }
-
-
-    if (LibEric::Button_A()) {
-        _AnimationToPlay = PLAYER_ANIMATION_TO_PLAY::SWORT;
-        // PlaySound ( _SwordSound );
-        _Frame = 0;
-        if (_CurrentRow == WALK_UP)
-            _CurrentRow = SWORT_UP;
-        if (_CurrentRow == WALK_DOWN)
-            _CurrentRow = SWORT_DOWN;
-        if (_CurrentRow == WALK_LEFT)
-            _CurrentRow = SWORT_LEFT;
-        if (_CurrentRow == WALK_RIGHT)
-            _CurrentRow = SWORT_RIGHT;
-    }
+    return;
 }
 
 void Eric::Player::Load(std::string scriptFile) {
     GraphicGameObject::Load(scriptFile);
     _Position.x = 50;
     _Position.y = 50;
-    _Width = 18;
-    _Height = 26;
+    _Width = 64;
+    _Height = 64;
     _TextureID = "player";
-    _NumFrames = 5;
-    _Frame = 0;
     _CurrentFrame = 0;
     _CurrentRow = 0;
 
 
+    //Lade Animationen
+    _Animation[EAST][WALK].Load("assets/Player/walking/east/Animation.lua");
+    _Animation[NORTH][WALK].Load("assets/Player/walking/north/Animation.lua");
+    _Animation[NORTHEAST][WALK].Load("assets/Player/walking/northeast/Animation.lua");
+    _Animation[NORTHWEST][WALK].Load("assets/Player/walking/northwest/Animation.lua");
+    _Animation[SOUTH][WALK].Load("assets/Player/walking/south/Animation.lua");
+    _Animation[SOUTHEAST][WALK].Load("assets/Player/walking/southeast/Animation.lua");
+    _Animation[SOUTHWEST][WALK].Load("assets/Player/walking/southwest/Animation.lua");
+    _Animation[WEST][WALK].Load("assets/Player/walking/west/Animation.lua");
+    _Animation[EAST][RUNNING].Load("assets/Player/running/east/Animation.lua");
+    _Animation[NORTH][RUNNING].Load("assets/Player/running/north/Animation.lua");
+    _Animation[NORTHEAST][RUNNING].Load("assets/Player/running/northeast/Animation.lua");
+    _Animation[NORTHWEST][RUNNING].Load("assets/Player/running/northwest/Animation.lua");
+    _Animation[SOUTH][RUNNING].Load("assets/Player/running/south/Animation.lua");
+    _Animation[SOUTHEAST][RUNNING].Load("assets/Player/running/southeast/Animation.lua");
+    _Animation[SOUTHWEST][RUNNING].Load("assets/Player/running/southwest/Animation.lua");
+    _Animation[WEST][RUNNING].Load("assets/Player/running/west/Animation.lua");
+
+    _CurrentAnimation = &_Animation[SOUTH][WALK];
     _Visable = true;
 
 
@@ -236,6 +324,7 @@ void Eric::Player::Load(std::string scriptFile) {
 void Eric::Player::SetPosition(float x, float y) {
     _Position.x = x;
     _Position.y = y;
+    _CurrentAnimation->SetPosition(x,y);
 }
 
 //! Ist das Objekt beweglich
@@ -246,6 +335,7 @@ bool Eric::Player::Moveable(){
 void Eric::Player::PositionReset() {
     _Position.x = oldPosition.x;
     _Position.y = oldPosition.y;
+    _CurrentAnimation->SetPosition(_Position.x,_Position.y);
 }
 
 //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren

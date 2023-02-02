@@ -31,13 +31,13 @@
 #include <libEric/CollisionManager.hpp>
 #include <raylib.h>
 #include <raylib-physfs.h>
+#include <libEric/Animation.hpp>
 
 const std::string Eric::PlayState::_PlayID = "PLAY";
 
 bool warenInPause;
 
 void Eric::PlayState::Update() {
-
     UpdateMusicStream(_BackgroundMusic);
     if (LibEric::Button_Menu()) {
         warenInPause = true;
@@ -58,8 +58,7 @@ void Eric::PlayState::Update() {
     float x = Player::Instance()->GetPosition().x - 224;
     float y = Player::Instance()->GetPosition().y - 128;
 
-    LOGW("Player.x: ", Player::Instance()->GetPosition().x);
-    LOGW("Player.y: ", Player::Instance()->GetPosition().y);
+    animation.SetPosition(Player::Instance()->GetPosition().x, Player::Instance()->GetPosition().y );
 
     if (x < 0.0f)
         x = 0.0f;
@@ -87,10 +86,9 @@ void Eric::PlayState::Render() {
     Player::Instance()->Draw();
 
     EndMode2D();
-
 }
 
-Eric::PlayState::PlayState() {
+Eric::PlayState::PlayState(){
 }
 
 
@@ -121,7 +119,6 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House.tmx"), "House1");
     // LibEric::MapManager::Instance()->LoadMap(EricDir + std::string("/assets/House2.tmx"), "House2");
     LibEric::MapManager::Instance()->ChangeCurrentMap("World");
-
     LibEric::GameObject_Interface *player = Player::Instance();
     player->Load("n/a");
     _CollisionManager.AddObject(player);

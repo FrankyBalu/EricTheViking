@@ -118,6 +118,9 @@ namespace LibEric {
 
         void ClearRenderManager();
 
+
+        Rectangle TextureRect(std::string id);
+
     private:
 
         static RenderManager *_Instance;

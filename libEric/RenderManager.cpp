@@ -155,3 +155,15 @@ bool LibEric::RenderManager::FreeTexture(std::string id) {
         return false;
     }
 }
+
+Rectangle LibEric::RenderManager::TextureRect(std::string id) {
+    if (_TextureMap.count(id) == 0){
+        return {0.0f, 0.0f, 0.0f, 0.0f};
+    }
+
+    Rectangle rect;
+    rect.x = rect.y = 0;
+    rect.width = _TextureMap[id].width;
+    rect.height = _TextureMap[id].height;
+    return rect;
+}

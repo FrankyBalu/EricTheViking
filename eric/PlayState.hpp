@@ -26,6 +26,7 @@
 #include <libEric/GameStateFactory.hpp>
 #include <libEric/GraphicGameObject.hpp>
 #include <libEric/CollisionManager.hpp>
+#include <libEric/Animation.hpp>
 #include <raylib.h>
 #include <vector>
 
@@ -58,6 +59,8 @@ namespace Eric {
         Music _BackgroundMusic;
         LibEric::CollisionManager _CollisionManager;
         void Resize() {}
+        LibEric::Animation animation;
+
     };
 
     class PlayCreator : public LibEric::StateBaseCreator {

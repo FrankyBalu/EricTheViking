@@ -22,26 +22,32 @@
 #define __PLAYER
 
 #include <libEric/GraphicGameObject.hpp>
+#include <libEric/Animation.hpp>
 #include <raylib.h>
 
 namespace Eric {
 
-    enum PLAYER_ANIMATIONS {
+    enum PLAYER_DIRECTION {
         ANIM_NONE = -1,
-        WALK_UP = 1,
-        WALK_DOWN = 0,
-        WALK_LEFT = 2,
-        WALK_RIGHT = 3,
-        SWORT_UP = 5,
-        SWORT_DOWN = 4,
-        SWORT_LEFT = 6,
-        SWORT_RIGHT = 7
+        NORTH = 0,
+        NORTHEAST = 1,
+        EAST = 2,
+        SOUTHEAST = 3,
+        SOUTH = 5,
+        SOUTHWEST = 4,
+        WEST = 6,
+        NORTHWEST = 7,
+        DIRECTION_MAX
     };
 
-    enum class PLAYER_ANIMATION_TO_PLAY {
+    enum PLAYER_ANIMATION {
         NONE = 0,
         WALK = 1,
-        SWORT = 2
+        RUNNING = 2,
+        HIT =3 ,
+        TIPPINGOVER = 4,
+        ATTACK = 5,
+        ANIMATION_MAX
     };
 
 
@@ -94,19 +100,17 @@ namespace Eric {
 
         void PositionReset();
 
-        PLAYER_ANIMATIONS _Animation;
-        PLAYER_ANIMATION_TO_PLAY _AnimationToPlay;
-        bool _PlayAnimation;
-        int _Frame;
-
-        float _Life;
+        PLAYER_ANIMATION _AnimationP;
+        PLAYER_DIRECTION _Direction;
 
         Vector2 _Velocity;
         Vector2 _Acceleration;
-        int _Direction;
-        int _NumFrames;
 
+        Rectangle _CollisionRect;
         Vector2 oldPosition;
+
+        LibEric::Animation _Animation[DIRECTION_MAX][ANIMATION_MAX];
+        LibEric::Animation *_CurrentAnimation;
 
         Sound _SwordSound;
         static Player *_Instance;

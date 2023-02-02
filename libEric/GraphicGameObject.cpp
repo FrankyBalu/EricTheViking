@@ -39,14 +39,6 @@ void LibEric::GraphicGameObject::Draw() {
     //Es Wird nur angezeigt, wenn die lebensenergie größer 0 ist
     if (!_Visable)
         return;
-    LOGV ("Draw Texture : ", _TextureID);
-    LOGV ("     Position: ", _Position.x, " x ", _Position.y);
-    LOGV ("     Breite  : ", _Width);
-    LOGV ("     Höhe    : ", _Height);
-    LOGV ("     Spalte  : ", _CurrentFrame);
-    LOGV ("     Zeile   : ", _CurrentRow);
-    RenderManager::Instance()->DrawFrame(_TextureID, (int) _Position.x, (int) _Position.y, _Width, _Height,
-                                         _CurrentFrame, _CurrentRow);
     if (LibEric::UserSettings::Instance()->GetCollisionBoxes()) {
         DrawRectangleLines((int) _Position.x, (int) _Position.y, _Width, _Height, BLUE);
     }
