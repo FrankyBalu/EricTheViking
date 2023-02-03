@@ -21,33 +21,120 @@
 #ifndef ERIC_SPRITE_HPP
 #define ERIC_SPRITE_HPP
 
+#include <libEric/GameObject_Interface.hpp>
 #include <string>
 #include <raylib.h>
 
 namespace LibEric {
 
-    class Sprite {
+    class Sprite : public GameObject_Interface{
     public:
-        Sprite(std::string textureID);
 
-        void SetSize (Vector2 size);
-        void SetPosition (Vector2 pos);
+        //! Neues Sprite erstellen
+        /*!
+         * Erstellt ein neues Sprite mit größe 0,0 an posittion 0,0
+         * @param textureID Der Name der zu verwendenden Texture
+         */
+        Sprite(std::string textureID = "n/a");
 
-        Vector2 Position();
-        Vector2 Size();
+        //! Neues Sprite erstellen
+        /*!
+         * Erstellt ein neues Sprite mit den angegebenen Parametern
+         * @param textureID Name der Texture
+         * @param position Position des Sprites auf dem Bildschirm
+         * @param size Größe des Sprites auf dem Bildschirm
+         */
+        Sprite(std::string textureID, Vector2 position, Vector2 size);
 
-        void SetTextureID(std::string id);
+        //! Zeichnet das Sprite auf den Bildschirm
+        /*!
+         *
+         */
         void Draw();
 
+        //! Wird für Sprites nicht gebraucht
+        void Update();
+
+        //! Speicher wird aufgeräumt
+        /*!
+         *
+         */
+        void Clean();
+
+        //! Wird nicht benötigt
+        void Load([[maybe_unused]]const std::string scriptfile);
+
+
+        //! Gibt die ID der Texture zurück, die verwendet wird
+        /*!
+         *
+         * @return ID der verwendeten Texture
+         */
+        std::string GetID();
+
+        //! Gibt die Fläche für Collisionen zurück
+        /*!
+         * Sprites haben nur ein Collisionrect.
+         * @return vector des Collisionrects
+         */
+        std::vector<CollisionRectangle> GetRects();
+
+        //! Für CollisionsManager, wird im Sprite Ignoriert
+        /*!
+         *
+         * @param IDofCollisionObject
+         * @param data
+         */
+        void Collision (std::string IDofCollisionObject, void *data);
+
+        //! Setzen der Größe fur das Zeichnen
+        /*!
+         * Die Größe, mit der das Sprite auf dem Bildschirm gezeichnet wird, wird gesetzt
+         * @param size Die neue größe zum Zeichnen
+         */
+        void SetDrawSize (Vector2 size);
+
+        //! Setzen die Position fur das Zeichnen
+        /*!
+         * Die Position, an der das Sprite auf dem Bildschirm gezeichnet wird, wird gesetzt
+         * @param size Die neue Position zum Zeichnen
+         */
+        void SetDrawPosition (Vector2 pos);
+
+        //! Setzen der Größe fur der Texture
+        /*!
+         * Setzt die Größe der Eigentlichen Texture.
+         * Wird benötigt, wenn sich mehrere Sprites in einer Texture befinden
+         * @sa SetTexturePosition
+         * @param size Die neue größe der Texture
+         */
+        void SetTextureSize (Vector2 size);
+
+        //! Setzen die Position innerhalb der Texture
+        /*!
+         * Setzt die Position in der Texture, ab w
+         * @param size Die neue größe zum Zeichnen
+         */
+        void SetTexturePosition (Vector2 pos);
+
+        Vector2 GetDrawSize();
+
+        Vector2 GetDrawPosition();
+
+        Vector2 GetTextureSize();
+
+        Vector2 GetTexturePosition();
+
+        void SetTextureID(std::string id);
+
+        bool Moveable ();
+
+
     private:
-        Vector2 _Position;
-
-        std::string _SpriteID;
-
-    protected:
-        Rectangle _TextureSize;
-        Rectangle _DrawSize;
-        std::string _TextureID;
+        Vector2 pDrawPosition;
+        Vector2 pDrawSize;
+        Vector2 pTexturePosition;
+        Vector2 pTextureSize;
 
     };
 

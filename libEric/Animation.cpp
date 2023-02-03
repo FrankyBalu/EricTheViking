@@ -29,7 +29,7 @@ LibEric::Animation::Animation(): Sprite("n/a"),_Duration(1.0f){
 
 }
 
-bool LibEric::Animation::Load (std::string file){
+void LibEric::Animation::Load (std::string file){
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
 
@@ -44,19 +44,10 @@ bool LibEric::Animation::Load (std::string file){
     lua.set_function("AddTextureID", &Animation::AddTexture, this);
     lua.set_function("SetTextureRect", &Animation::SetTextureRect, this);
     lua.set_function("SetDrawRect", &Animation::SetDrawRect, this);
+    lua.set_function("SetAnimationID", &Animation::SetAnimationToID, this);
     lua.script_file(EricDir + file);
-    Sprite::SetTextureID(_TextureIDs[0]);
-/*    LOGI ("Animation geladen: ");
-    LOGI("_TextureID: ", _TextureID);
-    LOGI("_TextureSize: x = ", _TextureSize.x);
-    LOGI("_TextureSize: y = ", _TextureSize.y);
-    LOGI("_TextureSize: w = ", _TextureSize.width);
-    LOGI("_TextureSize: h = ", _TextureSize.height);
-    LOGI("_DrawSize: x = ", _DrawSize.x);
-    LOGI("_DrawSize: y = ", _DrawSize.y);
-    LOGI("_DrawSize: w = ", _DrawSize.width);
-    LOGI("_DrawSize: h = ", _DrawSize.height);*/
-    return true;
+
+    return;
 }
 
 void LibEric::Animation::Play (){
@@ -74,7 +65,6 @@ void LibEric::Animation::Reset(){
 }
 
 void LibEric::Animation::Update() {
-
     if (!play)
         return;
 
@@ -84,39 +74,68 @@ void LibEric::Animation::Update() {
         Reset();
         return;
     }
-    int PlayFrames = LibEric::UserSettings::Instance()->GetFPS() * _Duration;
+
+    int PlayFrames = GetFPS() * _Duration;
 
     if (_CurrentFrame > PlayFrames)
         return;
 
-    int FramesPerTexture = PlayFrames / (_TextureIDs.size() - 1);
+    int FramesPerTexture = PlayFrames / (_AnimationsStruct[_CurrentAnimationID].NumFrames - 1);
 
     _CurrentTexture = _CurrentFrame / FramesPerTexture;
-    Sprite::SetTextureID(_TextureIDs[_CurrentTexture]);
+/*
+    LOGW("PlayFrames: ", PlayFrames);
+    LOGI("numFrames: ", _AnimationsStruct[_CurrentAnimationID].NumFrames);
+    LOGI("FramesPerTexture: ", FramesPerTexture);
+    LOGI(":CurrentTexture: ", FramesPerTexture);
+    LOGI("CurrentFrame: ", _CurrentFrame);
+*/
+
+    Sprite::SetTextureID( _AnimationsStruct[_CurrentAnimationID].TextureIDs[_CurrentTexture]);
+
 }
 
-void LibEric::Animation::AddTexture(std::string path, std::string newTex){
+void LibEric::Animation::AddTexture(std::string id, std::string path, std::string newTex){
     LOGW("add New Texture to animation: ", newTex);
     RenderManager::Instance()->LoadTextureFromFile(newTex, path  + newTex);
-    _TextureIDs.push_back(newTex);
+    int tmpNumFrames = 0;
+    if (_AnimationsStruct.count(id) != 0) {
+        LOGI("ID <", id, "> existiert bereits");
+        _AnimationsStruct[id].NumFrames += 1;
+        _AnimationsStruct[id].TextureIDs.push_back(newTex);
+    }
+    else{
+        LOGI("ID <", id, "> existiert noch nicht");
+        as t;
+        t.TextureIDs.push_back(newTex);
+        t.NumFrames =1;
+        _AnimationsStruct[id] = t;
+    }
+    return;
 }
 
 void LibEric::Animation::SetDrawRect(float x, float y, float w, float h) {
-    Sprite::SetPosition({x,y});
-    Sprite::SetSize({w,h});
+    Sprite::SetDrawPosition({x,y});
+    Sprite::SetDrawSize({w,h});
 }
 
-void LibEric::Animation::SetTextureRect(float x, float y, float w, float h) {
-    _TextureSize.x = x;
-    _TextureSize.y = y;
-    _TextureSize.width = w;
-    _TextureSize.height = h;
+void LibEric::Animation::SetTextureRect(std::string id, float x, float y, float w, float h) {
+    _AnimationsStruct[id].TextureRect = {x, y, w, h};
 }
 
 void LibEric::Animation::SetPosition(float x, float y) {
-    Sprite::SetPosition({x,y});
+    Sprite::SetDrawPosition({x,y});
 }
 
 void LibEric::Animation::Draw() {
     Sprite::Draw();
+}
+
+void LibEric::Animation::SetAnimationToID(std::string id) {
+    _CurrentAnimationID = id;
+    Sprite::SetTextureID(_AnimationsStruct[id].TextureIDs[0]);
+    Rectangle rec = {0,0,_AnimationsStruct[id].TextureRect.width, _AnimationsStruct[id].TextureRect.height};
+    Sprite::SetTexturePosition({0,0});
+    Sprite::SetTextureSize({_AnimationsStruct[id].TextureRect.width, _AnimationsStruct[id].TextureRect.height});
+    //Sprite::SetPosition({_AnimationsStruct[id].TextureRect.x, _AnimationsStruct[id].TextureRect.y});
 }

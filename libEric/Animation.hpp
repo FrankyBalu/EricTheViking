@@ -23,19 +23,26 @@
 
 #include <libEric/Sprite.hpp>
 #include <vector>
+#include <map>
 #include <sol/sol.hpp>
 
 namespace LibEric {
 
+    typedef struct as{
+        std::vector<std::string> TextureIDs;
+        Rectangle TextureRect;
+        int NumFrames;
+    } as;
     class Animation : public Sprite{
     public:
         Animation();
 
-        bool Load (std::string file);
+
+        void Load(const std::string scriptFile);
 
         void Play ();
 
-        void SetTextureRect(float x, float y, float w, float h);
+        void SetTextureRect(std::string id, float x, float y, float w, float h);
 
         void SetDrawRect(float x, float y, float w, float h);
 
@@ -49,12 +56,19 @@ namespace LibEric {
 
         void Draw();
 
-        void AddTexture(std::string path, std::string);
+        void SetAnimationToID (std::string id);
+
+        void AddTexture(std::string animationID, std::string path, std::string);
     private:
-        std::vector<std::string> _TextureIDs;
+        std::map<std::string,as> _AnimationsStruct;
+
+        std::string _CurrentAnimationID;
+
         float _Duration;
         int _CurrentFrame;
         int _CurrentTexture;
+        std::string _CurrentTextureID;
+
 
         sol::state lua;
 

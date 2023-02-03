@@ -82,14 +82,14 @@ std::string LibEric::GraphicGameObject::GetID() {
     return std::string("UNKNOWN");
 }
 
-std::vector<LibEric::EricRect> LibEric::GraphicGameObject::GetRects() {
-    EricRect rect;
+std::vector<LibEric::CollisionRectangle> LibEric::GraphicGameObject::GetRects() {
+    CollisionRectangle rect;
     rect.x = _Position.x;
     rect.y = _Position.y;
     rect.height = _Height;
     rect.width = _Width;
     rect.type = "unknown";
-    std::vector<EricRect> r;
+    std::vector<CollisionRectangle> r;
     r.push_back(rect);
     return r;
 }

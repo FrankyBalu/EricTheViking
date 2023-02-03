@@ -29,7 +29,7 @@
 namespace LibEric {
 
     typedef struct {
-        std::vector<EricRect> rects;
+        std::vector<CollisionRectangle> rects;
         GameObject_Interface* obj;
     }ObjectType;
 

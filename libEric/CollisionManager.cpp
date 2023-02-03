@@ -37,7 +37,7 @@ void LibEric::CollisionManager::AddObject(GameObject_Interface *object) {
 void LibEric::CollisionManager::Update() {
     // Check Map Collision
     for (long int i = 0; i < _MoveableObjects.size(); i++){
-        std::vector<EricRect> objRects = _MoveableObjects[i]->obj->GetRects();
+        std::vector<CollisionRectangle> objRects = _MoveableObjects[i]->obj->GetRects();
         for (long int j = 0; j < objRects.size(); j++){
             if (objRects[j].type == std::string ("WORLDCOLISION")){
                 Rectangle rectangle;
@@ -49,7 +49,7 @@ void LibEric::CollisionManager::Update() {
                 std::vector<Rectangle> mapRects = MapManager::Instance()->GetCollisionRects();
                 for (long int e = 0; e < mapRects.size(); e++){
                     if (CheckCollisionRecs(mapRects[e], rectangle)){
-                        _MoveableObjects[i]->obj->ObjectCollision("MapCollision", nullptr);
+                        _MoveableObjects[i]->obj->Collision("MapCollision", nullptr);
                     }
                 }
             }

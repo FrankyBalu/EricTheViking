@@ -76,18 +76,18 @@ namespace Eric {
         bool Moveable() override;
 
         //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
-        void ObjectCollision(std::string ownType, void *data) override;
+        void Collision(std::string ownType, void *data) override;
 
         std::string GetID() { return std::string("Player"); }
 
-        std::vector<LibEric::EricRect> GetRects() override {
-            LibEric::EricRect rect;
+        std::vector<LibEric::CollisionRectangle> GetRects() override {
+            LibEric::CollisionRectangle rect;
             rect.x = _Position.x;
             rect.y = _Position.y;
             rect.height = _Height;
             rect.width = _Width;
             rect.type = "WORLDCOLISION";
-            std::vector<LibEric::EricRect> r;
+            std::vector<LibEric::CollisionRectangle> r;
             r.push_back(rect);
             return r;
         }
@@ -109,7 +109,7 @@ namespace Eric {
         Rectangle _CollisionRect;
         Vector2 oldPosition;
 
-        LibEric::Animation _Animation[DIRECTION_MAX][ANIMATION_MAX];
+        LibEric::Animation _Animation;
         LibEric::Animation *_CurrentAnimation;
 
         Sound _SwordSound;

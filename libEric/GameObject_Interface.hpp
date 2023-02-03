@@ -74,21 +74,21 @@ namespace LibEric {
          * FIXME Doku
          * @return
          */
-        virtual std::vector<EricRect> GetRects() = 0;
+        virtual std::vector<CollisionRectangle> GetRects() = 0;
 
         //! Ist das Objekt beweglich
         virtual bool Moveable() = 0;
 
         //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
-        virtual void ObjectCollision(std::string ownType, void *data) = 0;
+        virtual void Collision(std::string IDofCollisionObject, void *data) = 0;
 
     protected:
-
         GameObject_Interface() {}
-
         virtual ~GameObject_Interface() {}
 
-        std::vector<EricRect> _Rects;
+        std::string pID;
+        bool pMoveable;
+        std::vector<CollisionRectangle> pCollisionRects;
     };
 
 } // LibEric

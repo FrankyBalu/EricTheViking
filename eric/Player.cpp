@@ -48,7 +48,7 @@ Eric::Player::Player() :
 
 void Eric::Player::Draw() {
 
-    _CurrentAnimation->Draw();
+    _Animation.Draw();
     GraphicGameObject::Draw();
 }
 
@@ -60,8 +60,8 @@ void Eric::Player::Update() {
     oldPosition = _Position;
     _Position.x += _Velocity.x;
     _Position.y += _Velocity.y;
-    _CurrentAnimation->SetPosition(_Position.x, _Position.y);
-    _CurrentAnimation->Update();
+    _Animation.SetPosition(_Position.x, _Position.y);
+    _Animation.Update();
 
     float offsetx = oldx - _Position.x;
     float offsety = oldy - _Position.y;
@@ -73,212 +73,123 @@ void Eric::Player::Clean() {
 }
 
 void Eric::Player::HandleInput() {
-    LibEric::Animation *tmpAnimatin = _CurrentAnimation;
     //und runter und x (rennen)
     if ( LibEric::Button_Right_Down() && LibEric::Button_Down_Down()){
         if (LibEric::Button_X_Down()) {
-            _CurrentAnimation = &_Animation[SOUTHEAST][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningSoutheast");
             _Velocity.x = 2.0f;
             _Velocity.y = 2.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else {
-            _CurrentAnimation = &_Animation[SOUTHEAST][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingSoutheast");
             _Velocity.x = 0.5f;
             _Velocity.y = 0.5f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }//nur runter
     else if (LibEric::Button_Right_Down() && LibEric::Button_Up_Down()){
         if (LibEric::Button_X_Down()) {
-            _CurrentAnimation = &_Animation[NORTHEAST][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningNortheast");
             _Velocity.x = 2.0f;
             _Velocity.y = -2.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else{
-            _CurrentAnimation = &_Animation[NORTHEAST][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingNortheast");
             _Velocity.x = 0.5f;
             _Velocity.y = -0.5f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }
     //Nach rechst
     if (LibEric::Button_Right_Down()) {
         if (LibEric::Button_X_Down()){
-            _CurrentAnimation = &_Animation[EAST][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningEast");
             _Velocity.x = 2.0f;
             _Velocity.y = 0.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else {
-            _CurrentAnimation = &_Animation[EAST][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingEast");
             _Velocity.x = 0.5f;
             _Velocity.y = 0.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }
     else if ( LibEric::Button_Left_Down() && LibEric::Button_Down_Down()){
         if (LibEric::Button_X_Down()) {
-            _CurrentAnimation = &_Animation[SOUTHWEST][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningSouthwest");
             _Velocity.x = -2.0f;
             _Velocity.y = 2.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else {
-            _CurrentAnimation = &_Animation[SOUTHWEST][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingSouthwest");
             _Velocity.x = -0.5f;
             _Velocity.y = 0.5f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }//nur runter
     else if (LibEric::Button_Left_Down() && LibEric::Button_Up_Down()){
         if (LibEric::Button_X_Down()) {
-            _CurrentAnimation = &_Animation[NORTHWEST][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningNorthwest");
             _Velocity.x = -2.0f;
             _Velocity.y = -2.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else{
-            _CurrentAnimation = &_Animation[NORTHWEST][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingNorthwest");
             _Velocity.x = -0.5f;
             _Velocity.y = -0.5f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }
     //Nach rechst
     if (LibEric::Button_Left_Down()) {
         if (LibEric::Button_X_Down()){
-            _CurrentAnimation = &_Animation[WEST][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningWest");
             _Velocity.x = -2.0f;
             _Velocity.y = 0.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else {
-            _CurrentAnimation = &_Animation[WEST][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingWest");
             _Velocity.x = -0.5f;
             _Velocity.y = 0.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }
     else if (LibEric::Button_Up_Down()){
         if (LibEric::Button_X_Down()){
-            _CurrentAnimation = &_Animation[NORTH][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningNorth");
             _Velocity.x = 0.0f;
             _Velocity.y = -2.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else {
-            _CurrentAnimation = &_Animation[NORTH][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingNorth");
             _Velocity.x = 0.0f;
             _Velocity.y = -0.5f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }
     else if (LibEric::Button_Down_Down()){
         if (LibEric::Button_X_Down()){
-            _CurrentAnimation = &_Animation[SOUTH][RUNNING];
+            _Animation.SetAnimationToID("PlayerMaleRunningSouth");
             _Velocity.x = 0.0f;
             _Velocity.y = 2.0f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
         else {
-            _CurrentAnimation = &_Animation[SOUTH][WALK];
+            _Animation.SetAnimationToID("PlayerMaleWalkingSouth");
             _Velocity.x = 0.0f;
             _Velocity.y = 0.5f;
-            if (tmpAnimatin == _CurrentAnimation) {
-                _CurrentAnimation->Play();
-            }else{
-                tmpAnimatin->Stop();
-                _CurrentAnimation->Play();
-            }
         }
+        _Animation.Play();
         return;
     }
     else{
-        _CurrentAnimation->Stop();
+        _Animation.Stop();
         _Velocity = {0.0f,0.0f};
     }
     return;
@@ -296,8 +207,8 @@ void Eric::Player::Load(std::string scriptFile) {
 
 
     //Lade Animationen
-    _Animation[EAST][WALK].Load("assets/Player/walking/east/Animation.lua");
-    _Animation[NORTH][WALK].Load("assets/Player/walking/north/Animation.lua");
+    _Animation.Load("assets/Player/Animation/Animation.lua");
+   /* _Animation[NORTH][WALK].Load("assets/Player/walking/north/Animation.lua");
     _Animation[NORTHEAST][WALK].Load("assets/Player/walking/northeast/Animation.lua");
     _Animation[NORTHWEST][WALK].Load("assets/Player/walking/northwest/Animation.lua");
     _Animation[SOUTH][WALK].Load("assets/Player/walking/south/Animation.lua");
@@ -312,10 +223,10 @@ void Eric::Player::Load(std::string scriptFile) {
     _Animation[SOUTHEAST][RUNNING].Load("assets/Player/running/southeast/Animation.lua");
     _Animation[SOUTHWEST][RUNNING].Load("assets/Player/running/southwest/Animation.lua");
     _Animation[WEST][RUNNING].Load("assets/Player/running/west/Animation.lua");
-
-    _CurrentAnimation = &_Animation[SOUTH][WALK];
+*/
+   // _CurrentAnimation = &_Animation[SOUTH][WALK];
     _Visable = true;
-
+    LOGI("hier");
 
     // TextureManager::Instance()->Load ( std::string(std::string(DATAPATH)+std::string("Heart.png")), "heart" );
     // _SwordSound =  LoadSound (std::string(std::string(DATAPATH)+std::string("Sword.wav")).c_str());
@@ -339,7 +250,7 @@ void Eric::Player::PositionReset() {
 }
 
 //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
-void Eric::Player::ObjectCollision(std::string Type, void *data){
+void Eric::Player::Collision(std::string Type, void *data){
     if (Type == "MapCollision"){
         PositionReset();
     }

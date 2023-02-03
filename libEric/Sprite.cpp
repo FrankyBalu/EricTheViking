@@ -18,48 +18,89 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+#include <libEric/Sprite.hpp>
 #include <libEric/RenderManager.hpp>
-#include "Sprite.hpp"
 #include <libEric/Log.hpp>
 
-LibEric::Sprite::Sprite(std::string textureID): _Position({0.0f,0.0f}),_TextureID(textureID),
-                                                _DrawSize({0.0f,0.0f,0.0f,0.0f}),_SpriteID(textureID),_TextureSize(LibEric::RenderManager::Instance()->TextureRect(textureID)){
-
+LibEric::Sprite::Sprite(std::string textureID): pDrawPosition({0.0f, 0.0f}),pDrawSize({0.0f, 0.0f}),
+                                                pTexturePosition({0.0f, 0.0f}),pTextureSize({LibEric::RenderManager::Instance()->TextureRect(textureID).width, LibEric::RenderManager::Instance()->TextureRect(textureID).height})
+                                                {
+    pID = textureID;
 
 }
 
-void LibEric::Sprite::SetPosition(Vector2 pos) {
-    _DrawSize.x = pos.x;
-    _DrawSize.y = pos.y;
-    _Position = pos;
-}
-
-void LibEric::Sprite::SetSize(Vector2 size) {
-    _DrawSize.width = size.x;
-    _DrawSize.height = size.y;
-}
-
-Vector2 LibEric::Sprite::Position() {
-    return _Position;
-}
-
-Vector2 LibEric::Sprite::Size() {
-    return {_DrawSize.width, _DrawSize.height};
+LibEric::Sprite::Sprite(std::string textureID, Vector2 position, Vector2 size): pDrawPosition(position), pDrawSize(size),
+                                                                                pTexturePosition({0.0f, 0.0f}),pTextureSize({LibEric::RenderManager::Instance()->TextureRect(textureID).width, LibEric::RenderManager::Instance()->TextureRect(textureID).height})
+                                                                                {
+    pID = textureID;
 }
 
 void LibEric::Sprite::Draw() {
-    /*LOGI("_TextureID: ", _TextureID);
-    LOGI("_TextureSize: x = ", _TextureSize.x);
-    LOGI("_TextureSize: y = ", _TextureSize.y);
-    LOGI("_TextureSize: w = ", _TextureSize.width);
-    LOGI("_TextureSize: h = ", _TextureSize.height);
-    LOGI("_DrawSize: x = ", _DrawSize.x);
-    LOGI("_DrawSize: y = ", _DrawSize.y);
-    LOGI("_DrawSize: w = ", _DrawSize.width);
-    LOGI("_DrawSize: h = ", _DrawSize.height);*/
-    RenderManager::Instance()->DrawEx(_TextureID, _TextureSize, _DrawSize);
+    RenderManager::Instance()->DrawEx(pID, {pTexturePosition.x, pTexturePosition.y, pTextureSize.x, pTextureSize.y},
+                                      {pDrawPosition.x, pDrawPosition.y, pDrawSize.x, pDrawSize.y});
+}
+
+void LibEric::Sprite::Update() {
+
+}
+
+void LibEric::Sprite::Clean() {
+    LOGW("Sprite::Clean Funktion muss noch erstellt werden!");
+}
+
+void LibEric::Sprite::Load(const std::string scriptFile){
+
+}
+
+std::string LibEric::Sprite::GetID() {
+    return pID;
+}
+
+std::vector<LibEric::CollisionRectangle> LibEric::Sprite::GetRects() {
+    return pCollisionRects;
+}
+
+void LibEric::Sprite::Collision(std::string IDofCollisionObject, void *data) {
+
+}
+
+void LibEric::Sprite::SetDrawSize(Vector2 size) {
+    pDrawSize = size;
+}
+
+void LibEric::Sprite::SetDrawPosition(Vector2 pos) {
+    pDrawPosition = pos;
+}
+
+void LibEric::Sprite::SetTextureSize(Vector2 size) {
+    pTextureSize = size;
+}
+
+void LibEric::Sprite::SetTexturePosition(Vector2 pos) {
+    pTexturePosition = pos;
+}
+
+Vector2 LibEric::Sprite::GetDrawSize() {
+    return pDrawSize;
+}
+
+Vector2  LibEric::Sprite::GetDrawPosition() {
+    return pDrawPosition;
+}
+
+Vector2 LibEric::Sprite::GetTextureSize() {
+    return pTextureSize;
+}
+
+Vector2  LibEric::Sprite::GetTexturePosition() {
+    return pTexturePosition;
 }
 
 void LibEric::Sprite::SetTextureID(std::string id) {
-    _TextureID = id;
+    pID = id;
+}
+
+bool LibEric::Sprite::Moveable() {
+    return pMoveable;
 }

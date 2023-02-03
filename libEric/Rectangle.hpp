@@ -25,7 +25,7 @@
 
 namespace LibEric {
 
-    class EricRect {
+    class CollisionRectangle {
     public:
         float x;
         float y;

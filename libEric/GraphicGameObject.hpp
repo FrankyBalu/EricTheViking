@@ -67,7 +67,7 @@ namespace LibEric {
         void SetHeight(float h);
 
 
-        virtual std::vector<EricRect> GetRects();
+        virtual std::vector<CollisionRectangle> GetRects();
 
     protected:
 

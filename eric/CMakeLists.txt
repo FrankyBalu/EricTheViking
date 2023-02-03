@@ -7,8 +7,9 @@ SET(Erik_SRC
         Player.cpp
         PlayState.hpp
         PlayState.cpp
-        Marker.hpp
-        Marker.cpp)
+       # Marker.hpp
+       # Marker.cpp
+        )
 
 add_executable(${PROJECT_NAME} ${Erik_SRC})
 target_link_libraries(${PROJECT_NAME} PUBLIC Eric
