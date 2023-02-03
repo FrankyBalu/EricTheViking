@@ -2948,16 +2948,16 @@ struct pre_main {
 // beginning of sol/compatibility/lua_version.hpp
 
 #if SOL_IS_ON(SOL_USE_CXX_LUA)
-	#include "../lua/lua-5.4.4/include/lua.h"
-	#include "../lua/lua-5.4.4/include/lualib.h"
-	#include "../lua/lua-5.4.4/include/lauxlib.h"
+	#include <lua.h>
+	#include <lualib.h>
+	#include <lauxlib.h>
 #elif SOL_IS_ON(SOL_USE_LUA_HPP)
 	#include <lua.hpp>
 #else
 	extern "C" {
-		#include "../lua/lua-5.4.4/include/lua.h"
-		#include "../lua/lua-5.4.4/include/lualib.h"
-		#include "../lua/lua-5.4.4/include/lauxlib.h"
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 	}
 #endif // C++ Mangling for Lua vs. Not
 

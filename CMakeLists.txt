@@ -81,6 +81,7 @@ include_directories(
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/Extra/"
+        "${LUA_INCLUDE_DIR}"
 )
 
 
