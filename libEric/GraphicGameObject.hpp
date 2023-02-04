@@ -49,7 +49,7 @@ namespace LibEric {
         virtual bool Moveable();
 
         //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
-        virtual void ObjectCollision(std::string ownType, void *data);
+        virtual void Collision(std::string ownType, void *data);
 
         virtual std::string GetID();
 

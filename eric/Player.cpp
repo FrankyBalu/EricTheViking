@@ -27,215 +27,362 @@
 #include <libEric/Input.hpp>
 #include <libEric/UserSettings.hpp>
 
-Eric::Player *Eric::Player::_Instance = nullptr;
+Eric::Player *Eric::Player::pInstance = nullptr;
 
 Eric::Player *Eric::Player::Instance() {
-    if (_Instance == nullptr) {
-        _Instance = new Player();
+    if (pInstance == nullptr) {
+        pInstance = new Player();
     }
-    return _Instance;
+    return pInstance;
 }
 
 
 Eric::Player::Player() :
-        GraphicGameObject() {
+    GraphicGameObject() {
     _Position.x = 10;
     _Position.y = 10;
     _Visable = true;
     _TypeID = "Player";
 }
 
+void Eric::Player::Load(std::string scriptFile) {
+    GraphicGameObject::Load(scriptFile);
+    _Position.x = 50;
+    _Position.y = 50;
+    _Width = 0;
+    _Height = 0;
+    //Collisionsrect setzen
+    pCollisionRects.push_back({75, 90, 14, 14, "WORLDCOLISION" });
+    _TextureID = "player";
+
+    //Lade Animationen
+    pAnimation.Load("assets/Player/Animation/Animation.lua");
+    pAnimation.SetAnimationToID("PlayerMaleWalkingSouth");
+    pAnimation.SetDrawSize({64,64});
+    _Visable = true;
+
+    // _SwordSound =  LoadSound (std::string(std::string(DATAPATH)+std::string("Sword.wav")).c_str());
+}
 
 void Eric::Player::Draw() {
-
-    _Animation.Draw();
+    pAnimation.Draw();
     GraphicGameObject::Draw();
+}
+
+void Eric::Player::HandleInput() {
+    bool move = false;
+    bool attack = false;
+    if (LibEric::Button_Up_Down() && LibEric::Button_Right_Down()){
+        pDirection = NORTHEAST;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Up_Down() && LibEric::Button_Left_Down()){
+        pDirection = NORTHWEST;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Down_Down() && LibEric::Button_Right_Down()){
+        pDirection = SOUTHEAST;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Down_Down() && LibEric::Button_Left_Down()){
+        pDirection = SOUTHWEST;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Up_Down()){
+        pDirection = NORTH;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Down_Down()){
+        pDirection = SOUTH;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Right_Down()){
+        pDirection = EAST;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+    else if (LibEric::Button_Left_Down()){
+        pDirection = WEST;
+        pAnimationToPlay = WALK;
+        pAnimation.Play();
+        move = true;
+    }
+
+    if (LibEric::Button_X_Down()){
+        pAnimationToPlay = RUNNING;
+    }
+
+    if (LibEric::Button_A_Down()){
+        pAnimationToPlay = ATTACK;
+        pAnimation.Play();
+        attack = true;
+    }
+    if (LibEric::Button_Y_Down()){
+        pAnimationToPlay = HIT;
+        pAnimation.Play();
+        attack = true;
+    }
+    if (LibEric::Button_B_Down()){
+        pAnimationToPlay = TIPPINGOVER;
+        pAnimation.Play();
+        attack = true;
+    }
+
+    if ( pAnimationToPlay == ATTACK){
+        pVelocity = {0.0f, 0.0f};
+        //return;
+    }
+
+    if (pAnimationToPlay == RUNNING){
+        if (pDirection == NORTH){
+            pVelocity = {0.0f, -2.0f};
+        }
+        if (pDirection == SOUTH){
+            pVelocity = {0.0f, 2.0f};
+        }
+        if (pDirection == EAST){
+            pVelocity = {2.0f, 0.0f};
+        }
+        if (pDirection == WEST){
+            pVelocity = {-2.0f, 0.0f};
+        }
+        if (pDirection == NORTHWEST){
+            pVelocity = {-2.0f, -2.0f};
+        }
+        if (pDirection == SOUTHWEST){
+            pVelocity = {-2.0f, 2.0f};
+        }
+        if (pDirection == NORTHEAST){
+            pVelocity = {2.0f, -2.0f};
+        }
+        if (pDirection == SOUTHEAST){
+            pVelocity = {2.0f, 2.0f};
+        }
+        //return;
+    }
+    if (pAnimationToPlay == WALK){
+        if (pDirection == NORTH){
+            pVelocity = {0.0f, -0.5f};
+        }
+        if (pDirection == SOUTH){
+            pVelocity = {0.0f, 0.5f};
+        }
+        if (pDirection == EAST){
+            pVelocity = {0.5f, 0.0f};
+        }
+        if (pDirection == WEST){
+            pVelocity = {-0.5f, 0.0f};
+        }
+        if (pDirection == NORTHWEST){
+            pVelocity = {-0.5f, -0.5f};
+        }
+        if (pDirection == SOUTHWEST){
+            pVelocity = {-0.5f, 0.5f};
+        }
+        if (pDirection == NORTHEAST){
+            pVelocity = {0.5f, -0.5f};
+        }
+        if (pDirection == SOUTHEAST){
+            pVelocity = {0.5f, 0.5f};
+        }
+        //return;
+    }
+    if (!move) {
+        pVelocity = {0, 0};
+    }
+    if (!move && !attack) {
+        pAnimation.Stop();
+    }
+    return;
 }
 
 void Eric::Player::Update() {
     HandleInput();
+
     float oldx = _Position.x;
     float oldy = _Position.y;
 
-    oldPosition = _Position;
-    _Position.x += _Velocity.x;
-    _Position.y += _Velocity.y;
-    _Animation.SetPosition(_Position.x, _Position.y);
-    _Animation.Update();
+    pOldPosition = _Position;
+    _Position.x += pVelocity.x;
+    _Position.y += pVelocity.y;
 
-    float offsetx = oldx - _Position.x;
-    float offsety = oldy - _Position.y;
-    _CollisionRect.x += offsetx;
-    _CollisionRect.y += offsety;
+    pAnimation.SetDrawPosition({_Position.x, _Position.y});
+    pAnimation.Update();
+
+    if (pAnimationToPlay == ATTACK){
+        switch (pDirection){
+            case NORTH:
+                pAnimation.SetAnimationToID("PlayerMaleAttackNorth");
+                break;
+            case NORTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleAttackNortheast");
+                break;
+            case NORTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleAttackNorthwest");
+                break;
+            case SOUTH:
+                pAnimation.SetAnimationToID("PlayerMaleAttackSouth");
+                break;
+            case SOUTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleAttackSoutheast");
+                break;
+            case SOUTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleAttackSouthwest");
+                break;
+            case EAST:
+                pAnimation.SetAnimationToID("PlayerMaleAttackEast");
+                break;
+            case WEST:
+                pAnimation.SetAnimationToID("PlayerMaleAttackWest");
+                break;
+        }
+    }
+    if (pAnimationToPlay == RUNNING){
+        switch (pDirection){
+            case NORTH:
+                pAnimation.SetAnimationToID("PlayerMaleRunningNorth");
+                break;
+            case NORTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleRunningNortheast");
+                break;
+            case NORTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleRunningNorthwest");
+                break;
+            case SOUTH:
+                pAnimation.SetAnimationToID("PlayerMaleRunningSouth");
+                break;
+            case SOUTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleRunningSoutheast");
+                break;
+            case SOUTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleRunningSouthwest");
+                break;
+            case EAST:
+                pAnimation.SetAnimationToID("PlayerMaleRunningEast");
+                break;
+            case WEST:
+                pAnimation.SetAnimationToID("PlayerMaleRunningWest");
+                break;
+        }
+    }
+    if (pAnimationToPlay == WALK){
+        switch (pDirection){
+            case NORTH:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingNorth");
+                break;
+            case NORTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingNortheast");
+                break;
+            case NORTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingNorthwest");
+                break;
+            case SOUTH:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingSouth");
+                break;
+            case SOUTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingSoutheast");
+                break;
+            case SOUTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingSouthwest");
+                break;
+            case EAST:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingEast");
+                break;
+            case WEST:
+                pAnimation.SetAnimationToID("PlayerMaleWalkingWest");
+                break;
+        }
+    }
+    if (pAnimationToPlay == TIPPINGOVER){
+        switch (pDirection){
+            case NORTH:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverNorth");
+                break;
+            case NORTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverNortheast");
+                break;
+            case NORTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverNorthwest");
+                break;
+            case SOUTH:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverSouth");
+                break;
+            case SOUTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverSoutheast");
+                break;
+            case SOUTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverSouthwest");
+                break;
+            case EAST:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverEast");
+                break;
+            case WEST:
+                pAnimation.SetAnimationToID("PlayerMaleTippingoverWest");
+                break;
+        }
+    }
+    if (pAnimationToPlay == HIT){
+        switch (pDirection){
+            case NORTH:
+                pAnimation.SetAnimationToID("PlayerMaleHitNorth");
+                break;
+            case NORTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleHitNortheast");
+                break;
+            case NORTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleHitNorthwest");
+                break;
+            case SOUTH:
+                pAnimation.SetAnimationToID("PlayerMaleHitSouth");
+                break;
+            case SOUTHEAST:
+                pAnimation.SetAnimationToID("PlayerMaleHitSoutheast");
+                break;
+            case SOUTHWEST:
+                pAnimation.SetAnimationToID("PlayerMaleHitSouthwest");
+                break;
+            case EAST:
+                pAnimation.SetAnimationToID("PlayerMaleHitEast");
+                break;
+            case WEST:
+                pAnimation.SetAnimationToID("PlayerMaleHitWest");
+                break;
+        }
+    }
+    float offsetx = _Position.x - oldx;
+    float offsety = _Position.y -oldy;
+    pCollisionRects[0].x += offsetx;
+    pCollisionRects[0].y += offsety;
 }
 
 void Eric::Player::Clean() {
 }
 
-void Eric::Player::HandleInput() {
-    //und runter und x (rennen)
-    if ( LibEric::Button_Right_Down() && LibEric::Button_Down_Down()){
-        if (LibEric::Button_X_Down()) {
-            _Animation.SetAnimationToID("PlayerMaleRunningSoutheast");
-            _Velocity.x = 2.0f;
-            _Velocity.y = 2.0f;
-        }
-        else {
-            _Animation.SetAnimationToID("PlayerMaleWalkingSoutheast");
-            _Velocity.x = 0.5f;
-            _Velocity.y = 0.5f;
-        }
-        _Animation.Play();
-        return;
-    }//nur runter
-    else if (LibEric::Button_Right_Down() && LibEric::Button_Up_Down()){
-        if (LibEric::Button_X_Down()) {
-            _Animation.SetAnimationToID("PlayerMaleRunningNortheast");
-            _Velocity.x = 2.0f;
-            _Velocity.y = -2.0f;
-        }
-        else{
-            _Animation.SetAnimationToID("PlayerMaleWalkingNortheast");
-            _Velocity.x = 0.5f;
-            _Velocity.y = -0.5f;
-        }
-        _Animation.Play();
-        return;
-    }
-    //Nach rechst
-    if (LibEric::Button_Right_Down()) {
-        if (LibEric::Button_X_Down()){
-            _Animation.SetAnimationToID("PlayerMaleRunningEast");
-            _Velocity.x = 2.0f;
-            _Velocity.y = 0.0f;
-        }
-        else {
-            _Animation.SetAnimationToID("PlayerMaleWalkingEast");
-            _Velocity.x = 0.5f;
-            _Velocity.y = 0.0f;
-        }
-        _Animation.Play();
-        return;
-    }
-    else if ( LibEric::Button_Left_Down() && LibEric::Button_Down_Down()){
-        if (LibEric::Button_X_Down()) {
-            _Animation.SetAnimationToID("PlayerMaleRunningSouthwest");
-            _Velocity.x = -2.0f;
-            _Velocity.y = 2.0f;
-        }
-        else {
-            _Animation.SetAnimationToID("PlayerMaleWalkingSouthwest");
-            _Velocity.x = -0.5f;
-            _Velocity.y = 0.5f;
-        }
-        _Animation.Play();
-        return;
-    }//nur runter
-    else if (LibEric::Button_Left_Down() && LibEric::Button_Up_Down()){
-        if (LibEric::Button_X_Down()) {
-            _Animation.SetAnimationToID("PlayerMaleRunningNorthwest");
-            _Velocity.x = -2.0f;
-            _Velocity.y = -2.0f;
-        }
-        else{
-            _Animation.SetAnimationToID("PlayerMaleWalkingNorthwest");
-            _Velocity.x = -0.5f;
-            _Velocity.y = -0.5f;
-        }
-        _Animation.Play();
-        return;
-    }
-    //Nach rechst
-    if (LibEric::Button_Left_Down()) {
-        if (LibEric::Button_X_Down()){
-            _Animation.SetAnimationToID("PlayerMaleRunningWest");
-            _Velocity.x = -2.0f;
-            _Velocity.y = 0.0f;
-        }
-        else {
-            _Animation.SetAnimationToID("PlayerMaleWalkingWest");
-            _Velocity.x = -0.5f;
-            _Velocity.y = 0.0f;
-        }
-        _Animation.Play();
-        return;
-    }
-    else if (LibEric::Button_Up_Down()){
-        if (LibEric::Button_X_Down()){
-            _Animation.SetAnimationToID("PlayerMaleRunningNorth");
-            _Velocity.x = 0.0f;
-            _Velocity.y = -2.0f;
-        }
-        else {
-            _Animation.SetAnimationToID("PlayerMaleWalkingNorth");
-            _Velocity.x = 0.0f;
-            _Velocity.y = -0.5f;
-        }
-        _Animation.Play();
-        return;
-    }
-    else if (LibEric::Button_Down_Down()){
-        if (LibEric::Button_X_Down()){
-            _Animation.SetAnimationToID("PlayerMaleRunningSouth");
-            _Velocity.x = 0.0f;
-            _Velocity.y = 2.0f;
-        }
-        else {
-            _Animation.SetAnimationToID("PlayerMaleWalkingSouth");
-            _Velocity.x = 0.0f;
-            _Velocity.y = 0.5f;
-        }
-        _Animation.Play();
-        return;
-    }
-    else{
-        _Animation.Stop();
-        _Velocity = {0.0f,0.0f};
-    }
-    return;
-}
-
-void Eric::Player::Load(std::string scriptFile) {
-    GraphicGameObject::Load(scriptFile);
-    _Position.x = 50;
-    _Position.y = 50;
-    _Width = 64;
-    _Height = 64;
-    _TextureID = "player";
-    _CurrentFrame = 0;
-    _CurrentRow = 0;
-
-
-    //Lade Animationen
-    _Animation.Load("assets/Player/Animation/Animation.lua");
-   /* _Animation[NORTH][WALK].Load("assets/Player/walking/north/Animation.lua");
-    _Animation[NORTHEAST][WALK].Load("assets/Player/walking/northeast/Animation.lua");
-    _Animation[NORTHWEST][WALK].Load("assets/Player/walking/northwest/Animation.lua");
-    _Animation[SOUTH][WALK].Load("assets/Player/walking/south/Animation.lua");
-    _Animation[SOUTHEAST][WALK].Load("assets/Player/walking/southeast/Animation.lua");
-    _Animation[SOUTHWEST][WALK].Load("assets/Player/walking/southwest/Animation.lua");
-    _Animation[WEST][WALK].Load("assets/Player/walking/west/Animation.lua");
-    _Animation[EAST][RUNNING].Load("assets/Player/running/east/Animation.lua");
-    _Animation[NORTH][RUNNING].Load("assets/Player/running/north/Animation.lua");
-    _Animation[NORTHEAST][RUNNING].Load("assets/Player/running/northeast/Animation.lua");
-    _Animation[NORTHWEST][RUNNING].Load("assets/Player/running/northwest/Animation.lua");
-    _Animation[SOUTH][RUNNING].Load("assets/Player/running/south/Animation.lua");
-    _Animation[SOUTHEAST][RUNNING].Load("assets/Player/running/southeast/Animation.lua");
-    _Animation[SOUTHWEST][RUNNING].Load("assets/Player/running/southwest/Animation.lua");
-    _Animation[WEST][RUNNING].Load("assets/Player/running/west/Animation.lua");
-*/
-   // _CurrentAnimation = &_Animation[SOUTH][WALK];
-    _Visable = true;
-    LOGI("hier");
-
-    // TextureManager::Instance()->Load ( std::string(std::string(DATAPATH)+std::string("Heart.png")), "heart" );
-    // _SwordSound =  LoadSound (std::string(std::string(DATAPATH)+std::string("Sword.wav")).c_str());
-}
 
 void Eric::Player::SetPosition(float x, float y) {
+    float oldx = _Position.x;
+    float oldy = _Position.y;
+
     _Position.x = x;
     _Position.y = y;
-    _CurrentAnimation->SetPosition(x,y);
+    pAnimation.SetDrawPosition({x,y});
+    float offsetx = _Position.x - oldx;
+    float offsety = _Position.y - oldy;
+    pCollisionRects[0].x += offsetx;
+    pCollisionRects[0].y += offsety;
 }
 
 //! Ist das Objekt beweglich
@@ -244,14 +391,31 @@ bool Eric::Player::Moveable(){
 }
 
 void Eric::Player::PositionReset() {
-    _Position.x = oldPosition.x;
-    _Position.y = oldPosition.y;
-    _CurrentAnimation->SetPosition(_Position.x,_Position.y);
+    float oldx = _Position.x;
+    float oldy = _Position.y;
+
+    _Position.x = pOldPosition.x;
+    _Position.y = pOldPosition.y;
+    pAnimation.SetDrawPosition({_Position.x,_Position.y});
+    float offsetx = _Position.x - oldx;
+    float offsety = _Position.y - oldy;
+    pCollisionRects[0].x += offsetx;
+    pCollisionRects[0].y += offsety;
 }
 
 //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
 void Eric::Player::Collision(std::string Type, void *data){
     if (Type == "MapCollision"){
         PositionReset();
+        LOGW("HIER");
     }
 }
+
+std::vector<LibEric::CollisionRectangle> Eric::Player::GetRects() {
+    return pCollisionRects;
+}
+
+Vector2 Eric::Player::GetPosition() {
+    return _Position;
+}
+

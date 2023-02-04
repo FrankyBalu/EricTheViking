@@ -45,6 +45,7 @@ void LibEric::CollisionManager::Update() {
                 rectangle.y = objRects[j].y;
                 rectangle.width = objRects[j].width;
                 rectangle.height = objRects[j].height;
+                LOGW("PlayerRect: ", rectangle.x, "  ", rectangle.y, "   ", rectangle.width, "   ", rectangle.height);
 
                 std::vector<Rectangle> mapRects = MapManager::Instance()->GetCollisionRects();
                 for (long int e = 0; e < mapRects.size(); e++){

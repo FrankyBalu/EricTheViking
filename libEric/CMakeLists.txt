@@ -47,22 +47,24 @@ SET(LIBEric_SRC
         MapManager.cpp
         MapParser.cpp
         Rectangle.hpp Animation.cpp Animation.hpp Sprite.cpp Sprite.hpp)
+if (UNIX)
+    add_library(Eric SHARED ${LIBEric_SRC})
+else ()
+    add_library(Eric STATIC ${LIBEric_SRC} ../Extra/tinyxml2/tinyxml2.cpp)
+endif ()
 
-add_library(Eric SHARED ${LIBEric_SRC})
-
-if (NOT ERIC_SYSTEM_LUA)
-    target_link_libraries(Eric lua
+if (UNIX)
+    target_link_libraries(Eric ${LUA_LIBRARY}
             raylib
             tinyxml2
-            physfs
             z
+            physfs
             )
 else ()
-    target_link_libraries(Eric lua
-            raylib
-            tinyxml2
-            z
-            physfs
+    target_link_libraries(Eric lua54.lib
+            raylibdll.lib
+            libz.lib
+            physfs.lib
             )
 endif ()
 

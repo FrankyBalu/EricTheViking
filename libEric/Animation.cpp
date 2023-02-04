@@ -24,30 +24,77 @@
 #include <libEric/Lua.hpp>
 #include <libEric/Log.hpp>
 #include <physfs.h>
+#include "../Extra/sol/sol.hpp"
 
-LibEric::Animation::Animation(): Sprite("n/a"),_Duration(1.0f){
+LibEric::Animation::Animation(): Sprite("n/a"),pAnimationStruct(), pCurrentAnimationID(), pFrameCounter(0),
+        pCurrentTexture(0), pCurrentTextureID(), play(false){
 
 }
 
 void LibEric::Animation::Load (std::string file){
-    lua.open_libraries(sol::lib::base);
-    lua.open_libraries(sol::lib::string);
+    lua = new sol::state;
+    lua->open_libraries(sol::lib::base);
+    lua->open_libraries(sol::lib::string);
 
-    LibEric::LuaSetup(&lua);
+    LibEric::LuaSetup(lua);
 #ifdef __linux__
     std::string EricDir = PHYSFS_getRealDir("/system/");
     EricDir += "/";
 #else
-    std::string EricDir = std::string("data\\scripts\\");
+    std::string EricDir = std::string("data\\");
 #endif
 
-    lua.set_function("AddTextureID", &Animation::AddTexture, this);
-    lua.set_function("SetTextureRect", &Animation::SetTextureRect, this);
-    lua.set_function("SetDrawRect", &Animation::SetDrawRect, this);
-    lua.set_function("SetAnimationID", &Animation::SetAnimationToID, this);
-    lua.script_file(EricDir + file);
+    lua->set_function("AddTextureID", &Animation::AddTexture, this);
+    lua->set_function("SetTextureRect", &Animation::SetTextureRect, this);
+    lua->set_function("SetDrawRect", &Sprite::SetDrawSize, this);
+    lua->set_function("SetAnimationID", &Animation::SetAnimationToID, this);
+    lua->set_function("SetDuration", &Animation::SetDuration, this);
+    lua->script_file(EricDir + file);
 
     return;
+}
+
+void LibEric::Animation::Draw() {
+    Sprite::Draw();
+}
+
+void LibEric::Animation::Update() {
+    if (!play)
+        return;
+
+
+    if (pFrameCounter < GetFPS())
+        pFrameCounter++;
+    else {
+        Reset();
+        return;
+    }
+
+    int durationFrames = GetFPS() * pAnimationStruct[pCurrentAnimationID].Duration;
+
+
+    if (pFrameCounter > durationFrames)
+        return;
+
+    int FramesPerTexture = durationFrames / (pAnimationStruct[pCurrentAnimationID].NumFrames - 1);
+
+    pCurrentTexture = pFrameCounter / FramesPerTexture;
+    if (pCurrentTexture > pAnimationStruct[pCurrentAnimationID].NumFrames - 1)
+        pCurrentTexture = pAnimationStruct[pCurrentAnimationID].NumFrames - 1;
+    LOGV("Animationsdaten Update(): ", pCurrentAnimationID);
+    LOGV("    CurrentFrame        : ", pFrameCounter);
+    LOGV("    Animationslänge     : ", durationFrames);
+    LOGV("    Frames pro Texture  : ", FramesPerTexture);
+    LOGV("    CurrentTexture      : ", pCurrentTexture);
+    Sprite::SetTextureID( pAnimationStruct[pCurrentAnimationID].TextureIDs[pCurrentTexture]);
+}
+
+void LibEric::Animation::Clean() {
+    LOGW ("Funktion muss noch Inplementiert werden");
+}
+
+std::string LibEric::Animation::GetID() {
+    return pCurrentAnimationID;
 }
 
 void LibEric::Animation::Play (){
@@ -60,82 +107,66 @@ void LibEric::Animation::Stop (){
 }
 
 void LibEric::Animation::Reset(){
-    _CurrentFrame = 0;
-    _CurrentTexture = 0;
+    pFrameCounter = 0;
+    pCurrentTexture = 0;
 }
 
-void LibEric::Animation::Update() {
-    if (!play)
-        return;
-
-    if (_CurrentFrame < LibEric::UserSettings::Instance()->GetFPS())
-        _CurrentFrame++;
-    else {
-        Reset();
-        return;
+bool LibEric::Animation::SetAnimationToID(std::string id) {
+    if (pCurrentAnimationID == id)
+        return true;
+    if (pAnimationStruct.count(id) == 0 ){
+        LOGE("Animation mit ID <", id, "> nicht vorhanden!");
+        return false;
     }
-
-    int PlayFrames = GetFPS() * _Duration;
-
-    if (_CurrentFrame > PlayFrames)
-        return;
-
-    int FramesPerTexture = PlayFrames / (_AnimationsStruct[_CurrentAnimationID].NumFrames - 1);
-
-    _CurrentTexture = _CurrentFrame / FramesPerTexture;
-/*
-    LOGW("PlayFrames: ", PlayFrames);
-    LOGI("numFrames: ", _AnimationsStruct[_CurrentAnimationID].NumFrames);
-    LOGI("FramesPerTexture: ", FramesPerTexture);
-    LOGI(":CurrentTexture: ", FramesPerTexture);
-    LOGI("CurrentFrame: ", _CurrentFrame);
-*/
-
-    Sprite::SetTextureID( _AnimationsStruct[_CurrentAnimationID].TextureIDs[_CurrentTexture]);
-
+    LOGV("Wechsel von Animations ID <", pCurrentAnimationID, "> zu <", id, ">");
+    pCurrentAnimationID = id;
+    LOGW("AnimationsID: ", pCurrentAnimationID);
+    LOGW("TextureID   : ", pAnimationStruct[id].TextureIDs[pCurrentTexture]);
+    Sprite::SetTextureID(pAnimationStruct[id].TextureIDs[pCurrentTexture]);
+    //Sprite::SetTexturePosition({0,0}); //FIXME Textureposition wenn mehrere Bilder in einer Datei sind?
+    Sprite::SetTextureSize({pAnimationStruct[id].TextureRect.width, pAnimationStruct[id].TextureRect.height});
+    return true;
 }
+
+
 
 void LibEric::Animation::AddTexture(std::string id, std::string path, std::string newTex){
-    LOGW("add New Texture to animation: ", newTex);
-    RenderManager::Instance()->LoadTextureFromFile(newTex, path  + newTex);
+    LOGV("Füge neue Texture <", newTex, "> zu Animation <", id, "> hinzu");
+    if (!path.empty()) {
+        if (!RenderManager::Instance()->LoadTextureFromFile(newTex, path + newTex)) {
+            return;
+        }
+    }
     int tmpNumFrames = 0;
-    if (_AnimationsStruct.count(id) != 0) {
-        LOGI("ID <", id, "> existiert bereits");
-        _AnimationsStruct[id].NumFrames += 1;
-        _AnimationsStruct[id].TextureIDs.push_back(newTex);
+    if (pAnimationStruct.count(id) != 0) {
+        pAnimationStruct[id].NumFrames++;
+        pAnimationStruct[id].TextureIDs.push_back(newTex);
     }
     else{
-        LOGI("ID <", id, "> existiert noch nicht");
-        as t;
+        LOGV("     Neu angelegt");
+        AnimationStruct t;
         t.TextureIDs.push_back(newTex);
-        t.NumFrames =1;
-        _AnimationsStruct[id] = t;
+        t.NumFrames = 1;
+        pAnimationStruct[id] = t;
     }
     return;
 }
 
-void LibEric::Animation::SetDrawRect(float x, float y, float w, float h) {
-    Sprite::SetDrawPosition({x,y});
-    Sprite::SetDrawSize({w,h});
+bool LibEric::Animation::SetDuration(std::string animationID, float duration) {
+    if (pAnimationStruct.count(animationID) == 0){
+        LOGE("Animation mit ID <", animationID, "> existiert nicht");
+        return false;
+    }
+    if (duration <= 0){
+        LOGE("Animation mit laufzeit <= 0 nicht möglich");
+        return false;
+    }
+    pAnimationStruct[animationID].Duration = duration;
+    return true;
 }
 
 void LibEric::Animation::SetTextureRect(std::string id, float x, float y, float w, float h) {
-    _AnimationsStruct[id].TextureRect = {x, y, w, h};
+    pAnimationStruct[id].TextureRect = {x, y, w, h};
 }
 
-void LibEric::Animation::SetPosition(float x, float y) {
-    Sprite::SetDrawPosition({x,y});
-}
 
-void LibEric::Animation::Draw() {
-    Sprite::Draw();
-}
-
-void LibEric::Animation::SetAnimationToID(std::string id) {
-    _CurrentAnimationID = id;
-    Sprite::SetTextureID(_AnimationsStruct[id].TextureIDs[0]);
-    Rectangle rec = {0,0,_AnimationsStruct[id].TextureRect.width, _AnimationsStruct[id].TextureRect.height};
-    Sprite::SetTexturePosition({0,0});
-    Sprite::SetTextureSize({_AnimationsStruct[id].TextureRect.width, _AnimationsStruct[id].TextureRect.height});
-    //Sprite::SetPosition({_AnimationsStruct[id].TextureRect.x, _AnimationsStruct[id].TextureRect.y});
-}

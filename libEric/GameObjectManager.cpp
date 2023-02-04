@@ -29,6 +29,7 @@ LibEric::GameObjectManager::~GameObjectManager() {
 int LibEric::GameObjectManager::AddObject(LibEric::GameObject_Interface *obj) {
     _Objects[_Counter] = obj;
     _Counter++;
+    return _Counter;
 }
 
 int LibEric::GameObjectManager::GetNumObjects() {

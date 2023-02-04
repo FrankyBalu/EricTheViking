@@ -56,19 +56,17 @@ namespace Eric {
 
         static Player *Instance();
 
+        void Load(const std::string scriptFile);
 
-        virtual void Draw() override;
+        void Draw();
 
-        virtual void Update() override;
+        void Update();
 
-        virtual void Clean() override;
-
-        virtual void Load(const std::string scriptFile) override;
+        void Clean();
 
 
-        Vector2 GetPosition() {
-            return _Position;
-        }
+
+        Vector2 GetPosition();
 
         void SetPosition(float x, float y);
 
@@ -80,17 +78,8 @@ namespace Eric {
 
         std::string GetID() { return std::string("Player"); }
 
-        std::vector<LibEric::CollisionRectangle> GetRects() override {
-            LibEric::CollisionRectangle rect;
-            rect.x = _Position.x;
-            rect.y = _Position.y;
-            rect.height = _Height;
-            rect.width = _Width;
-            rect.type = "WORLDCOLISION";
-            std::vector<LibEric::CollisionRectangle> r;
-            r.push_back(rect);
-            return r;
-        }
+        std::vector<LibEric::CollisionRectangle> GetRects();
+
 
     private:
 
@@ -100,20 +89,17 @@ namespace Eric {
 
         void PositionReset();
 
-        PLAYER_ANIMATION _AnimationP;
-        PLAYER_DIRECTION _Direction;
+        PLAYER_ANIMATION pAnimationToPlay;
+        PLAYER_DIRECTION pDirection;
 
-        Vector2 _Velocity;
-        Vector2 _Acceleration;
+        Vector2 pVelocity;
 
-        Rectangle _CollisionRect;
-        Vector2 oldPosition;
+        Vector2 pOldPosition;
 
-        LibEric::Animation _Animation;
-        LibEric::Animation *_CurrentAnimation;
+        LibEric::Animation pAnimation;
 
         Sound _SwordSound;
-        static Player *_Instance;
+        static Player *pInstance;
 
     };
 

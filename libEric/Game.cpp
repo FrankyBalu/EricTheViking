@@ -87,6 +87,7 @@ bool LibEric::Game::Init(const std::string &appName) {
 
     InitAudioDevice();
 
+    SetExitKey(LibEricSettings::Instance()->GetExitKey());
     _IsReady = true;
     _Running = true;
     return true;

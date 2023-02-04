@@ -31,7 +31,6 @@ namespace LibEric {
         float y;
         float width;
         float height;
-        std::string name;
         std::string type;
     };
 

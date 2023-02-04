@@ -15,9 +15,38 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 
 #Abbrechen wenn Windows verwendet wird, geht eh nicht
 if (WIN32)
-    message("Windows wird zur Zeit noch nicht unterstützt")
-    return()
+    message("Windows ist zur Zeit nur Experimentel, nur mit vs cpp + clion getestet")
 endif ()
+
+if (UNIX)
+    add_compile_options(-Wall -Wextra)
+elseif(WIN32)
+#    add_compile_options(-Wall)
+endif()
+
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+            "Wähle einen Build-Type, möglichkeiten sind: None(CMAKE_CXX_FLAGS oder CMAKE_C_FLAGS benutzen) Debug Release RelWithDebInfo MinSizeRel."
+            FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS None Debug Release RelWithDebInfo MinSizeRel)
+ENDIF()
+
+if(UNIX)
+    # Paths
+    SET(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Wo die Programme installiert werden")
+    SET(LIBDIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE PATH "Wo die Libs installiert werden")
+    SET(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" CACHE PATH "Wurzelverzeichniss für daten")
+    SET(ERIKDATADIR "${CMAKE_INSTALL_PREFIX}/share/games/Erik" CACHE PATH "Datenverzeichnis für Erik")
+    SET(LIBERICDATADIR "${CMAKE_INSTALL_PREFIX}/share/libEric" CACHE PATH "LibEric Datenverzeichnis")
+    SET(ICONDIR "${DATAROOTDIR}/pixmaps" CACHE PATH "Icon Verzeichnis") #noch haben wir kein icon
+
+    #set(LIBERIC_RESOURCE_FILES "${DATADIR}/resources" CACHE PATH "Verzeichnis zu daten")
+else(WIN32)
+    message ("Hier bin ich")
+    SET(ERIKDATADIR "data/" )
+    SET(LIBERICDATADIR "data/" )
+    #set(LIBERIC_RESOURCE_FILES "resources" CACHE PATH "Verzeichnis zu daten")
+endif(UNIX)
 
 ########################################################################################################################
 #                                                                                                                      #
@@ -38,66 +67,78 @@ add_feature_info("Doxygen" Doxygen_FOUND "Generate API doc mir make doc")
 #                                                                                                                      #
 ########################################################################################################################
 
-find_package(Lua REQUIRED 5.4)
+if (UNIX)
+    find_package(Lua REQUIRED 5.4)
 
-find_package(tinyxml2 REQUIRED)
+    find_package(tinyxml2 REQUIRED)
 
-#Sollte unter Linux immer vorhanden sein, glaub ich zumindest
-find_package(ZLIB REQUIRED)
-find_package(PhysFS 3.2 REQUIRED)
+    #Sollte unter Linux immer vorhanden sein, glaub ich zumindest
+    find_package(ZLIB REQUIRED)
+    find_package(PhysFS 3.2 REQUIRED)
 
-set(RAYLIB_VERSION 4.2.0)
-find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
-if (NOT raylib_FOUND) # If there's none, fetch and build raylib
-    include(FetchContent)
-    FetchContent_Declare(
-            raylib
-            URL https://github.com/raysan5/raylib/archive/refs/heads/master.zip
-    )
-    FetchContent_GetProperties(raylib)
-    if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
-        set(FETCHCONTENT_QUIET NO)
-        FetchContent_Populate(raylib)
-        set(BUILD_EXAMPLES OFF CACHE BOOL " " FORCE) # don't build the supplied examples
-        set(BUILD_SHARED_LIBS OFF)
-        set(USE_EXTERNAL_GLFW OFF)
-        set(CMAKE_BUILD_TYPE Release)
-        set(WITH_PIC TRUE)
-        add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR} EXCLUDE_FROM_ALL)
+    set(RAYLIB_VERSION 4.2.0)
+    find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
+    if (NOT raylib_FOUND) # If there's none, fetch and build raylib
+        include(FetchContent)
+        FetchContent_Declare(
+                raylib
+                URL https://github.com/raysan5/raylib/archive/refs/heads/master.zip
+        )
+        FetchContent_GetProperties(raylib)
+        if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+            set(FETCHCONTENT_QUIET NO)
+            FetchContent_Populate(raylib)
+            set(BUILD_EXAMPLES OFF CACHE BOOL " " FORCE) # don't build the supplied examples
+            set(BUILD_SHARED_LIBS OFF)
+            set(USE_EXTERNAL_GLFW OFF)
+            set(CMAKE_BUILD_TYPE Release)
+            set(WITH_PIC TRUE)
+            add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR} EXCLUDE_FROM_ALL)
+        endif ()
+        include_directories(" ${raylib_SOURCE_DIR}/src")
     endif ()
-    include_directories(" ${raylib_SOURCE_DIR}/src")
-endif ()
 
-add_feature_info("System lua" LUA_FOUND "")
-add_feature_info("System zlib" ZLIB_FOUND "")
-add_feature_info("System tinyxml2" TINYXML2_FOUND "")
+    add_feature_info("System lua" LUA_FOUND "")
+    add_feature_info("System zlib" ZLIB_FOUND "")
+    add_feature_info("System tinyxml2" TINYXML2_FOUND "")
+endif()
 
 ########################################################################################################################
 #                                                                                                                      #
 #   Include Verzeichnisse hinzufügen                                                                                   #
 #                                                                                                                      #
 ########################################################################################################################
-include_directories(
+if(UNIX)
+    include_directories(
         "${PROJECT_BINARY_DIR}"
         "${PROJECT_SOURCE_DIR}"
         "${PROJECT_SOURCE_DIR}/Extra/"
         "${LUA_INCLUDE_DIR}"
-)
-
+    )
+else()
+    include_directories(
+            "${PROJECT_SOURCE_DIR}/Extra/lua-5.4.0/include"
+            "${PROJECT_SOURCE_DIR}/Extra/physfs-3.2.0/include"
+            "${PROJECT_SOURCE_DIR}/Extra/raylib-4.2.0/include"
+            "${PROJECT_SOURCE_DIR}/Extra/zlib-1.2.13/"
+            "${PROJECT_SOURCE_DIR}/Extra/tinyxml2"
+            "${PROJECT_SOURCE_DIR}/Extra/sol"
+            "${PROJECT_SOURCE_DIR}/Extra"
+            "${PROJECT_SOURCE_DIR}"
+    )
+    link_directories(
+            "${PROJECT_SOURCE_DIR}/Extra/lua-5.4.0/lib"
+            "${PROJECT_SOURCE_DIR}/Extra/physfs-3.2.0/lib"
+            "${PROJECT_SOURCE_DIR}/Extra/raylib-4.2.0/lib"
+            "${PROJECT_SOURCE_DIR}/Extra/zlib-1.2.13/"
+    )
+endif()
 
 ########################################################################################################################
 #                                                                                                                      #
 #   Datenverzeichnis Festlegen, wo die assets zu finden sind                                                           #
 #                                                                                                                      #
 ########################################################################################################################
-if (LINUX)
-    set(DATA_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
-    set(INSTALL_PREFIX DATA_INSTALL_PREFIX)
-elseif (WIN32)
-    #Windows wird noch nicht unterstützt, kommt aber sicher noch irgendwann
-    set(DATA_INSTALL_PREFIX "data/")
-    set(INSTALL_PREFIX DATA_INSTALL_PREFIX)
-endif ()
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
     set(DEBUG 1)

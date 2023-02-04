@@ -40,7 +40,8 @@ void LibEric::GraphicGameObject::Draw() {
     if (!_Visable)
         return;
     if (LibEric::UserSettings::Instance()->GetCollisionBoxes()) {
-        DrawRectangleLines((int) _Position.x, (int) _Position.y, _Width, _Height, BLUE);
+        LOGI("Draw Collisionbox: " );
+        DrawRectangleLines(pCollisionRects[0].x, pCollisionRects[0].y, pCollisionRects[0].width, pCollisionRects[0].height, BLUE);
     }
 }
 
@@ -100,6 +101,6 @@ bool LibEric::GraphicGameObject::Moveable(){
 }
 
 //! Dise Funktion wird vom ColisionManager aufgerufen, wenn zwei Objekte sich berühren
-void LibEric::GraphicGameObject::ObjectCollision(std::string ownType, void *data){
+void LibEric::GraphicGameObject::Collision(std::string ownType, void *data){
     return;
 }

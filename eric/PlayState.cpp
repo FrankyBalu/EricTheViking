@@ -58,8 +58,6 @@ void Eric::PlayState::Update() {
     float x = Player::Instance()->GetPosition().x - 224;
     float y = Player::Instance()->GetPosition().y - 128;
 
-    animation.SetPosition(Player::Instance()->GetPosition().x, Player::Instance()->GetPosition().y );
-
     if (x < 0.0f)
         x = 0.0f;
     if (y < 0.0f)
@@ -94,9 +92,6 @@ Eric::PlayState::PlayState(){
 
 bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
 
-    std::string blueKnight(std::string("/assets/BlueKnight.png"));
-    std::string npc(std::string("/assets/NPC.png"));
-    std::string hero(std::string("/assets/Hero.png"));
     std::string bgMusic(std::string("/system") + std::string("/assets/Inspiring-Dreams.mp3"));
 
 
@@ -106,7 +101,7 @@ bool Eric::PlayState::OnEnter([[maybe_unused]] std::string file) {
     if(!LibEric::TextureManager::Instance()->Load(npc, "NPC")) {
         PLOGW << "Can't load player sprite";
     }*/
-    LibEric::RenderManager::Instance()->LoadTextureFromFile("player", hero);/* {
+    /*LibEric::RenderManager::Instance()->LoadTextureFromFile("player", hero);/* {
         PLOGW << "Can't load player sprite";
     }*/
 

@@ -22,57 +22,98 @@
 #define ERIC_ANIMATION_HPP
 
 #include <libEric/Sprite.hpp>
-#include <vector>
 #include <map>
-#include <sol/sol.hpp>
+
+namespace sol{class state;};
 
 namespace LibEric {
 
-    typedef struct as{
+    typedef struct AnimationStruct{
         std::vector<std::string> TextureIDs;
         Rectangle TextureRect;
         int NumFrames;
-    } as;
+        float Duration;
+    } AnimationStruct;
+
     class Animation : public Sprite{
     public:
+        //! Constructor
         Animation();
 
-
+        //! Läd eine Animation aus einer Datei
         void Load(const std::string scriptFile);
 
-        void Play ();
-
-        void SetTextureRect(std::string id, float x, float y, float w, float h);
-
-        void SetDrawRect(float x, float y, float w, float h);
-
-        void SetPosition(float x, float y);
-
-        void Stop ();
-
-        void Reset();
-
-        void Update();
-
+        //! Zeichnet die Animation auf den Bildschirm
+        /*!
+         *
+         */
         void Draw();
 
-        void SetAnimationToID (std::string id);
+        //! Updated interne Variablen
+        /*!
+         * Updated FrameCounter und setzt die TextureID neu, wenn notwendig
+         */
+        void Update();
 
-        void AddTexture(std::string animationID, std::string path, std::string);
+        //! Löscht den reservierten Speicher
+        /*
+         *
+         */
+        void Clean();
+
+        //! Gibt die ID der aktuellen Animation zurück
+        /*!
+         * Es wird die ID der Animation zurückgegeben, nicht die des Sprites
+         * @return Animations ID
+         */
+        std::string GetID();
+
+        //! Hiermit wird die Animation gestartet
+        void Play ();
+
+        //! Animation wird angehalten und resetet
+        void Stop ();
+
+        //! FrameCounter und Frames werden auf 0 gesetzt
+        void Reset();
+
+        //! Setzt die Animations ID, die abgespielt werden soll
+        /*!
+         *
+         * @param id Die neue ID
+         * @return false, wenn die ID nicht vorhanden ist
+         */
+        bool SetAnimationToID (std::string id);
+
+        //! Eine neue Texture wird zur Animation hinzugefügt
+        /*!
+         * Fügt der Animation mit animationsID eine neue Texture hinzu, wenn path
+         * leer ist, wird keine neue Texture geladen, sondern nur die ID(file) zur Animation hinzugefügt.
+         * @param animationID ID der Animation
+         * @param path Dateipfad, wo die Texture liegt
+         * @param file Dateiname udn ID der Texture
+         */
+        void AddTexture(std::string animationID, std::string path, std::string file);
+
+        //! Setzt die abspieldauer
+        /*!
+         * Setzt die abspiel dauer für eine bestimmte Animation
+         * @param animationID ID der Animation
+         * @param duration Die abspielzeit (0.5 = eine halbe Minute, 1.0 = 1 Minute, 2.0 = 2 Minute, ...
+         * @return false, wenn animationID nicht vorhanden.
+         */
+        bool SetDuration (std::string animationID, float duration);
+
+        //! Setzt das Rect der Texture
+        void SetTextureRect(std::string id, float x, float y, float w, float h);
     private:
-        std::map<std::string,as> _AnimationsStruct;
-
-        std::string _CurrentAnimationID;
-
-        float _Duration;
-        int _CurrentFrame;
-        int _CurrentTexture;
-        std::string _CurrentTextureID;
-
-
-        sol::state lua;
-
+        std::map<std::string,AnimationStruct> pAnimationStruct;
+        std::string pCurrentAnimationID;
+        int pFrameCounter;
+        int pCurrentTexture;
+        std::string pCurrentTextureID;
         bool play;
+        sol::state *lua;
     };
 
 } // LibEric
