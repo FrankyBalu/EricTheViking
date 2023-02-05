@@ -21,12 +21,15 @@
 #ifndef ERIC_GAMEOBJECTMANAGER_HPP
 #define ERIC_GAMEOBJECTMANAGER_HPP
 
+#include <libEric/libEric.hpp>
 #include <libEric/GameObject_Interface.hpp>
 #include <map>
 
 namespace LibEric {
 
-    class GameObjectManager {
+    extern "C" {
+
+    LIBERIC_API class GameObjectManager {
         GameObjectManager();
 
         ~GameObjectManager();
@@ -43,6 +46,8 @@ namespace LibEric {
 
         int _Counter;
     };
+
+}//extern "C"
 
 } // LibEric
 

@@ -21,13 +21,16 @@
 #ifndef ERIC_SPRITE_HPP
 #define ERIC_SPRITE_HPP
 
+#include <libEric/libEric.hpp>
 #include <libEric/GameObject_Interface.hpp>
 #include <string>
 #include <raylib.h>
 
 namespace LibEric {
 
-    class Sprite : public GameObject_Interface{
+    extern "C" {
+
+    class Sprite : public GameObject_Interface {
     public:
 
         //! Neues Sprite erstellen
@@ -35,7 +38,7 @@ namespace LibEric {
          * Erstellt ein neues Sprite mit größe 0,0 an posittion 0,0
          * @param textureID Der Name der zu verwendenden Texture
          */
-        Sprite(std::string textureID = "n/a");
+        explicit Sprite(const std::string &textureID = "n/a");
 
         //! Neues Sprite erstellen
         /*!
@@ -44,25 +47,25 @@ namespace LibEric {
          * @param position Position des Sprites auf dem Bildschirm
          * @param size Größe des Sprites auf dem Bildschirm
          */
-        Sprite(std::string textureID, Vector2 position, Vector2 size);
+        Sprite(const std::string &textureID, Vector2 position, Vector2 size);
 
         //! Zeichnet das Sprite auf den Bildschirm
         /*!
          *
          */
-        void Draw();
+        void Draw() override;
 
         //! Wird für Sprites nicht gebraucht
-        void Update();
+        void Update() override;
 
         //! Speicher wird aufgeräumt
         /*!
          *
          */
-        void Clean();
+        void Clean() override;
 
         //! Wird nicht benötigt
-        void Load([[maybe_unused]]const std::string scriptfile);
+        void Load([[maybe_unused]]std::string scriptfile) override;
 
 
         //! Gibt die ID der Texture zurück, die verwendet wird
@@ -70,14 +73,14 @@ namespace LibEric {
          *
          * @return ID der verwendeten Texture
          */
-        std::string GetID();
+        std::string GetID() override;
 
         //! Gibt die Fläche für Collisionen zurück
         /*!
          * Sprites haben nur ein Collisionrect.
          * @return vector des Collisionrects
          */
-        std::vector<CollisionRectangle> GetRects();
+        std::vector<CollisionRectangle> GetRects() override;
 
         //! Für CollisionsManager, wird im Sprite Ignoriert
         /*!
@@ -85,21 +88,21 @@ namespace LibEric {
          * @param IDofCollisionObject
          * @param data
          */
-        void Collision (std::string IDofCollisionObject, void *data);
+        void Collision(std::string IDofCollisionObject, void *data) override;
 
         //! Setzen der Größe fur das Zeichnen
         /*!
          * Die Größe, mit der das Sprite auf dem Bildschirm gezeichnet wird, wird gesetzt
          * @param size Die neue größe zum Zeichnen
          */
-        void SetDrawSize (Vector2 size);
+        void SetDrawSize(Vector2 size);
 
         //! Setzen die Position fur das Zeichnen
         /*!
          * Die Position, an der das Sprite auf dem Bildschirm gezeichnet wird, wird gesetzt
          * @param size Die neue Position zum Zeichnen
          */
-        void SetDrawPosition (Vector2 pos);
+        void SetDrawPosition(Vector2 pos);
 
         //! Setzen der Größe fur der Texture
         /*!
@@ -108,14 +111,14 @@ namespace LibEric {
          * @sa SetTexturePosition
          * @param size Die neue größe der Texture
          */
-        void SetTextureSize (Vector2 size);
+        void SetTextureSize(Vector2 size);
 
         //! Setzen die Position innerhalb der Texture
         /*!
          * Setzt die Position in der Texture, ab w
          * @param size Die neue größe zum Zeichnen
          */
-        void SetTexturePosition (Vector2 pos);
+        void SetTexturePosition(Vector2 pos);
 
         Vector2 GetDrawSize();
 
@@ -127,7 +130,7 @@ namespace LibEric {
 
         void SetTextureID(std::string id);
 
-        bool Moveable ();
+        bool Moveable() override;
 
 
     private:
@@ -137,6 +140,8 @@ namespace LibEric {
         Vector2 pTextureSize;
 
     };
+
+    }//extern "C"
 
 } // LibEric
 

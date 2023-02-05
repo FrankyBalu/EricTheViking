@@ -21,17 +21,20 @@
 #ifndef ERIC_GAMESTATEFACTORY_HPP
 #define ERIC_GAMESTATEFACTORY_HPP
 
+#include <libEric/libEric.hpp>
+#include <libEric/GameState.hpp>
 #include <string>
 #include <map>
-#include <libEric/GameState.hpp>
 
 namespace LibEric {
+
+    extern "C" {
 
     //! StateCreator
     /*!
      * Basisklasse, die die Schnittstelle beschreibt, die ein StateCreator einhalten muss
      */
-    class StateBaseCreator {
+    LIBERIC_API class StateBaseCreator {
     public:
 
         //! Erstellt den neuen State
@@ -45,7 +48,7 @@ namespace LibEric {
     };
 
     //! Die Klasse, die neue Gamestates erstellt
-    class GameStateFactory {
+    LIBERIC_API class GameStateFactory {
     public:
         //! Zeiger auf die Instance der Klasse
         static GameStateFactory *Instance();
@@ -75,6 +78,8 @@ namespace LibEric {
 
         std::map<std::string, StateBaseCreator *> _Creators;
     };
+
+    }//extern "C"
 
 } // LibEric
 

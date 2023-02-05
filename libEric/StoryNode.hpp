@@ -18,15 +18,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef __STORYNODE
-#define __STORYNODE
+#ifndef LIBERIC_STORYNODE_HPP
+#define LIBERIC_STORYNODE_HPP
 
+#include <libEric/libEric.hpp>
 #include <string>
 #include <map>
 
 namespace LibEric {
+
+    extern "C" {
+
 //FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
-    class StoryNode {
+    LIBERIC_API class StoryNode {
     public:
         static StoryNode *Instance();
 
@@ -35,14 +39,17 @@ namespace LibEric {
         void NewNode(std::string node, bool value);
 
     private:
-        std::map<std::string, bool> _NodeMap;
+        std::map<std::string, bool> pNodeMap;
 
 
-        static StoryNode *_Instance;
+        static StoryNode *pInstance;
 
         StoryNode();
 
         ~StoryNode();
     };
+
+}//extern "C"
+
 }; //namespace LibEric
-#endif // __STORYNODE
+#endif // LIBERIC_STORYNODE_HPP

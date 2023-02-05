@@ -46,11 +46,12 @@ SET(LIBEric_SRC
         MapManager.hpp
         MapManager.cpp
         MapParser.cpp
-        Rectangle.hpp Animation.cpp Animation.hpp Sprite.cpp Sprite.hpp)
+        Rectangle.hpp Animation.cpp Animation.hpp Sprite.cpp Sprite.hpp libEric.hpp libEric.hpp)
 if (UNIX)
     add_library(Eric SHARED ${LIBEric_SRC})
 else ()
-    add_library(Eric STATIC ${LIBEric_SRC} ../Extra/tinyxml2/tinyxml2.cpp)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    add_library(Eric SHARED ${LIBEric_SRC} ../Extra/tinyxml2/tinyxml2.cpp)
 endif ()
 
 if (UNIX)

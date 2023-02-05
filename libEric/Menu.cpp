@@ -24,9 +24,7 @@
 #include <libEric/RenderManager.hpp>
 #include <libEric/Game.hpp>
 #include <libEric/LibEricSettings.hpp>
-#include <Config.hpp>
 #include <libEric/Input.hpp>
-#include <libEric/Log.hpp>
 #include <libEric/Dialog.hpp>
 #include <raylib.h>
 
@@ -39,101 +37,101 @@
 
 
 LibEric::Button::Button(std::string text, float x, float y, float width, float height) {
-    _Activ = false;
-    _Text = text;
-    _Rect.x = x;
-    _Rect.y = y;
-    _Rect.width = width;
-    _Rect.height = height;
+    pActiv = false;
+    pText = text;
+    pRect.x = x;
+    pRect.y = y;
+    pRect.width = width;
+    pRect.height = height;
 }
 
 void LibEric::Button::Resize(float x, float y, float width, float height) {
-    _Rect.x = x;
-    _Rect.y = y;
-    _Rect.width = width;
-    _Rect.height = height;
+    pRect.x = x;
+    pRect.y = y;
+    pRect.width = width;
+    pRect.height = height;
 }
 
 
 void LibEric::Button::Draw() {
-    if (_Activ) {
+    if (pActiv) {
         GuiSetState(STATE_FOCUSED);
     } else {
         GuiSetState(STATE_NORMAL);
     }
 
-    GuiButton(_Rect, _Text.c_str());
+    GuiButton(pRect, pText.c_str());
     GuiSetState(STATE_NORMAL);
 }
 
 void LibEric::Button::SetActiv(bool activ) {
-    _Activ = activ;
+    pActiv = activ;
 }
 
 LibEric::CheckBox::CheckBox(std::string text, float x, float y, float width, float height, bool checked) {
-    _Activ = false;
-    _Rect.x = x;
-    _Rect.y = y;
-    _Rect.width = width;
-    _Rect.height = height;
-    _Check = checked;
-    _Text = text;
+    pActiv = false;
+    pRect.x = x;
+    pRect.y = y;
+    pRect.width = width;
+    pRect.height = height;
+    pCheck = checked;
+    pText = text;
 }
 
 void LibEric::CheckBox::Resize(float x, float y, float width, float height) {
-    _Rect.x = x;
-    _Rect.y = y;
-    _Rect.width = width;
-    _Rect.height = height;
+    pRect.x = x;
+    pRect.y = y;
+    pRect.width = width;
+    pRect.height = height;
 }
 
 bool LibEric::CheckBox::IsActivated() {
-    return _Check;
+    return pCheck;
 }
 
 void LibEric::CheckBox::Toggle(bool n) {
-    _Check = n;
+    pCheck = n;
 }
 
 void LibEric::CheckBox::Draw() {
-    if (_Activ) {
+    if (pActiv) {
         GuiSetState(STATE_FOCUSED);
     } else {
         GuiSetState(STATE_NORMAL);
     }
 
-    GuiCheckBox(_Rect, _Text.c_str(), _Check);
+    GuiCheckBox(pRect, pText.c_str(), pCheck);
     GuiSetState(STATE_NORMAL);
 
 }
 
 void LibEric::CheckBox::SetActiv(bool activ) {
-    _Activ = activ;
+    pActiv = activ;
 }
 
 LibEric::Slider::Slider(std::string text, float x, float y, float width, float height, float currentVal, float minVal,
                         float maxVal) {
-    _Activ = false;
-    _CurrentValue = currentVal;
-    _MinValue = minVal;
-    _MaxValue = maxVal;
-    _Rect.x = x;
-    _Rect.y = y;
-    _Rect.width = width;
-    _Rect.height = height;
-    _Text = text;
+    pActiv = false;
+    pCurrentValue = currentVal;
+    pMinValue = minVal;
+    pMaxValue = maxVal;
+    pRect.x = x;
+    pRect.y = y;
+    pRect.width = width;
+    pRect.height = height;
+    pText = text;
 }
 
 void LibEric::Slider::Resize(float x, float y, float width, float height) {
-    _Rect.x = x;
-    _Rect.y = y;
-    _Rect.width = width;
-    _Rect.height = height;
+    pRect.x = x;
+    pRect.y = y;
+    pRect.width = width;
+    pRect.height = height;
 }
 
 
 float LibEric::Slider::GetValue() {
-    return _CurrentValue;
+    return pCurrentValue;
 }
 
 void LibEric::Slider::SetValue(float val) {
@@ -141,59 +139,54 @@ void LibEric::Slider::SetValue(float val) {
         val = 0.0;
     if (val > 1)
         val = 1.0;
-    if (val == 2.77556e-17)
-        val = 0;
-    _CurrentValue = val;
+    pCurrentValue = val;
 }
 
 
 void LibEric::Slider::Draw() {
-    if (_Activ) {
+    if (pActiv) {
         GuiSetState(STATE_FOCUSED);
     } else {
         GuiSetState(STATE_NORMAL);
     }
 
     std::stringstream ss;
-    int i = 100 * _CurrentValue;
-    if (_CurrentValue == 0.0)
+    int i = 100 * pCurrentValue;
+    if (pCurrentValue == 0.0)
         ss << "0";
     else
         ss << i;
 
-    GuiSliderBar(_Rect, _Text.c_str(), ss.str().c_str(), _CurrentValue, _MinValue, _MaxValue);
+    GuiSliderBar(pRect, pText.c_str(), ss.str().c_str(), pCurrentValue, pMinValue, pMaxValue);
     GuiSetState(STATE_NORMAL);
 }
 
 
 void LibEric::Slider::SetActiv(bool activ) {
-    _Activ = activ;
+    pActiv = activ;
 }
 
 
 void LibEric::Menu::Update() {
-    //   for (int i = 0; i < 3; i++) {
-    //       LOGE("Gampad ", i, ": ", IsGamepadButtonPressed(i, GAMEPAD_BUTTON_LEFT_FACE_DOWN));
-    //   }
     if (Button_Down()) {
-        _LUA_Key_Down();
+        pLUA_Key_Down();
     }
     if (Button_Up()) {
-        _LUA_Key_Up();
+        pLUA_Key_Up();
     }
     if (Button_Left()) {
-        _LUA_Key_Left();
+        pLUA_Key_Left();
     }
     if (Button_Right()) {
-        _LUA_Key_Right();
+        pLUA_Key_Right();
     }
     if (Button_A()) {
-        _LUA_Key_Activate();
+        pLUA_Key_Activate();
     }
     if (Button_X()) {
-        _LUA_Key_Back();
+        pLUA_Key_Back();
     }
-    _LUA_Update();
+    pLUA_Update();
 }
 
 void LibEric::Menu::Render() {
@@ -206,7 +199,7 @@ void LibEric::Menu::Render() {
     dest.width = Game::Instance()->GetWindowWidth();
     dest.height = Game::Instance()->GetWindowHeight();
     RenderManager::Instance()->DrawEx("BGI", src, dest, 0.0f);
-    _LUA_Draw();
+    pLUA_Draw();
 #ifdef __linux__
     if (LibEric::LibEricSettings::Instance()->GetShowVersion())
         DrawText(std::string(std::string("Version: ") + std::string(LIBERIC_VERSION)).c_str(), 20,
@@ -215,17 +208,16 @@ void LibEric::Menu::Render() {
 }
 
 std::string LibEric::Menu::GetStateID() const {
-    return _ID;
+    return pID;
 }
 
 
 void LibEric::Menu::SetID(std::string id) {
-    // PLOGE << "Setzte ID zu " << id;
-    _ID = id;
+    pID = id;
 }
 
 void LibEric::Menu::Resize() {
-    _Lua_Resize();
+    pLua_Resize();
 }
 
 
@@ -281,17 +273,17 @@ bool LibEric::Menu::OnEnter(std::string file) {
 
     lua.script_file(scriptFile.c_str());
 
-    _ID = lua["MENUID"];
+    pID = lua["MENUID"];
 
-    _LUA_Update = lua["Update"];
-    _LUA_Draw = lua["Draw"];
-    _LUA_Key_Up = lua["Key_Up"];
-    _LUA_Key_Down = lua["Key_Down"];
-    _LUA_Key_Left = lua["Key_Left"];
-    _LUA_Key_Right = lua["Key_Right"];
-    _LUA_Key_Activate = lua["Activate"];
-    _LUA_Key_Back = lua["Back"];
-    _Lua_Resize = lua["Resize"];
+    pLUA_Update = lua["Update"];
+    pLUA_Draw = lua["Draw"];
+    pLUA_Key_Up = lua["Key_Up"];
+    pLUA_Key_Down = lua["Key_Down"];
+    pLUA_Key_Left = lua["Key_Left"];
+    pLUA_Key_Right = lua["Key_Right"];
+    pLUA_Key_Activate = lua["Activate"];
+    pLUA_Key_Back = lua["Back"];
+    pLua_Resize = lua["Resize"];
 
     return true;
 }

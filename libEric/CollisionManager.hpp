@@ -21,6 +21,9 @@
 #ifndef ERIC_COLLISIONMANAGER_HPP
 #define ERIC_COLLISIONMANAGER_HPP
 
+#include <libEric/libEric.hpp>
+#include <libEric/GameObject_Interface.hpp>
+#include <libEric/Rectangle.hpp>
 #include <raylib.h>
 #include <vector>
 #include <libEric/GameObject_Interface.hpp>
@@ -33,15 +36,21 @@ namespace LibEric {
         GameObject_Interface* obj;
     }ObjectType;
 
-    class CollisionManager {
+    extern "C" {
+
+    LIBERIC_API class CollisionManager {
     public:
         //nicht final, nur zum testen
         void AddObject(GameObject_Interface *object);
+
         void Update();
+
     private:
-        std::vector<ObjectType*> _MoveableObjects;
+        std::vector<ObjectType *> _MoveableObjects;
         std::vector<ObjectType *> _StaticObjects;
     };
+
+    }//extern "C"
 
 } // LibEric
 

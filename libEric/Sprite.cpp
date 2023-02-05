@@ -22,15 +22,16 @@
 #include <libEric/Sprite.hpp>
 #include <libEric/RenderManager.hpp>
 #include <libEric/Log.hpp>
+#include <utility>
 
-LibEric::Sprite::Sprite(std::string textureID): pDrawPosition({0.0f, 0.0f}),pDrawSize({0.0f, 0.0f}),
+LibEric::Sprite::Sprite(const std::string& textureID): pDrawPosition({0.0f, 0.0f}),pDrawSize({0.0f, 0.0f}),
                                                 pTexturePosition({0.0f, 0.0f}),pTextureSize({LibEric::RenderManager::Instance()->TextureRect(textureID).width, LibEric::RenderManager::Instance()->TextureRect(textureID).height})
                                                 {
     pID = textureID;
 
 }
 
-LibEric::Sprite::Sprite(std::string textureID, Vector2 position, Vector2 size): pDrawPosition(position), pDrawSize(size),
+LibEric::Sprite::Sprite(const std::string& textureID, Vector2 position, Vector2 size): pDrawPosition(position), pDrawSize(size),
                                                                                 pTexturePosition({0.0f, 0.0f}),pTextureSize({LibEric::RenderManager::Instance()->TextureRect(textureID).width, LibEric::RenderManager::Instance()->TextureRect(textureID).height})
                                                                                 {
     pID = textureID;
@@ -98,7 +99,7 @@ Vector2  LibEric::Sprite::GetTexturePosition() {
 }
 
 void LibEric::Sprite::SetTextureID(std::string id) {
-    pID = id;
+    pID = std::move(id);
 }
 
 bool LibEric::Sprite::Moveable() {

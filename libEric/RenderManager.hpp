@@ -21,13 +21,16 @@
 #ifndef ERIC_RENDERMANAGER_HPP
 #define ERIC_RENDERMANAGER_HPP
 
+#include <libEric/libEric.hpp>
 #include <string>
 #include <map>
 #include <raylib.h>
 
 namespace LibEric {
 
-    class RenderManager {
+    extern "C" {
+
+    LIBERIC_API class RenderManager {
     public:
         //! Gibt einen Zeiger auf eine Klassen Instance
         static RenderManager *Instance();
@@ -41,7 +44,7 @@ namespace LibEric {
          * @param fileName name der Datei
          * @param id ID der Texture
          */
-        bool LoadTextureFromFile(std::string id, std::string fileName);
+        bool LoadTextureFromFile(const std::string &id, const std::string &fileName);
 
         //! Zeichnet eine Texture auf dn Bildschirm
         /*!
@@ -52,7 +55,7 @@ namespace LibEric {
          * @param y Y-Position der Texture
          * @return false, falls keine Texture mit dem Namen vorhanden ist
          */
-        bool DrawTextureSimple(std::string id, int x, int y);
+        bool DrawTextureSimple(const std::string &id, int x, int y);
 
         //! Zeichnet einen Frame aus einer Texture
         /*!
@@ -74,7 +77,7 @@ namespace LibEric {
          * @param row Die Zeile in der sich der Frame befindet
          * @return false Wenn id nicht existiert oder Frame/Row nicht möglich ist mit der Texture
          */
-        bool DrawFrame(std::string id, float x, float y, float width, float height, int frame, int row);
+        bool DrawFrame(const std::string &id, float x, float y, float width, float height, int frame, int row);
 
         //!Zeichnet einen Frame aus einer Texture
         /*!
@@ -87,7 +90,7 @@ namespace LibEric {
          * @param rotate Drehung der Texture
          * @return false Wenn die Texture nicht existiert
          */
-        bool DrawEx(std::string id, Rectangle src, Rectangle dest, float rotate = 0.0f);
+        bool DrawEx(const std::string &id, Rectangle src, Rectangle dest, float rotate = 0.0f);
 
         //! Zeichnet ein Tile aus einer Tilemap
         /*!
@@ -104,7 +107,8 @@ namespace LibEric {
          * @param currentFrame Die Spalte in der sich das Tile befindet
          * @return false, wenn keine Texture mit der ID vorhanden
          */
-        bool DrawTile(std::string id, float x, float y, float width, float height, int currentRow, int currentFrame);
+        bool
+        DrawTile(const std::string &id, float x, float y, float width, float height, int currentRow, int currentFrame);
 
 
         //! Gibt den Speicher einer Texture wieder frei
@@ -114,24 +118,25 @@ namespace LibEric {
          * @param id Die ID der zu löschenden Texture
          * @return false, Wenn die Texture nicht gefunden wird
          */
-        bool FreeTexture(std::string id);
+        bool FreeTexture(const std::string &id);
 
         void ClearRenderManager();
 
 
-        Rectangle TextureRect(std::string id);
+        Rectangle TextureRect(const std::string &id);
 
     private:
 
-        static RenderManager *_Instance;
+        static RenderManager *pInstance;
 
         RenderManager();
 
         ~RenderManager();
 
-        std::map<std::string, Texture2D> _TextureMap;
-
+        std::map<std::string, Texture2D> pTextureMap;
     };
+
+    }//extern "C"
 
 } // LibEric
 

@@ -29,40 +29,36 @@
 
 
 LibEric::TileLayer::TileLayer(int tileSize, int mapWidth, int mapHeight, const std::vector<Tileset> &tilesets)
-        : _NumColumns(mapWidth), _NumRows(mapHeight), _TileSize(tileSize), _Position{0, 0}, _Velocity{0, 0}, _Name(),
-          _Tilesets(tilesets), _TileIDs() {
+        : pNumColumns(mapWidth), pNumRows(mapHeight), pTileSize(tileSize), pPosition{0, 0}, pVelocity{0, 0}, pName(),
+          pTilesets(tilesets), pTileIDs() {
 
 }
 
 void LibEric::TileLayer::Update() {
-    _Position.x += _Velocity.x;
-    _Position.y += _Velocity.y;
+    pPosition.x += pVelocity.x;
+    pPosition.y += pVelocity.y;
 }
 
 void LibEric::TileLayer::Render() {
-    int x;
+    float x;
 
-    x = _Position.x / _TileSize;
+    x = pPosition.x / pTileSize;
 
-
-    for (int i = 0; i < _NumRows; i++) {
-        for (int j = 0; j < _NumColumns; j++) {
-            int id = _TileIDs[i][j + x];
+    for (int i = 0; i < pNumRows; i++) {
+        for (int j = 0; j < pNumColumns; j++) {
+            int id = pTileIDs[i][j + x];
 
             if (id == 0) {
                 continue;
             }
-
             Tileset tileset = GetTilesetByID(id);
-
             id--;
 
-
-            RenderManager::Instance()->DrawTile(tileset.name, j * _TileSize, i * _TileSize, _TileSize, _TileSize,
+            RenderManager::Instance()->DrawTile(tileset.name, j * pTileSize, i * pTileSize, pTileSize, pTileSize,
                                                 (id - (tileset.firstGridID - 1)) / tileset.numColumns,
                                                 (id - (tileset.firstGridID - 1)) % tileset.numColumns);
-            if (_Name == std::string("Collision") && UserSettings::Instance()->GetCollisionBoxes()) {
-                DrawRectangleLines(j * _TileSize, i * _TileSize, _TileSize, _TileSize, RED);
+            if (pName == std::string("Collision") && UserSettings::Instance()->GetCollisionBoxes()) {
+                DrawRectangleLines(j * pTileSize, i * pTileSize, pTileSize, pTileSize, RED);
             }
         }
     }
@@ -71,16 +67,16 @@ void LibEric::TileLayer::Render() {
 std::vector<Rectangle> LibEric::TileLayer::GetCollisionRects() {
     std::vector<Rectangle> _rects;
     Rectangle tileRect;
-    for (int i = 0; i < _NumRows; i++) {
-        for (int j = 0; j < _NumColumns; j++) {
-            int id = _TileIDs[i][j];
+    for (int i = 0; i < pNumRows; i++) {
+        for (int j = 0; j < pNumColumns; j++) {
+            int id = pTileIDs[i][j];
             if (id == 0) {
                 continue;
             }
-            tileRect.x = j * _TileSize;
-            tileRect.y = i * _TileSize;
-            tileRect.height = _TileSize;
-            tileRect.width = _TileSize;
+            tileRect.x = j * pTileSize;
+            tileRect.y = i * pTileSize;
+            tileRect.height = pTileSize;
+            tileRect.width = pTileSize;
 
             _rects.push_back(tileRect);
         }
@@ -90,16 +86,15 @@ std::vector<Rectangle> LibEric::TileLayer::GetCollisionRects() {
 
 
 LibEric::Tileset LibEric::TileLayer::GetTilesetByID(int tileID) {
-    for (unsigned long i = 0; i < _Tilesets.size(); i++) {
-        if (i + 1 <= _Tilesets.size() - 1) {
-            if (tileID >= _Tilesets[i].firstGridID && tileID < _Tilesets[i + 1].firstGridID) {
-                return _Tilesets[i];
+    for (unsigned long i = 0; i < pTilesets.size(); i++) {
+        if (i + 1 <= pTilesets.size() - 1) {
+            if (tileID >= pTilesets[i].firstGridID && tileID < pTilesets[i + 1].firstGridID) {
+                return pTilesets[i];
             }
         } else {
-            return _Tilesets[i];
+            return pTilesets[i];
         }
     }
-
     LOGE ("Konnte kein Tileset finden: ", tileID);
     Tileset t;
     return t;

@@ -22,13 +22,16 @@
 #ifndef ERIC_GAMESTATEMASCHINE_HPP
 #define ERIC_GAMESTATEMASCHINE_HPP
 
+#include <libEric/libEric.hpp>
+#include <libEric/GameState.hpp>
 #include <string>
 #include <vector>
-#include <libEric/GameState.hpp>
 
 namespace LibEric {
 
-    class GameStateMaschine {
+    extern "C" {
+
+    LIBERIC_API class GameStateMaschine {
     public:
         //! Zeiger auf die Instace der Klasse
         static GameStateMaschine *Instance();
@@ -101,6 +104,8 @@ namespace LibEric {
 
         std::vector<GameState *> _GameStates;
     };
+
+    }//extern "C"
 
 } // LibEric
 

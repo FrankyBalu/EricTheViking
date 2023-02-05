@@ -22,9 +22,13 @@
 #ifndef ERIC_USERSETTINGS_HPP
 #define ERIC_USERSETTINGS_HPP
 
+#include <libEric/libEric.hpp>
+
 namespace LibEric {
 
-    class UserSettings {
+    extern "C" {
+
+    LIBERIC_API class UserSettings {
     public:
         //!Gibt einen Zeiger auf die Instance der Klasse
         static UserSettings *Instance();
@@ -35,33 +39,50 @@ namespace LibEric {
          */
         bool Load();
 
-        float GetMusicVolume();
+        //! Gibt die Musiklautstärke zurück 0.0 = Mute 1.0 = das Lauteste
+        [[nodiscard]] float GetMusicVolume() const;
 
-        float GetEffectVolume();
+        //! Gibt die Effektlautstärke zurück 0.0 = Mute 1.0 = das Lauteste
+        [[nodiscard]] float GetEffectVolume() const;
 
-        bool GetFullScreen();
+        //!gibt an, ob in Vollbild gestartet werden soll
+        [[nodiscard]] bool GetFullScreen() const;
 
-        bool GetCollisionBoxes();
+        //! Gibt an, ob die KollisionsBoxen Angezeigt werden sollen
+        [[nodiscard]] bool GetCollisionBoxes() const;
 
-        int GetWindowWidth();
+        //! Gibt die Fensterbreite an
+        [[nodiscard]] int GetWindowWidth() const;
 
-        int GetWindowHeight();
+        //! Gibt die Fensterhöhe an
+        [[nodiscard]] int GetWindowHeight() const;
 
-        int GetFPS();
+        //! Gibt an, auf wie viel FPS im Vollbild gesetzt werden soll
+        [[nodiscard]] int GetFPS() const;
 
+        //! Setzt die Musiklautstärke
         void SetMusicVolume(float vol);
 
+        //! Setzt die Effektlautstärke
         void SetEffectVolume(float vol);
 
+        //! Setzt das zukünftig in Vollbildgestartet werden soll
         void SetFullScreen(bool val);
 
+        //! Setzt ob Killionsboxen angezeigt werden sollen oder nicht
         void SetCollisionBoxes(bool val);
 
+        //! Setzt die Fensterbreite
         void SetWindowWidth(int width);
 
+        //! Setzt die Fensterhöhe
         void SetWindowHeight(int height);
 
+        //! Setzt die FPS
         void SetFPS(int fps);
+
+        //! Speichert die aktuellen Einstellungen in die Settingsdatei
+        void Save() const;
 
         UserSettings(const UserSettings &) = delete;
 
@@ -74,16 +95,18 @@ namespace LibEric {
     private:
         UserSettings();
 
-        static UserSettings *_Instance;
+        static UserSettings *pInstance;
 
-        float _MusicVolume;    /*!< Musiklautstärke */
-        float _EffectVolume;   /*!< Effektlautstärke */
-        bool _Fullscreen;      /*!< Vollbild Variable */
-        bool _CollisionBoxes;  /*!< Kollisionsboxen Variable */
-        int _WindowWidth;    /*!< Fensterbreite */
-        int _WindowHeight;   /*!< Fensterhöhe */
-        int _FPS;              /*!< Bilder pro Sekunde */
+        float pMusicVolume;    /*!< Musiklautstärke */
+        float pEffectVolume;   /*!< Effektlautstärke */
+        bool pFullscreen;      /*!< Vollbild Variable */
+        bool pCollisionBoxes;  /*!< Kollisionsboxen Variable */
+        int pWindowWidth;    /*!< Fensterbreite */
+        int pWindowHeight;   /*!< Fensterhöhe */
+        int pFPS;              /*!< Bilder pro Sekunde */
     };
+
+    }//extern "C"
 
 } // LibEric
 

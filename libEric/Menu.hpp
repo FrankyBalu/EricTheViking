@@ -20,7 +20,7 @@
 
 
 #ifndef __MENU
-#define __MENU
+#define MENU
 
 #include <libEric/GameState.hpp>
 #include <libEric/GameStateFactory.hpp>
@@ -44,9 +44,9 @@ namespace LibEric {
         void SetActiv(bool activ);
 
     private:
-        bool _Activ;
-        Rectangle _Rect;
-        std::string _Text;
+        bool pActiv;
+        Rectangle pRect;
+        std::string pText;
     };
 
 
@@ -66,12 +66,12 @@ namespace LibEric {
         void SetActiv(bool activ);
 
     private:
-        bool _Activ;
-        float _CurrentValue;
-        float _MinValue;
-        float _MaxValue;
-        Rectangle _Rect;
-        std::string _Text;
+        bool pActiv;
+        float pCurrentValue;
+        float pMinValue;
+        float pMaxValue;
+        Rectangle pRect;
+        std::string pText;
     };
 
     class CheckBox {
@@ -89,10 +89,10 @@ namespace LibEric {
         void SetActiv(bool activ);
 
     private:
-        bool _Activ;
-        bool _Check;
-        Rectangle _Rect;
-        std::string _Text;
+        bool pActiv;
+        bool pCheck;
+        Rectangle pRect;
+        std::string pText;
     };
 
     class Menu : public LibEric::GameState {
@@ -117,20 +117,20 @@ namespace LibEric {
 
         void SetID(std::string id);
 
-        std::string _ID;
-        std::string _LUA_File;
+        std::string pID;
+        std::string pLUA_File;
 
         sol::state lua;
 
-        sol::function _LUA_Update;
-        sol::function _LUA_Draw;
-        sol::function _LUA_Key_Up;
-        sol::function _LUA_Key_Down;
-        sol::function _LUA_Key_Left;
-        sol::function _LUA_Key_Right;
-        sol::function _LUA_Key_Activate;
-        sol::function _LUA_Key_Back;
-        sol::function _Lua_Resize;
+        sol::function pLUA_Update;
+        sol::function pLUA_Draw;
+        sol::function pLUA_Key_Up;
+        sol::function pLUA_Key_Down;
+        sol::function pLUA_Key_Left;
+        sol::function pLUA_Key_Right;
+        sol::function pLUA_Key_Activate;
+        sol::function pLUA_Key_Back;
+        sol::function pLua_Resize;
 
     };
 

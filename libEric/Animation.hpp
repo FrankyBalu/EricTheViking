@@ -21,6 +21,7 @@
 #ifndef ERIC_ANIMATION_HPP
 #define ERIC_ANIMATION_HPP
 
+#include <libEric/libEric.hpp>
 #include <libEric/Sprite.hpp>
 #include <map>
 
@@ -28,14 +29,16 @@ namespace sol{class state;};
 
 namespace LibEric {
 
-    typedef struct AnimationStruct{
+    extern "C" {
+
+    typedef struct AnimationStruct {
         std::vector<std::string> TextureIDs;
         Rectangle TextureRect;
         int NumFrames;
         float Duration;
     } AnimationStruct;
 
-    class Animation : public Sprite{
+    LIBERIC_API class Animation : public Sprite {
     public:
         //! Constructor
         Animation();
@@ -69,10 +72,10 @@ namespace LibEric {
         std::string GetID();
 
         //! Hiermit wird die Animation gestartet
-        void Play ();
+        void Play();
 
         //! Animation wird angehalten und resetet
-        void Stop ();
+        void Stop();
 
         //! FrameCounter und Frames werden auf 0 gesetzt
         void Reset();
@@ -83,7 +86,7 @@ namespace LibEric {
          * @param id Die neue ID
          * @return false, wenn die ID nicht vorhanden ist
          */
-        bool SetAnimationToID (std::string id);
+        bool SetAnimationToID(std::string id);
 
         //! Eine neue Texture wird zur Animation hinzugefügt
         /*!
@@ -102,12 +105,13 @@ namespace LibEric {
          * @param duration Die abspielzeit (0.5 = eine halbe Minute, 1.0 = 1 Minute, 2.0 = 2 Minute, ...
          * @return false, wenn animationID nicht vorhanden.
          */
-        bool SetDuration (std::string animationID, float duration);
+        bool SetDuration(std::string animationID, float duration);
 
         //! Setzt das Rect der Texture
         void SetTextureRect(std::string id, float x, float y, float w, float h);
+
     private:
-        std::map<std::string,AnimationStruct> pAnimationStruct;
+        std::map<std::string, AnimationStruct> pAnimationStruct;
         std::string pCurrentAnimationID;
         int pFrameCounter;
         int pCurrentTexture;
@@ -115,6 +119,8 @@ namespace LibEric {
         bool play;
         sol::state *lua;
     };
+
+    }//extern "C"
 
 } // LibEric
 

@@ -23,20 +23,20 @@
 #include "Log.hpp"
 
 
-LibEric::ObjectLayer::ObjectLayer() {}
+LibEric::ObjectLayer::ObjectLayer() = default;
 
 void LibEric::ObjectLayer::Render() {
-    for (unsigned long i = 0; i < _GameObjectList.size(); i++) {
-        _GameObjectList[i]->Draw();
+    for (auto & i : pGameObjectList) {
+        i->Draw();
     }
 }
 
 void LibEric::ObjectLayer::Update() {
-    for (unsigned long i = 0; i < _GameObjectList.size(); i++) {
-        _GameObjectList[i]->Update();
+    for (auto & i : pGameObjectList) {
+        i->Update();
     }
 }
 
 std::vector<LibEric::GameObject_Interface *> *LibEric::ObjectLayer::GetGameObjectList() {
-    return &_GameObjectList;
+    return &pGameObjectList;
 }

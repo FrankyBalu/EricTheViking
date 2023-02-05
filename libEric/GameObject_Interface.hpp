@@ -22,6 +22,7 @@
 #ifndef ERIC_GAMEOBJECT_INTERFACE_HPP
 #define ERIC_GAMEOBJECT_INTERFACE_HPP
 
+#include <libEric/libEric.hpp>
 #include <libEric/Rectangle.hpp>
 #include <string>
 #include <vector>
@@ -30,7 +31,9 @@
 
 namespace LibEric {
 
-    class GameObject_Interface {
+    extern "C" {
+
+    LIBERIC_API class GameObject_Interface {
     public:
 
         //! Das Object auf dem Bildschirm darstellen
@@ -84,12 +87,15 @@ namespace LibEric {
 
     protected:
         GameObject_Interface() {}
+
         virtual ~GameObject_Interface() {}
 
         std::string pID;
         bool pMoveable;
         std::vector<CollisionRectangle> pCollisionRects;
     };
+
+    }//extern "C"
 
 } // LibEric
 

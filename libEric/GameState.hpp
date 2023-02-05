@@ -21,11 +21,14 @@
 #ifndef ERIC_GAMESTATE_HPP
 #define ERIC_GAMESTATE_HPP
 
+#include <libEric/libEric.hpp>
 #include <string>
 
 namespace LibEric {
 
-    class GameState {
+    extern "C" {
+
+    LIBERIC_API class GameState {
     public:
         //! Benutzer eingaben verarbeiten
         /*! Diese Funktion dient dazu die eingaben, die vom Benutzer kommen zu verarbeiten
@@ -75,6 +78,8 @@ namespace LibEric {
         virtual ~GameState() {}
 
     };
+
+    }//extern "C"
 
 } // LibEric
 

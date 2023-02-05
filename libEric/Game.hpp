@@ -5,12 +5,15 @@
 #ifndef ERIC_GAME_HPP
 #define ERIC_GAME_HPP
 
+#include <libEric/libEric.hpp>
 #include <string>
 #include <raylib.h>
 
 namespace LibEric {
 
-    class Game {
+    extern "C" {
+
+    LIBERIC_API class Game {
     public:
         //! Gibt einen Zeiger auf eine Klassen Instance
         static Game *Instance();
@@ -122,6 +125,8 @@ namespace LibEric {
         int _FontSize;
         int UseGamepad;
     };
+
+    }//extern "C"
 
 } // LibEric
 

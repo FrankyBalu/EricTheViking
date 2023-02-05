@@ -19,20 +19,23 @@
  */
 
 
-#ifndef DIALOG_H
-#define DIALOG_H
+#ifndef LIBERIC_DIALOG_HPP
+#define LIBERIC_DIALOG_HPP
 
+#include <libEric/libEric.hpp>
 #include <raylib.h>
 #include <string>
 #include <vector>
 
 namespace LibEric {
 
+    extern  "C" {
+
 //! Zeigt ein Textbox/Dialogbox in der Text angezeigt wird
 /*! Am besten ZeilenUmbrüche("\n") direkt in den Text setzen, da noch keine automatischen Zeilenumbrüche unterstützt wereden
 
  */
-    class Dialog {
+    LIBERIC_API class Dialog {
     public:
         //! Gibt einen Zeiger auf die DialogInstance
         /*! Es gibt immer nur eine instance in einer Anwendung
@@ -80,5 +83,8 @@ namespace LibEric {
 
         Dialog();
     };
+
+    }//extern "C"
+
 };//namespace LibEric
 #endif // DIALOG_H

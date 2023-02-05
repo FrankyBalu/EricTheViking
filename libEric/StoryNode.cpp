@@ -20,26 +20,26 @@
 
 #include "StoryNode.hpp"
 
-LibEric::StoryNode *LibEric::StoryNode::_Instance = nullptr;
+LibEric::StoryNode *LibEric::StoryNode::pInstance = nullptr;
 
 
 LibEric::StoryNode *LibEric::StoryNode::Instance() {
-    if (_Instance == nullptr) {
-        _Instance = new StoryNode();
+    if (pInstance == nullptr) {
+        pInstance = new StoryNode();
     }
-    return _Instance;
+    return pInstance;
 }
 
 void LibEric::StoryNode::NewNode(std::string node, bool value) {
-    if (_NodeMap.count(node) != 0) {
-        _NodeMap[node] = value;
+    if (pNodeMap.count(node) != 0) {
+        pNodeMap[node] = value;
     }
-    _NodeMap[node] = value;
+    pNodeMap[node] = value;
 }
 
 bool LibEric::StoryNode::NodeFinished(std::string node) {
-    if (_NodeMap.count(node) != 0) {
-        return _NodeMap[node];
+    if (pNodeMap.count(node) != 0) {
+        return pNodeMap[node];
     }
     return false;
 }

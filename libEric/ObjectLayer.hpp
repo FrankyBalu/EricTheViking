@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef __OBJECTLAYER
-#define __OBJECTLAYER
+#ifndef OBJECTLAYER
+#define OBJECTLAYER
 
 #include <vector>
 #include "Layer.hpp"
@@ -31,14 +31,14 @@ namespace LibEric {
     public:
         ObjectLayer();
 
-        void Render();
+        void Render() override;
 
-        void Update();
+        void Update() override;
 
         std::vector<GameObject_Interface *> *GetGameObjectList();
 
     private:
-        std::vector<GameObject_Interface *> _GameObjectList;
+        std::vector<GameObject_Interface *> pGameObjectList;
     };
 
 }; //namespace LibEric

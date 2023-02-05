@@ -23,42 +23,41 @@
 #include <libEric/Game.hpp>
 #include <Extra/raylib-physfs.h>
 
-LibEric::RenderManager *LibEric::RenderManager::_Instance = nullptr;
+LibEric::RenderManager *LibEric::RenderManager::pInstance = nullptr;
 
 LibEric::RenderManager *LibEric::RenderManager::Instance() {
-    if (_Instance == nullptr)
-        _Instance = new RenderManager();
-    return _Instance;
+    if (pInstance == nullptr)
+        pInstance = new RenderManager();
+    return pInstance;
 }
 
-LibEric::RenderManager::RenderManager() {
-
-}
+LibEric::RenderManager::RenderManager() = default;
 
 LibEric::RenderManager::~RenderManager() {
-    //FIXME Der obereteil wird laut ausgabe auf der Konsole mehrfach ausgeführt, aber keine ahnung warum
+    //FIXME Funktioniert scheinbar noch nicht richtig
     LOGD ("Lösche die Instanz vom RenderManager!");
-    RenderManager *tmp = _Instance;
-    _Instance = nullptr;
-    delete tmp;
+    //RenderManager *tmp = pInstance;
+    //pInstance = nullptr;
+    //delete tmp;
     LOGD ("Lösche alle Texturen aus dem RenderManager:");
-    for (auto it = _TextureMap.cbegin(); it != _TextureMap.cend(); ++it) {
+    for (auto it = pTextureMap.cbegin(); it != pTextureMap.cend(); ++it) {
         LOGD ("\t\t", (*it).first);
         UnloadTexture((*it).second);
-        _TextureMap.erase((*it).first);
+        pTextureMap.erase((*it).first);
     }
+    delete pInstance;
 }
 
 void LibEric::RenderManager::ClearRenderManager() {
     this->~RenderManager();
 }
 
-bool LibEric::RenderManager::LoadTextureFromFile(std::string id, std::string fileName) {
+bool LibEric::RenderManager::LoadTextureFromFile(const std::string& id, const std::string& fileName) {
     if (!Game::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
-    if (_TextureMap.count(id) == 0) {
+    if (pTextureMap.count(id) == 0) {
         LOGD("Lade Texture ", id, " aus Datei: ", fileName);
         if (!FileExistsInPhysFS(std::string("system/" + fileName).c_str())) {
             LOGI ("Datei existiert nicht");
@@ -71,7 +70,7 @@ bool LibEric::RenderManager::LoadTextureFromFile(std::string id, std::string fil
             return false;
         }
 
-        _TextureMap[id] = tmpTexture;
+        pTextureMap[id] = tmpTexture;
         return true;
     } else {
         LOGW ("Texture mit ID <", id, "> existiert bereits!");
@@ -79,13 +78,13 @@ bool LibEric::RenderManager::LoadTextureFromFile(std::string id, std::string fil
     }
 }
 
-bool LibEric::RenderManager::DrawTextureSimple(std::string id, int x, int y) {
+bool LibEric::RenderManager::DrawTextureSimple(const std::string& id, int x, int y) {
     if (!Game::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
-    if (_TextureMap.count(id) != 0) {
-        DrawTexture(_TextureMap[id], x, y, WHITE);
+    if (pTextureMap.count(id) != 0) {
+        DrawTexture(pTextureMap[id], x, y, WHITE);
         return true;
     } else {
         LOGE("Texture mit ID <", id, "> nicht vorhanden!");
@@ -94,13 +93,13 @@ bool LibEric::RenderManager::DrawTextureSimple(std::string id, int x, int y) {
 }
 
 //FIXME größe überprüfen, ist der Frame innerhalb der Texture
-bool LibEric::RenderManager::DrawFrame(std::string id, float x, float y, float width, float height, int frame,
+bool LibEric::RenderManager::DrawFrame(const std::string& id, float x, float y, float width, float height, int frame,
                                        int row) {
     if (!Game::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
-    if (_TextureMap.count(id) != 0) {
+    if (pTextureMap.count(id) != 0) {
         Rectangle frameRect = {0.0f, 0.0f, width, height};
         Rectangle destRect = {x, y, width, height};
         frameRect.x = width * frame;
@@ -113,13 +112,13 @@ bool LibEric::RenderManager::DrawFrame(std::string id, float x, float y, float w
     }
 }
 
-bool LibEric::RenderManager::DrawEx(std::string id, Rectangle src, Rectangle dest, float rotate) {
+bool LibEric::RenderManager::DrawEx(const std::string& id, Rectangle src, Rectangle dest, float rotate) {
     if (!Game::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
-    if (_TextureMap.count(id) != 0) {
-        DrawTexturePro(_TextureMap[id], src, dest, Vector2{0.0f, 0.0f}, rotate, WHITE);
+    if (pTextureMap.count(id) != 0) {
+        DrawTexturePro(pTextureMap[id], src, dest, Vector2{0.0f, 0.0f}, rotate, WHITE);
         return true;
     } else {
         LOGE("Texture mit ID <", id, "> existiert nicht");
@@ -128,15 +127,15 @@ bool LibEric::RenderManager::DrawEx(std::string id, Rectangle src, Rectangle des
 
 }
 
-bool LibEric::RenderManager::DrawTile(std::string id, float x, float y, float width, float height, int currentRow,
+bool LibEric::RenderManager::DrawTile(const std::string& id, float x, float y, float width, float height, int currentRow,
                                       int currentFrame) {
     if (!Game::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
-    if (_TextureMap.count(id) != 0) {
+    if (pTextureMap.count(id) != 0) {
         Rectangle frame = {width * currentFrame, height * currentRow, width, height};
-        DrawTextureRec(_TextureMap[id], frame, Vector2{x, y}, WHITE);
+        DrawTextureRec(pTextureMap[id], frame, Vector2{x, y}, WHITE);
         return true;
     } else {
         LOGE ("Texture mit ID <", id, "> existiert nicht");
@@ -144,11 +143,11 @@ bool LibEric::RenderManager::DrawTile(std::string id, float x, float y, float wi
     }
 }
 
-bool LibEric::RenderManager::FreeTexture(std::string id) {
-    if (_TextureMap.count(id) != 0) {
+bool LibEric::RenderManager::FreeTexture(const std::string& id) {
+    if (pTextureMap.count(id) != 0) {
         LOGD("Lösche Texture <", id, ">");
-        UnloadTexture(_TextureMap[id]);
-        _TextureMap.erase(id);
+        UnloadTexture(pTextureMap[id]);
+        pTextureMap.erase(id);
         return true;
     } else {
         LOGE("Konnte Texture mit ID <", id, "> nicht löschen, da nicht gefunden");
@@ -156,14 +155,14 @@ bool LibEric::RenderManager::FreeTexture(std::string id) {
     }
 }
 
-Rectangle LibEric::RenderManager::TextureRect(std::string id) {
-    if (_TextureMap.count(id) == 0){
+Rectangle LibEric::RenderManager::TextureRect(const std::string& id) {
+    if (pTextureMap.count(id) == 0){
         return {0.0f, 0.0f, 0.0f, 0.0f};
     }
 
     Rectangle rect;
     rect.x = rect.y = 0;
-    rect.width = _TextureMap[id].width;
-    rect.height = _TextureMap[id].height;
+    rect.width = pTextureMap[id].width;
+    rect.height = pTextureMap[id].height;
     return rect;
 }

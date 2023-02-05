@@ -21,14 +21,18 @@
 #ifndef ERIC_GAMEOBJECTFACTORY_HPP
 #define ERIC_GAMEOBJECTFACTORY_HPP
 
+#include <libEric/libEric.hpp>
 #include <libEric/GameObject_Interface.hpp>
 #include <string>
 #include <map>
 
 namespace LibEric {
+
+    extern "C" {
+
     //Von dieser Klasse müssen alle ObjectCreators abgeleitet werden,
     //damit die objecte dynamisch aus dateien geladen werden können
-    class BaseCreator {
+    LIBERIC_API class BaseCreator {
     public:
         //Gibt einen Zeiger auf ein erstelltes GameObject_Interface (egal welcher Type) zurück
         virtual GameObject_Interface *CreateObject() const = 0;
@@ -36,7 +40,7 @@ namespace LibEric {
         virtual ~BaseCreator() {}
     };
 
-    class GameObjectFactory {
+    LIBERIC_API class GameObjectFactory {
     public:
 
         //Neuen Typen regestrieren, um dynamisch Objekte zu erstellen
@@ -61,6 +65,8 @@ namespace LibEric {
 
         static GameObjectFactory *_Instance;
     };
+
+    }//extern "C"
 
 } // LibEric
 

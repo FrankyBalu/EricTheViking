@@ -43,9 +43,10 @@ bool LibEric::Game::Init(const std::string &appName) {
     InitPhysFSEx(_AppDir.c_str(), "system");
     MountPhysFS(GetPerfDirectory(" ", _AppName.c_str()), "user");
 #else
-    InitPhysFSEx(_AppDir.c_str(), "system");
-    MountPhysFS(GetPerfDirectory(" ", _AppName.c_str()), "user");
+    InitPhysFSEx("data/", "system");
+    //MountPhysFS("data/", "user");
 #endif
+
     if (!LibEricSettings::Instance()->Load()) {
         return false;
     }
@@ -70,6 +71,10 @@ bool LibEric::Game::Init(const std::string &appName) {
     } else {
         SetConfigFlags(FLAG_VSYNC_HINT);
     }
+
+    LOGE ("BIS HIER");
+    UserSettings::Instance()->Save();
+    LOGE ("BIS HIER");
 
     if (UserSettings::Instance()->GetFullScreen()) {
         int display = GetCurrentMonitor();

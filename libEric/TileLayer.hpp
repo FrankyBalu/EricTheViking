@@ -19,72 +19,79 @@
  */
 
 
-#ifndef __TILELAYER
-#define __TILELAYER
+#ifndef LIBERIC_TILELAYER_HPP
+#define LIBERIC_TILELAYER_HPP
 
+#include <libEric/libEric.hpp>
+#include <libEric/GameObject_Interface.hpp>
+#include <libEric/Layer.hpp>
+#include <libEric/Map.hpp>
+
+#include <utility>
 #include <vector>
 #include <string>
-#include "GameObject_Interface.hpp"
-#include "Layer.hpp"
-#include "Map.hpp"
 #include <raylib.h>
 
 namespace LibEric {
 
-    class TileLayer : public Layer {
+    extern "C" {
+
+    LIBERIC_API class TileLayer : public Layer {
     public:
         TileLayer(int tileSize, int mapWidth, int mapHeight, const std::vector<Tileset> &tilestes);
 
-        virtual void Update() override;
+        void Update() override;
 
-        virtual void Render() override;
+        void Render() override;
 
         void SetTileIDs(const std::vector<std::vector<int>> &data) {
-            _TileIDs = data;
+            pTileIDs = data;
         }
 
         std::vector<std::vector<int>> GetTileIDs() {
-            return _TileIDs;
+            return pTileIDs;
         }
 
         void SetTileSize(int tileSize) {
-            _TileSize = tileSize;
+            pTileSize = tileSize;
         }
 
         Tileset GetTilesetByID(int tileID);
 
 
         std::string GetName() {
-            return _Name;
+            return pName;
         }
 
         void SetName(std::string name) {
-            _Name = name;
+            pName = std::move(name);
         }
 
         std::vector<Rectangle> GetCollisionRects();
 
-        int GetWidth() {
-            return _NumColumns * _TileSize;
+        [[nodiscard]] int GetWidth() const {
+            return pNumColumns * pTileSize;
         }
 
-        int GetHeight() {
-            return _NumRows * _TileSize;
+        [[nodiscard]] int GetHeight() const {
+            return pNumRows * pTileSize;
         }
 
     private:
-        int _NumColumns;
-        int _NumRows;
-        int _TileSize;
+        int pNumColumns;
+        int pNumRows;
+        int pTileSize;
 
-        Vector2 _Position;
-        Vector2 _Velocity;
+        Vector2 pPosition;
+        Vector2 pVelocity;
 
-        std::string _Name;
+        std::string pName;
 
-        const std::vector<Tileset> _Tilesets;
-        std::vector<std::vector<int>> _TileIDs;
+        const std::vector<Tileset> pTilesets;
+        std::vector<std::vector<int>> pTileIDs;
     };
+
+    }//extern "C"
 
 }; //namespace LibEric
 #endif //__TILELAYER

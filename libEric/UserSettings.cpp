@@ -21,25 +21,27 @@
 
 #include <libEric/UserSettings.hpp>
 #include <libEric/Log.hpp>
+
+#include <fstream>
+
 #include <raylib.h>
-#include <Extra/raylib-physfs.h>
-
+#include <raylib-physfs.h>
+#include <physfs.h>
 #define SOL_ALL_SAFETIES_ON 1
-
 #include <sol/sol.hpp>
 
-LibEric::UserSettings *LibEric::UserSettings::_Instance = nullptr;
+LibEric::UserSettings *LibEric::UserSettings::pInstance = nullptr;
 
 LibEric::UserSettings::UserSettings()
-        : _MusicVolume(0.5), _EffectVolume(0.5), _Fullscreen(false), _CollisionBoxes(true),
-          _WindowWidth(800), _WindowHeight(600), _FPS(60) {
+        : pMusicVolume(0.5), pEffectVolume(0.5), pFullscreen(false), pCollisionBoxes(true),
+          pWindowWidth(800), pWindowHeight(600), pFPS(60) {
 
 }
 
 LibEric::UserSettings *LibEric::UserSettings::Instance() {
-    if (_Instance == nullptr)
-        _Instance = new UserSettings();
-    return _Instance;
+    if (pInstance == nullptr)
+        pInstance = new UserSettings();
+    return pInstance;
 }
 
 bool LibEric::UserSettings::Load() {
@@ -60,79 +62,116 @@ bool LibEric::UserSettings::Load() {
         LOGI ("Lade Settings aus Systemverzeichnis");
     }
 
-    if (return_value == true) {
+    if (return_value) {
         lua.script(script_file.c_str());
-        _MusicVolume = lua.get<float>("MusicVolume");
-        _EffectVolume = lua.get<float>("EffectVolume");
-        _Fullscreen = lua.get<bool>("Fullscreen");
-        _CollisionBoxes = lua.get<bool>("CollisionsBox");
-        _WindowWidth = lua.get<int>("Screen_Width");
-        _WindowHeight = lua.get<int>("Screen_Height");
-        _FPS = lua.get<int>("FPS");
+        pMusicVolume = lua.get<float>("MusicVolume");
+        pEffectVolume = lua.get<float>("EffectVolume");
+        pFullscreen = lua.get<bool>("Fullscreen");
+        pCollisionBoxes = lua.get<bool>("CollisionsBox");
+        pWindowWidth = lua.get<int>("Screen_Width");
+        pWindowHeight = lua.get<int>("Screen_Height");
+        pFPS = lua.get<int>("FPS");
     }
 
-    LOGD("\t_MusicVolume : ", _MusicVolume);
-    LOGD("\t_EffectVolume: ", _EffectVolume);
-    LOGD("\t_Fullscreen  : ", _Fullscreen);
-    LOGD("\t_CollisionBox: ", _CollisionBoxes);
-    LOGD("\t_WindowWidth : ", _WindowWidth);
-    LOGD("\t_WindowHeight: ", _WindowHeight);
-    LOGD("\t_FPS         : ", _FPS);
+    LOGD("\t_MusicVolume : ", pMusicVolume);
+    LOGD("\t_EffectVolume: ", pEffectVolume);
+    LOGD("\t_Fullscreen  : ", pFullscreen);
+    LOGD("\t_CollisionBox: ", pCollisionBoxes);
+    LOGD("\t_WindowWidth : ", pWindowWidth);
+    LOGD("\t_WindowHeight: ", pWindowHeight);
+    LOGD("\t_FPS         : ", pFPS);
     return return_value;
 }
 
-float LibEric::UserSettings::GetMusicVolume() {
-    return _MusicVolume;
+float LibEric::UserSettings::GetMusicVolume() const {
+    return pMusicVolume;
 }
 
-float LibEric::UserSettings::GetEffectVolume() {
-    return _EffectVolume;
+float LibEric::UserSettings::GetEffectVolume() const {
+    return pEffectVolume;
 }
 
-bool LibEric::UserSettings::GetFullScreen() {
-    return _Fullscreen;
+bool LibEric::UserSettings::GetFullScreen() const {
+    return pFullscreen;
 }
 
-bool LibEric::UserSettings::GetCollisionBoxes() {
-    return _CollisionBoxes;
+bool LibEric::UserSettings::GetCollisionBoxes() const {
+    return pCollisionBoxes;
 }
 
-int LibEric::UserSettings::GetWindowWidth() {
-    return _WindowWidth;
+int LibEric::UserSettings::GetWindowWidth() const {
+    return pWindowWidth;
 }
 
-int LibEric::UserSettings::GetWindowHeight() {
-    return _WindowHeight;
+int LibEric::UserSettings::GetWindowHeight() const {
+    return pWindowHeight;
 }
 
-int LibEric::UserSettings::GetFPS() {
-    return _FPS;
+int LibEric::UserSettings::GetFPS() const {
+    return pFPS;
 }
 
 void LibEric::UserSettings::SetMusicVolume(float vol) {
-    _MusicVolume = vol;
+    pMusicVolume = vol;
+    Save();
 }
 
 void LibEric::UserSettings::SetEffectVolume(float vol) {
-    _EffectVolume = vol;
+    pEffectVolume = vol;
+    Save();
 }
 
 void LibEric::UserSettings::SetFPS(int fps) {
-    _FPS = fps;
+    pFPS = fps;
+    Save();
 }
 
-void LibEric::UserSettings::SetFullScreen(bool val) {
+void LibEric::UserSettings::SetFullScreen([[maybe_unused]] bool val) {
     LOGW("Fixme: Change Fullscreen");
+    Save();
 }
 
-void LibEric::UserSettings::SetWindowWidth(int width) {
+void LibEric::UserSettings::SetWindowWidth([[maybe_unused]]int width) {
     LOGW("Fixme: Change Window Width");
+    Save();
 }
 
-void LibEric::UserSettings::SetWindowHeight(int height) {
+void LibEric::UserSettings::SetWindowHeight([[maybe_unused]]int height) {
     LOGW("Fixme: Change Window Height");
+    Save();
 }
 
 void LibEric::UserSettings::SetCollisionBoxes(bool val) {
-    _CollisionBoxes = val;
+    pCollisionBoxes = val;
+    Save();
+}
+
+void LibEric::UserSettings::Save() const {
+    std::string realpath;
+#ifdef __linux__
+        realpath = PHYSFS_getRealDir("system");
+#elifdef _WIN64
+        realpath = "data\\";
+#endif
+    std::string saveFile = realpath + PHYSFS_getDirSeparator() + "main.settings";
+
+    std::ofstream file;
+    file.open(saveFile);
+    file << "MusicVolume = " << pMusicVolume << "\n";
+    file << "EffectVolume = " << pEffectVolume << "\n";
+    file << "Screen_Width = " << pWindowWidth  << "\n";
+    file << "Screen_Height = " << pWindowHeight << "\n";
+    file << "FPS = " << pFPS << "\n";
+    if (pFullscreen){
+        file << "Fullscreen = true\n";
+    }
+    else{
+        file << "Fullscreen = false\n";
+    }
+    if (pCollisionBoxes){
+        file << "CollisionsBox = true\n";
+    }
+    else{
+        file << "CollisionsBox = false\n";
+    }
 }
