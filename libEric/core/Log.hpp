@@ -70,13 +70,19 @@ namespace LibEric {
                 return;
             static std::mutex myMutex;
             std::ostringstream os;      // used to build the logging message
-
-            os << LOG_COLOR_BOLDRED << "ERROR  : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+#ifdef _WIN64
+            os << "ERROR  : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
                << "):" << std::boolalpha;
 
-            // fold expression:
-            ((os << ' ' << args), ...); // add all arguments to os
-            os << LOG_COLOR_RESET << std::endl;
+            ((os << ' ' << args), ...);
+            os << std::endl;
+#else
+            os << LOG_COLOR_BOLDRED << "ERROR  : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+       << "):" << std::boolalpha;
+    // fold expression:
+    ((os << ' ' << args), ...); // add all arguments to os
+    os << LOG_COLOR_RESET << std::endl;
+#endif
 
             std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
             std::clog << os.str();                     // and stream
@@ -89,13 +95,20 @@ namespace LibEric {
             static std::mutex myMutex;
             std::ostringstream os;      // used to build the logging message
 
+#ifdef _WIN64
+            os << "WARNING: " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+               << "):" << std::boolalpha;
+
+            ((os << ' ' << args), ...);
+            os << std::endl;
+#else
             os << LOG_COLOR_BOLDYELLOW << "WARNING: " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
                << loc.line() << "):" << std::boolalpha;
 
             // fold expression:
             ((os << ' ' << args), ...); // add all arguments to os
             os << LOG_COLOR_RESET << std::endl;
-
+#endif
             std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
             std::clog << os.str();                     // and stream
         }
@@ -107,13 +120,20 @@ namespace LibEric {
             static std::mutex myMutex;
             std::ostringstream os;      // used to build the logging message
 
+#ifdef _WIN64
+            os << "INFO   : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+               << "):" << std::boolalpha;
+
+            ((os << ' ' << args), ...);
+            os << std::endl;
+#else
             os << LOG_COLOR_BOLDGREEN << "INFO   : " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
                << loc.line() << "):" << std::boolalpha;
 
             // fold expression:
             ((os << ' ' << args), ...); // add all arguments to os
             os << LOG_COLOR_RESET << std::endl;
-
+#endif
             std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
             std::clog << os.str();                     // and stream
         }
@@ -125,13 +145,20 @@ namespace LibEric {
             static std::mutex myMutex;
             std::ostringstream os;      // used to build the logging message
 
+#ifdef _WIN64
+            os << "DEBUG  : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+               << "):" << std::boolalpha;
+
+            ((os << ' ' << args), ...);
+            os << std::endl;
+#else
             os << LOG_COLOR_BOLDBLUE << "DEBUG  : " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
                << loc.line() << "):" << std::boolalpha;
 
             // fold expression:
             ((os << ' ' << args), ...); // add all arguments to os
             os << LOG_COLOR_RESET << std::endl;
-
+#endif
             std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
             std::clog << os.str();                     // and stream
         }
@@ -143,13 +170,20 @@ namespace LibEric {
             static std::mutex myMutex;
             std::ostringstream os;      // used to build the logging message
 
+#ifdef _WIN64
+            os << "VERBOSE  : " << std::setw(NAME_WIDTH) << loc.function_name() << " (" << loc.line()
+               << "):" << std::boolalpha;
+
+            ((os << ' ' << args), ...);
+            os << std::endl;
+#else
             os << LOG_COLOR_BOLDWHITE << "VERBOSE: " << std::setw(NAME_WIDTH) << loc.function_name() << " ("
                << loc.line() << "):" << std::boolalpha;
 
             // fold expression:
             ((os << ' ' << args), ...); // add all arguments to os
             os << LOG_COLOR_RESET << std::endl;
-
+#endif
             std::lock_guard<std::mutex> lock(myMutex); // use a lock_guard
             std::clog << os.str();                     // and stream
         }

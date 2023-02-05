@@ -24,7 +24,7 @@
 #include <libEric/Core/LibEricSettings.hpp>
 #include <libEric/Core/Log.hpp>
 #include <Config.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/Input.hpp>
 #include <sstream>
 
@@ -61,7 +61,7 @@ void LibEric::Dialog::DrawDialog() {
             return;
         int TextSpaceToLeft = 20;
         int TextSpaceToTOP = 8;
-        DrawTextEx(Game::Instance()->GetDefaultFont(), _MSG[i].c_str(),
+        DrawTextEx(LibEricApp::Instance()->GetDefaultFont(), _MSG[i].c_str(),
                    Vector2{TextBox.x + TextSpaceToLeft, (TextBox.y + TextSpaceToTOP) + (_FontSize * line)}, _FontSize,
                    1, BLACK);
         line++;
@@ -91,9 +91,9 @@ void LibEric::Dialog::DrawDialog() {
             DrawRectangleRoundedLines(OptionBox1, 0.5, 4, 3.0, RED);
             DrawRectangleRoundedLines(OptionBox2, 0.5, 4, 3.0, GREEN);
         }
-        DrawTextEx(Game::Instance()->GetDefaultFont(), _Answer1.c_str(), Vector2{OptionBox1.x + 20, (OptionBox1.y + 5)},
+        DrawTextEx(LibEricApp::Instance()->GetDefaultFont(), _Answer1.c_str(), Vector2{OptionBox1.x + 20, (OptionBox1.y + 5)},
                    _FontSize, 1, BLACK);
-        DrawTextEx(Game::Instance()->GetDefaultFont(), _Answer2.c_str(), Vector2{OptionBox2.x + 20, (OptionBox1.y + 5)},
+        DrawTextEx(LibEricApp::Instance()->GetDefaultFont(), _Answer2.c_str(), Vector2{OptionBox2.x + 20, (OptionBox1.y + 5)},
                    _FontSize, 1, BLACK);
     }
 }

@@ -1,6 +1,6 @@
 MENUID = "PauseMenu"
 settings = UserSettings.Instance()
-game = Game.Instance()
+game = LibEricApp.Instance()
 stateMaschine = StateMaschine.Instance()
 
 ButtonX = settings:GetWindowWidth() / 3

@@ -6,8 +6,6 @@ SET(LIBERIC_CORE_SRC
         core/base64.h
         core/CollisionManager.cpp
         core/CollisionManager.hpp
-        core/Game.cpp
-        core/Game.hpp
         core/GameObject_Interface.hpp
         core/GameObjectFactory.cpp
         core/GameObjectFactory.hpp
@@ -20,6 +18,8 @@ SET(LIBERIC_CORE_SRC
         core/GameStateMaschine.hpp
         core/Input.cpp
         core/Input.hpp
+        core/LibEricApp.cpp
+        core/LibEricApp.hpp
         core/LibEricSettings.cpp
         core/LibEricSettings.hpp
         core/Log.cpp

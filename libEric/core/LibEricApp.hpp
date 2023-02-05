@@ -2,8 +2,8 @@
 // Created by frank on 27.01.23.
 //
 
-#ifndef ERIC_GAME_HPP
-#define ERIC_GAME_HPP
+#ifndef ERIC_LIBERICAPP_HPP
+#define ERIC_LIBERICAPP_HPP
 
 #include "libEric/libEric_API.hpp"
 #include <string>
@@ -13,12 +13,12 @@ namespace LibEric {
 
     extern "C" {
 
-    LIBERIC_API class Game {
+    LIBERIC_API class LibEricApp {
     public:
         //! Gibt einen Zeiger auf eine Klassen Instance
-        static Game *Instance();
+        static LibEricApp *Instance();
 
-        //! Initialisiert das Object der Klasse Game
+        //! Initialisiert das Object der Klasse LibEricApp
         /*!
          * Hier werden alle Einstellungen geladen und das Fenster erstellt, in dem gerendert wird.
          * Desweiteren werden alle GameStates und GameObjekte, die fest zu libEric gehören geladen.
@@ -97,13 +97,13 @@ namespace LibEric {
         //! Gibt den Defaultfont zurück
         Font GetDefaultFont();
 
-        Game(const Game &) = delete;
+        LibEricApp(const LibEricApp &) = delete;
 
-        Game(Game &&) = delete;
+        LibEricApp(LibEricApp &&) = delete;
 
-        Game &operator=(const Game &) = delete;
+        LibEricApp &operator=(const LibEricApp &) = delete;
 
-        Game &operator=(Game &&) = delete;
+        LibEricApp &operator=(LibEricApp &&) = delete;
 
 
         //!da meine installation probleme mit meinen Controllern hat, das als Workarout
@@ -112,9 +112,9 @@ namespace LibEric {
         void SetGamepad(int gp) { UseGamepad = gp; };
 
     private:
-        static Game *_Instance;
+        static LibEricApp *_Instance;
 
-        Game();
+        LibEricApp();
 
         bool _IsReady;
         bool _Running;
@@ -130,4 +130,4 @@ namespace LibEric {
 
 } // LibEric
 
-#endif //ERIC_GAME_HPP
+#endif //ERIC_LIBERICAPP_HPP

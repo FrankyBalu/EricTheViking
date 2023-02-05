@@ -20,7 +20,7 @@
 
 #include <libEric/Graphic/GraphicGameObject.hpp>
 #include <libEric/Graphic/RenderManager.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/Log.hpp>
 #include <libEric/Core/UserSettings.hpp>
 

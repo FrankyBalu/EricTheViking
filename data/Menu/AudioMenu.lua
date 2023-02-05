@@ -1,7 +1,7 @@
 MENUID = "AudioMenu"
 settings = UserSettings.Instance()
 stateMaschine = StateMaschine.Instance()
-game = Game.Instance()
+game = LibEricApp.Instance()
 
 ButtonX = settings:GetWindowWidth() / 3
 ButtonY = settings:GetWindowHeight() / 7

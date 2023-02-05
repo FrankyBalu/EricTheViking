@@ -20,7 +20,7 @@
 #define ERIC_APP 1
 
 #include <libEric/Core/Log.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/LibEricSettings.hpp>
 #include <libEric/Graphic/RenderManager.hpp>
 #include <libEric/Core/GameStateMaschine.hpp>
@@ -28,11 +28,15 @@
 //#include "Marker.hpp"
 #include "PlayState.hpp"
 
+
+
 int main() {
-    if (!LibEric::Game::Instance()->Init("EricTheViking")) {
+    if (!LibEric::LibEricApp::Instance()->Init("EricTheViking")) {
         LOGE("Konnte libEric nicht Initialisieren!\nAbbruch!");
         return 1;
     }
+
+LOGE("TESTE ROTE FARBE");
 
     LibEric::RenderManager::Instance()->LoadTextureFromFile("BGI", "assets/Background.png");
 
@@ -52,9 +56,9 @@ int main() {
 
   //  LibEric::GameObjectFactory::Instance()->RegisterType("Marker", new Eric::MarkerCreator());
     //scheinbar ein Fehler in meiner Arch Linux installation, aber bei mir funktioniert 0 nicht
-    LibEric::Game::Instance()->SetGamepad(0);
+    LibEric::LibEricApp::Instance()->SetGamepad(0);
 
-    LibEric::Game::Instance()->Run();
+    LibEric::LibEricApp::Instance()->Run();
 
     LibEric::RenderManager::Instance()->ClearRenderManager();
     return 0;

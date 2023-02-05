@@ -22,7 +22,7 @@
 
 #include <libEric/Maps/TileLayer.hpp>
 #include <libEric/Graphic/RenderManager.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/UserSettings.hpp>
 #include <libEric/Core/Log.hpp>
 #include <raylib.h>

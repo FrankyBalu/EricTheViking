@@ -22,7 +22,7 @@
 #include <zlib.h>
 #include <Config.hpp>
 #include <libEric/Core/base64.h>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/GameObjectFactory.hpp>
 #include <libEric/Graphic/GraphicGameObject.hpp>
 #include <libEric/Core/Log.hpp>

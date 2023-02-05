@@ -3565,7 +3565,7 @@ PHYSFS_DECL void PHYSFS_setErrorCode(PHYSFS_ErrorCode code);
  *      changes for an app once you've decided on it.
  *    - Unicode characters are legal, as long as it's UTF-8 encoded, but...
  *    - ...only use letters, numbers, and spaces. Avoid punctuation like
- *      "Game Name 2: Bad Guy's Revenge!" ... "Game Name 2" is sufficient.
+ *      "LibEricApp Name 2: Bad Guy's Revenge!" ... "LibEricApp Name 2" is sufficient.
  *
  * The pointer returned by this function remains valid until you call this
  *  function again, or call PHYSFS_deinit(). This is not necessarily a fast

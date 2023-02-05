@@ -19,7 +19,7 @@
  */
 
 #include <libEric/Core/Lua.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/GameStateMaschine.hpp>
 #include <libEric/Core/UserSettings.hpp>
 #include <libEric/Graphic/Dialog.hpp>
@@ -46,12 +46,12 @@ void LibEric::LuaSetup(sol::state *state) {
                                       "Save", &UserSettings::Save*/
     );
 
-    state->new_usertype<Game>("Game",
-                              "new", sol::no_constructor,
-                              "Instance", &Game::Instance,
-                              "GetWindowWidth", &Game::GetWindowWidth,
-                              "GetWindowHeight", &Game::GetWindowHeight,
-                              "Quit", &Game::Quit
+    state->new_usertype<LibEricApp>("LibEricApp",
+                                    "new", sol::no_constructor,
+                                    "Instance", &LibEricApp::Instance,
+                                    "GetWindowWidth", &LibEricApp::GetWindowWidth,
+                                    "GetWindowHeight", &LibEricApp::GetWindowHeight,
+                                    "Quit", &LibEricApp::Quit
     );
 
 

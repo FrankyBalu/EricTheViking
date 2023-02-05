@@ -22,7 +22,7 @@
 #include <libEric/Graphic/Menu.hpp>
 #include <libEric/Core/Lua.hpp>
 #include <libEric/Graphic/RenderManager.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/LibEricSettings.hpp>
 #include <libEric/Core/Input.hpp>
 #include <libEric/Graphic/Dialog.hpp>
@@ -196,8 +196,8 @@ void LibEric::Menu::Render() {
     src.y = dest.y = 0;
     src.width = 1920;
     src.height = 1080;
-    dest.width = Game::Instance()->GetWindowWidth();
-    dest.height = Game::Instance()->GetWindowHeight();
+    dest.width = LibEricApp::Instance()->GetWindowWidth();
+    dest.height = LibEricApp::Instance()->GetWindowHeight();
     RenderManager::Instance()->DrawEx("BGI", src, dest, 0.0f);
     pLUA_Draw();
 #ifdef __linux__
@@ -240,7 +240,7 @@ bool LibEric::Menu::OnEnter(std::string file) {
     std::string scriptFile = std::string("data\\Menu\\") + file;
 #endif
 
-    GuiSetFont(Game::Instance()->GetDefaultFont());
+    GuiSetFont(LibEricApp::Instance()->GetDefaultFont());
 
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);

@@ -4,7 +4,7 @@ MENUID = "MainMenu"
 -- GameStateMaschine Instance, um Menüs zu wechseln oder ein Spiel zu starten
 stateMaschine = StateMaschine.Instance()
 -- Instance von Game, um das Spiel zu beenden
-game = Game.Instance()
+game = LibEricApp.Instance()
 
 settings = UserSettings.Instance()
 

@@ -2,7 +2,7 @@
 // Created by frank on 27.01.23.
 //
 
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/Log.hpp>
 #include <Config.hpp>
 #include <libEric/Core/UserSettings.hpp>
@@ -16,19 +16,19 @@
 
 #include "../Extra/raylib-physfs.h"
 
-LibEric::Game *LibEric::Game::_Instance = nullptr;
+LibEric::LibEricApp *LibEric::LibEricApp::_Instance = nullptr;
 
-LibEric::Game *LibEric::Game::Instance() {
+LibEric::LibEricApp *LibEric::LibEricApp::Instance() {
     if (_Instance == nullptr)
-        _Instance = new Game();
+        _Instance = new LibEricApp();
     return _Instance;
 }
 
 //FIXME _FONTSIZE muss noch in die config datei
-LibEric::Game::Game() : _IsReady(false), _Running(false), _AppName(), _AppDir(), _FontSize(25), UseGamepad(0) {
+LibEric::LibEricApp::LibEricApp() : _IsReady(false), _Running(false), _AppName(), _AppDir(), _FontSize(25), UseGamepad(0) {
 }
 
-bool LibEric::Game::Init(const std::string &appName) {
+bool LibEric::LibEricApp::Init(const std::string &appName) {
     _AppName = appName;
 #ifdef __linux__
     _AppDir = std::string(INSTALL_PREFIX) + std::string("/share/") + std::string(_AppName);
@@ -98,11 +98,11 @@ bool LibEric::Game::Init(const std::string &appName) {
     return true;
 }
 
-std::string LibEric::Game::GetUserDir() {
+std::string LibEric::LibEricApp::GetUserDir() {
     return GetPerfDirectory(" ", _AppName.c_str());
 }
 
-void LibEric::Game::Run() {
+void LibEric::LibEricApp::Run() {
     while (!WindowShouldClose() && _Running) {
         HandleEvents();
         Update();
@@ -110,11 +110,11 @@ void LibEric::Game::Run() {
     }
 }
 
-bool LibEric::Game::IsReady() {
+bool LibEric::LibEricApp::IsReady() {
     return _IsReady;
 }
 
-void LibEric::Game::Render() {
+void LibEric::LibEricApp::Render() {
     BeginDrawing();
     ClearBackground(Color{(unsigned char) LibEricSettings::Instance()->GetBGCRed(),
                           (unsigned char) LibEricSettings::Instance()->GetBGCGreen(),
@@ -128,7 +128,7 @@ void LibEric::Game::Render() {
     EndDrawing();
 }
 
-void LibEric::Game::Update() {
+void LibEric::LibEricApp::Update() {
     if (!Dialog::Instance()->Exist()) {
         GameStateMaschine::Instance()->Update();
     } else {
@@ -137,7 +137,7 @@ void LibEric::Game::Update() {
 
 }
 
-void LibEric::Game::HandleEvents() {
+void LibEric::LibEricApp::HandleEvents() {
     if (IsKeyPressed(KEY_F)) {
         ToggleFullscreen();
         Resize();
@@ -147,11 +147,11 @@ void LibEric::Game::HandleEvents() {
     }
 }
 
-void LibEric::Game::Quit() {
+void LibEric::LibEricApp::Quit() {
     _Running = false;
 }
 
-int LibEric::Game::GetWindowWidth() {
+int LibEric::LibEricApp::GetWindowWidth() {
     int width;
     if (IsWindowFullscreen()) {
         width = GetMonitorWidth(GetCurrentMonitor());
@@ -161,7 +161,7 @@ int LibEric::Game::GetWindowWidth() {
     return width;
 }
 
-int LibEric::Game::GetWindowHeight() {
+int LibEric::LibEricApp::GetWindowHeight() {
     int height;
     if (IsWindowFullscreen()) {
         height = GetMonitorHeight(GetCurrentMonitor());
@@ -171,10 +171,10 @@ int LibEric::Game::GetWindowHeight() {
     return height;
 }
 
-void LibEric::Game::Resize() {
+void LibEric::LibEricApp::Resize() {
     GameStateMaschine::Instance()->Resize();
 }
 
-Font LibEric::Game::GetDefaultFont() {
+Font LibEric::LibEricApp::GetDefaultFont() {
     return _Font;
 }

@@ -20,7 +20,7 @@
 
 #include <libEric/Graphic/RenderManager.hpp>
 #include <libEric/Core/Log.hpp>
-#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricApp.hpp>
 #include <Extra/raylib-physfs.h>
 
 LibEric::RenderManager *LibEric::RenderManager::pInstance = nullptr;
@@ -53,7 +53,7 @@ void LibEric::RenderManager::ClearRenderManager() {
 }
 
 bool LibEric::RenderManager::LoadTextureFromFile(const std::string& id, const std::string& fileName) {
-    if (!Game::Instance()->IsReady()) {
+    if (!LibEricApp::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
@@ -79,7 +79,7 @@ bool LibEric::RenderManager::LoadTextureFromFile(const std::string& id, const st
 }
 
 bool LibEric::RenderManager::DrawTextureSimple(const std::string& id, int x, int y) {
-    if (!Game::Instance()->IsReady()) {
+    if (!LibEricApp::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
@@ -95,7 +95,7 @@ bool LibEric::RenderManager::DrawTextureSimple(const std::string& id, int x, int
 //FIXME größe überprüfen, ist der Frame innerhalb der Texture
 bool LibEric::RenderManager::DrawFrame(const std::string& id, float x, float y, float width, float height, int frame,
                                        int row) {
-    if (!Game::Instance()->IsReady()) {
+    if (!LibEricApp::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
@@ -113,7 +113,7 @@ bool LibEric::RenderManager::DrawFrame(const std::string& id, float x, float y, 
 }
 
 bool LibEric::RenderManager::DrawEx(const std::string& id, Rectangle src, Rectangle dest, float rotate) {
-    if (!Game::Instance()->IsReady()) {
+    if (!LibEricApp::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
@@ -129,7 +129,7 @@ bool LibEric::RenderManager::DrawEx(const std::string& id, Rectangle src, Rectan
 
 bool LibEric::RenderManager::DrawTile(const std::string& id, float x, float y, float width, float height, int currentRow,
                                       int currentFrame) {
-    if (!Game::Instance()->IsReady()) {
+    if (!LibEricApp::Instance()->IsReady()) {
         LOGE("Kein Rendercontext vorhanden");
         return false;
     }
