@@ -1,7 +1,7 @@
 /*
- * LibEric
- * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * libEric
+ * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,38 +18,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LIBERIC_STORYNODE_HPP
-#define LIBERIC_STORYNODE_HPP
+#ifndef OBJECTLAYER
+#define OBJECTLAYER
 
-#include "libEric_API.hpp"
-#include <string>
-#include <map>
+#include <vector>
+#include <libEric/Maps/Layer.hpp>
+#include <libEric/Core/GameObject_Interface.hpp>
 
 namespace LibEric {
 
-    extern "C" {
-
-//FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
-    LIBERIC_API class StoryNode {
+    class ObjectLayer : public Layer {
     public:
-        static StoryNode *Instance();
+        ObjectLayer();
 
-        bool NodeFinished(std::string node);
+        void Render() override;
 
-        void NewNode(std::string node, bool value);
+        void Update() override;
+
+        std::vector<GameObject_Interface *> *GetGameObjectList();
 
     private:
-        std::map<std::string, bool> pNodeMap;
-
-
-        static StoryNode *pInstance;
-
-        StoryNode();
-
-        ~StoryNode();
+        std::vector<GameObject_Interface *> pGameObjectList;
     };
 
-}//extern "C"
-
 }; //namespace LibEric
-#endif // LIBERIC_STORYNODE_HPP
+#endif //__OBJECTLAYER

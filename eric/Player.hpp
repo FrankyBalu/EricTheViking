@@ -21,8 +21,8 @@
 #ifndef __PLAYER
 #define __PLAYER
 
-#include <libEric/GraphicGameObject.hpp>
-#include <libEric/Animation.hpp>
+#include <libEric/Graphic/GraphicGameObject.hpp>
+#include <libEric/Graphic/Animation.hpp>
 #include <raylib.h>
 
 namespace Eric {

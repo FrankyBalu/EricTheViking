@@ -21,17 +21,17 @@
 
 #include "PlayState.hpp"
 #include "Player.hpp"
-#include <libEric/UserSettings.hpp>
-#include <libEric/GameStateMaschine.hpp>
-#include <libEric/RenderManager.hpp>
-#include <libEric/Input.hpp>
-#include <libEric/MapManager.hpp>
-#include <libEric/Log.hpp>
-#include <libEric/Dialog.hpp>
-#include <libEric/CollisionManager.hpp>
+#include <libEric/Core/UserSettings.hpp>
+#include <libEric/Core/GameStateMaschine.hpp>
+#include <libEric/Graphic/RenderManager.hpp>
+#include <libEric/Core/Input.hpp>
+#include <libEric/Maps/MapManager.hpp>
+#include <libEric/Core/Log.hpp>
+#include <libEric/Graphic/Dialog.hpp>
+#include <libEric/Core/CollisionManager.hpp>
 #include <raylib.h>
 #include <raylib-physfs.h>
-#include <libEric/Animation.hpp>
+#include <libEric/Graphic/Animation.hpp>
 
 const std::string Eric::PlayState::_PlayID = "PLAY";
 

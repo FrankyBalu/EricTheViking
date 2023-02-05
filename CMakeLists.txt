@@ -10,13 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include(FeatureSummary)
 
-option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 
 #Abbrechen wenn Windows verwendet wird, geht eh nicht
-if (WIN32)
-    message("Windows ist zur Zeit nur Experimentel, nur mit vs cpp + clion getestet")
-endif ()
 
 if (UNIX)
     add_compile_options(-Wall -Wextra)
@@ -39,13 +36,9 @@ if(UNIX)
     SET(ERIKDATADIR "${CMAKE_INSTALL_PREFIX}/share/games/Erik" CACHE PATH "Datenverzeichnis für Erik")
     SET(LIBERICDATADIR "${CMAKE_INSTALL_PREFIX}/share/libEric" CACHE PATH "LibEric Datenverzeichnis")
     SET(ICONDIR "${DATAROOTDIR}/pixmaps" CACHE PATH "Icon Verzeichnis") #noch haben wir kein icon
-
-    #set(LIBERIC_RESOURCE_FILES "${DATADIR}/resources" CACHE PATH "Verzeichnis zu daten")
 else(WIN32)
-    message ("Hier bin ich")
     SET(ERIKDATADIR "data/" )
     SET(LIBERICDATADIR "data/" )
-    #set(LIBERIC_RESOURCE_FILES "resources" CACHE PATH "Verzeichnis zu daten")
 endif(UNIX)
 
 ########################################################################################################################
@@ -110,10 +103,11 @@ endif()
 ########################################################################################################################
 if(UNIX)
     include_directories(
-        "${PROJECT_BINARY_DIR}"
-        "${PROJECT_SOURCE_DIR}"
-        "${PROJECT_SOURCE_DIR}/Extra/"
-        "${LUA_INCLUDE_DIR}"
+            "${PROJECT_BINARY_DIR}"
+            "${PROJECT_SOURCE_DIR}"
+            "${PROJECT_SOURCE_DIR}/Extra/"
+            "${PROJECT_SOURCE_DIR}/Extra/"
+            "${LUA_INCLUDE_DIR}"
     )
 else()
     include_directories(
@@ -157,5 +151,11 @@ add_subdirectory(libEric)
 add_subdirectory(eric)
 add_subdirectory(data)
 message("  ")
-feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features:")
-feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features: ")
+
+if(UNIX)
+    feature_summary(WHAT ENABLED_FEATURES DESCRIPTION "Enabled features:")
+    feature_summary(WHAT DISABLED_FEATURES DESCRIPTION "Disabled features: ")
+elseif(WIN32)
+    message("Build for Windows")
+    message("Nutzen interne kopien von LUA, TINYXML2, PHYSFS und ZLIB")
+endif()

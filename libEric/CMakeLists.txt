@@ -1,57 +1,75 @@
 project(LibEric)
 
 # Local source files here
-SET(LIBEric_SRC
-        base64.cpp
-        base64.h
-        Log.cpp
-        Log.hpp
-        LibEricSettings.cpp
-        LibEricSettings.hpp
-        Game.cpp
-        Game.hpp
-        UserSettings.cpp
-        UserSettings.hpp
-        RenderManager.cpp
-        RenderManager.hpp
-        GameState.hpp
-        GameStateMaschine.cpp
-        GameStateMaschine.hpp
-        GameStateFactory.cpp
-        GameStateFactory.hpp
-        Lua.cpp
-        Lua.hpp
-        Menu.hpp
-        Menu.cpp
-        Dialog.cpp
-        Dialog.hpp
-        GameObject_Interface.hpp
-        GameObjectFactory.cpp
-        GameObjectFactory.hpp
-        Layer.hpp
+SET(LIBERIC_CORE_SRC
+        core/base64.cpp
+        core/base64.h
+        core/CollisionManager.cpp
+        core/CollisionManager.hpp
+        core/Game.cpp
+        core/Game.hpp
+        core/GameObject_Interface.hpp
+        core/GameObjectFactory.cpp
+        core/GameObjectFactory.hpp
+        core/GameObjectManager.cpp
+        core/GameObjectManager.hpp
+        core/GameState.hpp
+        core/GameStateFactory.cpp
+        core/GameStateFactory.hpp
+        core/GameStateMaschine.cpp
+        core/GameStateMaschine.hpp
+        core/Input.cpp
+        core/Input.hpp
+        core/LibEricSettings.cpp
+        core/LibEricSettings.hpp
+        core/Log.cpp
+        core/Log.hpp
+        core/Lua.cpp
+        core/Lua.hpp
+        core/Rectangle.hpp
+        core/UserSettings.cpp
+        core/UserSettings.hpp
+        )
+
+SET(LIBERIC_GRAPHIC_SRC
+        Graphic/Animation.cpp
+        Graphic/Animation.hpp
+        Graphic/Dialog.cpp
+        Graphic/Dialog.hpp
+        Graphic/GraphicGameObject.hpp
+        Graphic/GraphicGameObject.cpp
+        Graphic/Menu.hpp
+        Graphic/Menu.cpp
+        Graphic/RenderManager.cpp
+        Graphic/RenderManager.hpp
+        Graphic/Sprite.cpp
+        Graphic/Sprite.hpp
+        )
+
+SET(LIBERIC_MAPS_SRC
+        Maps/Layer.hpp
+        Maps/Map.hpp
+        Maps/Map.cpp
+        Maps/MapManager.hpp
+        Maps/MapManager.cpp
+        Maps/MapParser.cpp
+        Maps/MapParser.hpp
+        Maps/ObjectLayer.hpp
+        Maps/ObjectLayer.cpp
+        Maps/TileLayer.cpp
+        )
+
+SET(LIBERIC_SRC
         StoryNode.cpp
         StoryNode.hpp
-        Input.cpp Input.hpp
-        GraphicGameObject.hpp
-        GraphicGameObject.cpp
-        GameObjectManager.cpp
-        GameObjectManager.hpp
-        CollisionManager.cpp
-        CollisionManager.hpp
-        Map.hpp
-        Map.cpp
-        TileLayer.cpp
-        ObjectLayer.hpp
-        ObjectLayer.cpp
-        MapManager.hpp
-        MapManager.cpp
-        MapParser.cpp
-        Rectangle.hpp Animation.cpp Animation.hpp Sprite.cpp Sprite.hpp libEric.hpp libEric.hpp)
+        libEric_API.hpp
+        )
+
 if (UNIX)
-    add_library(Eric SHARED ${LIBEric_SRC})
+    add_library(Eric  ${LIBERIC_SRC} ${LIBERIC_CORE_SRC} ${LIBERIC_GRAPHIC_SRC} ${LIBERIC_MAPS_SRC})
 else ()
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    add_library(Eric SHARED ${LIBEric_SRC} ../Extra/tinyxml2/tinyxml2.cpp)
+    add_library(Eric  ${LIBERIC_SRC} ${LIBERIC_CORE_SRC} ${LIBERIC_GRAPHIC_SRC} ${LIBERIC_MAPS_SRC} ../Extra/tinyxml2/tinyxml2.cpp)
 endif ()
 
 if (UNIX)

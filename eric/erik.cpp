@@ -19,12 +19,12 @@
  */
 #define ERIC_APP 1
 
-#include <libEric/Log.hpp>
-#include <libEric/Game.hpp>
-#include <libEric/LibEricSettings.hpp>
-#include <libEric/RenderManager.hpp>
-#include <libEric/GameStateMaschine.hpp>
-#include <libEric/Menu.hpp>
+#include <libEric/Core/Log.hpp>
+#include <libEric/Core/Game.hpp>
+#include <libEric/Core/LibEricSettings.hpp>
+#include <libEric/Graphic/RenderManager.hpp>
+#include <libEric/Core/GameStateMaschine.hpp>
+#include <libEric/Graphic/Menu.hpp>
 //#include "Marker.hpp"
 #include "PlayState.hpp"
 

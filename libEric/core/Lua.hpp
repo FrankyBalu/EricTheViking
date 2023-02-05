@@ -18,38 +18,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LIBERIC_STORYNODE_HPP
-#define LIBERIC_STORYNODE_HPP
+#ifndef ERIC_LUA_HPP
+#define ERIC_LUA_HPP
 
-#include "libEric_API.hpp"
-#include <string>
-#include <map>
+
+#define SOL_ALL_SAFETIES_ON 1
+
+#include <sol.hpp>
 
 namespace LibEric {
 
-    extern "C" {
+    //! Erzeugt einen Lua-Context mit allem was für libEric im Allgemeinen nötig ist
+    /*!
+     * Es wird aber nicht hinzugefügt, was für spezielle Gamestates oder GameObjekte nötig ist
+     * @param state  Zeiger auf den Lua-Context, der erstellt werden soll
+     */
+    void LuaSetup(sol::state *state);
 
-//FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
-    LIBERIC_API class StoryNode {
-    public:
-        static StoryNode *Instance();
+} // LibEric
 
-        bool NodeFinished(std::string node);
-
-        void NewNode(std::string node, bool value);
-
-    private:
-        std::map<std::string, bool> pNodeMap;
-
-
-        static StoryNode *pInstance;
-
-        StoryNode();
-
-        ~StoryNode();
-    };
-
-}//extern "C"
-
-}; //namespace LibEric
-#endif // LIBERIC_STORYNODE_HPP
+#endif //ERIC_LUA_HPP

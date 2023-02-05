@@ -1,7 +1,7 @@
 /*
- * LibEric
- * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * libEric
+ * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,38 +18,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LIBERIC_STORYNODE_HPP
-#define LIBERIC_STORYNODE_HPP
+#ifndef ERIC_GAMEOBJECTMANAGER_HPP
+#define ERIC_GAMEOBJECTMANAGER_HPP
 
-#include "libEric_API.hpp"
-#include <string>
+#include "libEric/libEric_API.hpp"
+#include <libEric/Core/GameObject_Interface.hpp>
 #include <map>
 
 namespace LibEric {
 
     extern "C" {
 
-//FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
-    LIBERIC_API class StoryNode {
-    public:
-        static StoryNode *Instance();
+    LIBERIC_API class GameObjectManager {
+        GameObjectManager();
 
-        bool NodeFinished(std::string node);
+        ~GameObjectManager();
 
-        void NewNode(std::string node, bool value);
+        int AddObject(GameObject_Interface *obj);
+
+        //bool RemoveObject(int id);
+        GameObject_Interface *GetObject(int id);
+
+        int GetNumObjects();
 
     private:
-        std::map<std::string, bool> pNodeMap;
+        std::map<int, GameObject_Interface *> _Objects;
 
-
-        static StoryNode *pInstance;
-
-        StoryNode();
-
-        ~StoryNode();
+        int _Counter;
     };
 
 }//extern "C"
 
-}; //namespace LibEric
-#endif // LIBERIC_STORYNODE_HPP
+} // LibEric
+
+#endif //ERIC_GAMEOBJECTMANAGER_HPP

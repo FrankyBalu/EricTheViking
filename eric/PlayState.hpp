@@ -19,14 +19,14 @@
  */
 
 
-#ifndef __PLAYSTATE
-#define __PLAYSTATE
+#ifndef ERIC_PLAYSTATE_HPP
+#define ERIC_PLAYSTATE_HPP
 
-#include <libEric/GameState.hpp>
-#include <libEric/GameStateFactory.hpp>
-#include <libEric/GraphicGameObject.hpp>
-#include <libEric/CollisionManager.hpp>
-#include <libEric/Animation.hpp>
+#include <libEric/Core/GameState.hpp>
+#include <libEric/Core/GameStateFactory.hpp>
+#include <libEric/Graphic/GraphicGameObject.hpp>
+#include <libEric/Core/CollisionManager.hpp>
+#include <libEric/Graphic/Animation.hpp>
 #include <raylib.h>
 #include <vector>
 

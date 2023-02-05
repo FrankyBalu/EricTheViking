@@ -1,7 +1,7 @@
 /*
- * LibEric
- * Copyright (C) 2022  Frank Kartheuser <frank.kartheuser1988@gmail.com>
- * Copyright (C) 2023  Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * libEric
+ * Copyright (C) 2022   Frank Kartheuser <frank.kartheuser1988@gmail.com>
+ * Copyright (C) 2023   Frank Kartheuser <frank.kartheuser1988@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,38 +18,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef LIBERIC_STORYNODE_HPP
-#define LIBERIC_STORYNODE_HPP
+#ifndef LIBERIC_LEVELPARSER_HPP
+#define LIBERIC_LEVELPARSER_HPP
 
-#include "libEric_API.hpp"
+#include <tinyxml2.h>
+#include <libEric/Maps/Map.hpp>
 #include <string>
-#include <map>
 
 namespace LibEric {
 
-    extern "C" {
-
-//FIXME Die ganze Klasse ist nur zum Testen und muss noch ersetzt werden
-    LIBERIC_API class StoryNode {
+    class MapParser {
     public:
-        static StoryNode *Instance();
-
-        bool NodeFinished(std::string node);
-
-        void NewNode(std::string node, bool value);
+        Map *ParseMap(std::string levelFile);
 
     private:
-        std::map<std::string, bool> pNodeMap;
+
+        void ParseTilesets(tinyxml2::XMLElement *tilesetRoot, std::vector<Tileset> *tilesets, std::string path);
+
+        void ParseTileLayer(tinyxml2::XMLElement *tileElement, Map *rmap);
+
+        void ParseObjectLayer(tinyxml2::XMLElement *pObjectElement, Map *level);
 
 
-        static StoryNode *pInstance;
-
-        StoryNode();
-
-        ~StoryNode();
+        int _TileSize;
+        int _Width;
+        int _Height;
     };
 
-}//extern "C"
-
 }; //namespace LibEric
-#endif // LIBERIC_STORYNODE_HPP
+#endif // LIBERIC_LEVELPARSER_HPP

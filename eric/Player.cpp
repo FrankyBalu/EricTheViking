@@ -19,13 +19,13 @@
  */
 
 #include "Player.hpp"
-#include <libEric/GameStateMaschine.hpp>
-#include <libEric/RenderManager.hpp>
-#include <libEric/LibEricSettings.hpp>
+#include <libEric/Core/GameStateMaschine.hpp>
+#include <libEric/Graphic/RenderManager.hpp>
+#include <libEric/Core/LibEricSettings.hpp>
 #include <raylib.h>
-#include <libEric/Log.hpp>
-#include <libEric/Input.hpp>
-#include <libEric/UserSettings.hpp>
+#include <libEric/Core/Log.hpp>
+#include <libEric/Core/Input.hpp>
+#include <libEric/Core/UserSettings.hpp>
 
 Eric::Player *Eric::Player::pInstance = nullptr;
 
