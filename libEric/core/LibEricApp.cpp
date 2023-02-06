@@ -4,7 +4,7 @@
 
 #include <libEric/Core/LibEricApp.hpp>
 #include <libEric/Core/Log.hpp>
-#include <Config.hpp>
+#include <Config_LibEric.hpp>
 #include <libEric/Core/UserSettings.hpp>
 #include <libEric/Core/LibEricSettings.hpp>
 #include <libEric/Core/GameStateMaschine.hpp>
@@ -71,10 +71,6 @@ bool LibEric::LibEricApp::Init(const std::string &appName) {
     } else {
         SetConfigFlags(FLAG_VSYNC_HINT);
     }
-
-    LOGE ("BIS HIER");
-    UserSettings::Instance()->Save();
-    LOGE ("BIS HIER");
 
     if (UserSettings::Instance()->GetFullScreen()) {
         int display = GetCurrentMonitor();

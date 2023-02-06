@@ -1,0 +1,11 @@
+#ifndef Test_nn
+#define Test_nn
+
+#include <string>
+
+const std::string DEBUG = "@ENABLE_DEBUG@";
+const std::string LIBERIC_DATADIR = "@LIBERICDATADIR@";
+const std::string ERIK_DATADIR = "@ERIKDATADIR@";
+const std::string BINARYSYSTEM = "@CMAKE_SYSTEM_NAME@";
+
+#endif

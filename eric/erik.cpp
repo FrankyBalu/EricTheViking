@@ -27,7 +27,7 @@
 #include <libEric/Graphic/Menu.hpp>
 //#include "Marker.hpp"
 #include "PlayState.hpp"
-
+#include <Config_LibEric.hpp>
 
 
 int main() {
@@ -36,7 +36,10 @@ int main() {
         return 1;
     }
 
-LOGE("TESTE ROTE FARBE");
+    LOGI("Datenverzeichis LibEric: ", LIBERIC_DATADIR);
+    LOGI("Datenverzeichis Erik: ", ERIK_DATADIR);
+    LOGI("Betriebssystem: ", BINARYSYSTEM);
+
 
     LibEric::RenderManager::Instance()->LoadTextureFromFile("BGI", "assets/Background.png");
 

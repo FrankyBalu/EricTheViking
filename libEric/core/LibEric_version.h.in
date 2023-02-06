@@ -1,0 +1,6 @@
+#ifndef LIBERIC_VERSION_HPP
+#define LIBERIC_VERSION_HPP
+#include <string>
+
+const std::string LIBERIC_VERSION_GIT = "@LIBERIC_VERSION_GIT@"
+#endif  /* LIBERIC_VERSION_HPP */

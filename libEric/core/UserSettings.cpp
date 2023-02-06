@@ -21,14 +21,15 @@
 
 #include <libEric/Core/UserSettings.hpp>
 #include <libEric/Core/Log.hpp>
-
 #include <fstream>
-
-#include <raylib.h>
-#include <raylib-physfs.h>
-#include <physfs.h>
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
+
+#ifdef _WIN64
+    #include <libEric/Core/Windows.hpp>
+#else
+    #include <libEric/Core/Linux.hpp>
+#endif
 
 LibEric::UserSettings *LibEric::UserSettings::pInstance = nullptr;
 
@@ -52,18 +53,18 @@ bool LibEric::UserSettings::Load() {
     lua.open_libraries(sol::lib::base);
     lua.open_libraries(sol::lib::string);
 
-    if (FileExistsInPhysFS("user/main.settings")) {
+    if (LibEric::Filesystem::Instance()->FileExists(LibEric::Filesystem::Instance()->GetConfigPath()+std::string("user.settings"))){
         return_value = true;
-        script_file = LoadFileTextFromPhysFS("user/main.settings");
-        LOGI ("Lade Settings aus Benutzerverzeichnis");
-    } else if (FileExistsInPhysFS("system/main.settings")) {
+        script_file = LibEric::Filesystem::Instance()->GetRealPath(LibEric::Filesystem::Instance()->GetConfigPath()+std::string("user.settings"));
+        LOGI ("Lade Settings aus ", LibEric::Filesystem::Instance()->GetRealPath(LibEric::Filesystem::Instance()->GetConfigPath()+std::string("user.settings")));
+    } else if (LibEric::Filesystem::Instance()->FileExists(LibEric::Filesystem::Instance()->GetDataPath()+std::string("user.settings"))) {
         return_value = true;
-        script_file = LoadFileTextFromPhysFS("system/main.settings");
-        LOGI ("Lade Settings aus Systemverzeichnis");
+        script_file = LibEric::Filesystem::Instance()->GetRealPath(LibEric::Filesystem::Instance()->GetDataPath()+std::string("user.settings"));
+        LOGI ("Lade Settings aus ", LibEric::Filesystem::Instance()->GetRealPath(LibEric::Filesystem::Instance()->GetDataPath()+std::string("user.settings")));
     }
 
     if (return_value) {
-        lua.script(script_file.c_str());
+        lua.script_file("data/user.settings");
         pMusicVolume = lua.get<float>("MusicVolume");
         pEffectVolume = lua.get<float>("EffectVolume");
         pFullscreen = lua.get<bool>("Fullscreen");
@@ -153,7 +154,7 @@ void LibEric::UserSettings::Save() const {
 #elifdef _WIN64
         realpath = "data\\";
 #endif
-    std::string saveFile = realpath + PHYSFS_getDirSeparator() + "main.settings";
+    std::string saveFile = realpath + std::string ("\\") + "user.settings";
 
     std::ofstream file;
     file.open(saveFile);

@@ -64,13 +64,27 @@ SET(LIBERIC_SRC
         StoryNode.hpp
         libEric_API.hpp
         )
+if (WIN32)
+    set(EXTRA_SRC
+            core/Windows.cpp
+            core/Windows.hpp
+            ../Extra/tinyxml2/tinyxml2.cpp
+            )
+else ()
+    set(EXTRA_SRC
+            core/Linux.cpp
+            core/Linux.hpp
+            )
+endif ()
 
 if (UNIX)
-    add_library(Eric  ${LIBERIC_SRC} ${LIBERIC_CORE_SRC} ${LIBERIC_GRAPHIC_SRC} ${LIBERIC_MAPS_SRC})
+    add_library(Eric  ${LIBERIC_SRC} ${LIBERIC_CORE_SRC} ${LIBERIC_GRAPHIC_SRC} ${LIBERIC_MAPS_SRC} ${EXTRA_SRC})
 else ()
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    add_library(Eric  ${LIBERIC_SRC} ${LIBERIC_CORE_SRC} ${LIBERIC_GRAPHIC_SRC} ${LIBERIC_MAPS_SRC} ../Extra/tinyxml2/tinyxml2.cpp)
+    add_library(Eric  ${LIBERIC_SRC} ${LIBERIC_CORE_SRC} ${LIBERIC_GRAPHIC_SRC} ${LIBERIC_MAPS_SRC} ${EXTRA_SRC})
 endif ()
+
+add_dependencies(Eric version)
 
 if (UNIX)
     target_link_libraries(Eric ${LUA_LIBRARY}
@@ -87,6 +101,7 @@ else ()
             )
 endif ()
 
+if (UNIX)
 install(TARGETS Eric
         EXPORT Eric
         LIBRARY DESTINATION lib
@@ -96,3 +111,11 @@ install(TARGETS Eric
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/libEric
         FILES_MATCHING PATTERN "*.h*")
+elseif (WIN32)
+    install(TARGETS Eric
+            EXPORT Eric
+            LIBRARY DESTINATION "${PROJECT_BINARY_DIR}/../bin"
+            ARCHIVE DESTINATION "${PROJECT_BINARY_DIR}/../bin"
+            RUNTIME DESTINATION "${PROJECT_BINARY_DIR}/../bin"
+            )
+endif()

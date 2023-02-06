@@ -119,6 +119,7 @@ else()
             "${PROJECT_SOURCE_DIR}/Extra/sol"
             "${PROJECT_SOURCE_DIR}/Extra"
             "${PROJECT_SOURCE_DIR}"
+            "${PROJECT_BINARY_DIR}"
     )
     link_directories(
             "${PROJECT_SOURCE_DIR}/Extra/lua-5.4.0/lib"
@@ -138,7 +139,16 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
     set(DEBUG 1)
 endif()
 
-configure_file(Config.hpp.in Config.hpp)
+find_package(Git)
+add_custom_target(version
+        ${CMAKE_COMMAND} -D SRC=${CMAKE_SOURCE_DIR}
+        -D DST=${CMAKE_BINARY_DIR}/LibEric_version.h
+        -D GIT_EXECUTABLE=${GIT_EXECUTABLE}
+        -P ${CMAKE_SOURCE_DIR}/cmake/GenerateVersionHeader.cmake
+        )
+
+
+configure_file(Config_LibEric.hpp.in Config_LibEric.hpp)
 
 
 ########################################################################################################################
