@@ -8,4 +8,4 @@ Erik wird ein kleines Advanture/RPG, das viele Elemente von The Legend of Zelda 
 Die libEric soll dabei als mehr oder weniger eigenständiges Projekt entstehen und es ermöglichen, relativ einfach, mit wenig c++, Tiled (https://www.mapeditor.org/) und lua ein eigenes Spiel auf die Beine zu stellen.
 
 
-## Siehe Wiki(https://github.com/FrankyBalu/EricTheViking/wiki)
+## [Siehe Wiki](https://github.com/FrankyBalu/EricTheViking/wiki)
