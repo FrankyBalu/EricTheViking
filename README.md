@@ -9,4 +9,4 @@ Die libEric soll dabei als mehr oder weniger eigenständiges Projekt entstehen u
 
 
 * [Wiki](https://github.com/FrankyBalu/EricTheViking/wiki)
-* [Build](https://github.com/FrankyBalu/EricTheViking/wiki:Builds)
+* [Build](https://github.com/FrankyBalu/EricTheViking/wiki/Builds)
